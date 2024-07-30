@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "577399386049",
+    "project_id": "ecommercecompose-6fe24",
+    "storage_bucket": "ecommercecompose-6fe24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577399386049:android:1ce03ff48ab5772ce70940",
+        "android_client_info": {
+          "package_name": "com.hoy.ecommercecompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "577399386049-us1pd5n6jnscrb1uvqmlrurof604bf67.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hoy.ecommercecompose",
+            "certificate_hash": "429015fc377411db16028c16f51470a2cca0b660"
+          }
+        },
+        {
+          "client_id": "577399386049-hhl7r87tc71ij5kkorkkb8u3a48r0bbf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3rTP2T_89BC-v_qhp6ZGZzQo3dAGTsGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "577399386049-hhl7r87tc71ij5kkorkkb8u3a48r0bbf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
