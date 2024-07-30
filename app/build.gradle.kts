@@ -82,4 +82,11 @@ dependencies {
     implementation (libs.converter.gson)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.play.services.auth)
+
 }
