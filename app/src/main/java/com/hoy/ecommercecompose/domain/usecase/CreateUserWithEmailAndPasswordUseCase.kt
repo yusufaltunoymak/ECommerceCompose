@@ -7,17 +7,17 @@ import javax.inject.Inject
 
 class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val firebaseAuthRepositoryImpl: FirebaseAuthRepositoryImpl) {
     suspend operator fun invoke(
-        email: String,
-        password: String,
         name: String,
         surname: String,
+        email: String,
+        password: String,
         address: String
     ): Flow<Resource<Boolean>> {
         return firebaseAuthRepositoryImpl.createUserWithEmailAndPassword(
-            email = email,
-            password = password,
             name = name,
             surname = surname,
+            email = email,
+            password = password,
             address = address
         )
     }
