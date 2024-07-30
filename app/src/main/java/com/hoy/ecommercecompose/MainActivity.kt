@@ -10,34 +10,35 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.hoy.ecommercecompose.ui.navigation.SetupNavGraph
+import com.hoy.ecommercecompose.ui.signup.SignupRoute
 import com.hoy.ecommercecompose.ui.theme.ECommerceComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ECommerceComposeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val navController = rememberNavController()
+                SetupNavGraph(navController = navController)
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ECommerceComposeTheme {
-        Greeting("Android")
+        val navController = rememberNavController()
+        SetupNavGraph(navController = navController)
     }
 }
+
