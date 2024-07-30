@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.signup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
@@ -18,18 +19,21 @@ class SignUpViewModel @Inject constructor(
     private val _signUpViewState = MutableStateFlow(SignUpViewState())
     val signUpViewState: StateFlow<SignUpViewState> = _signUpViewState
 
-    fun signUp(email: String, password: String, name: String, surname: String, address: String = "") {
+    fun signUp(name: String, surname: String, email: String, password: String, address: String = "") {
         viewModelScope.launch {
-            createUserWithEmailAndPasswordUseCase(email, password, name, surname, address).collect { resource ->
+            createUserWithEmailAndPasswordUseCase(name, surname, email, password, address).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         _signUpViewState.value = SignUpViewState(isLoading = true)
+                        Log.e("SignUpViewModel", "Loading")
                     }
                     is Resource.Success -> {
                         _signUpViewState.value = SignUpViewState(isLoading = false, isSuccess = resource.data)
+                        Log.e("SignUpViewModel", "Success: ${resource.data}")
                     }
                     is Resource.Error -> {
                         _signUpViewState.value = SignUpViewState(isLoading = false, errorMessage = resource.message)
+                        Log.e("SignUpViewModel", "Error: ${resource.message}")
                     }
                 }
             }
