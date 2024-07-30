@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -14,6 +13,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+
 
 /**
  * SignupRoute
@@ -25,16 +26,15 @@ import androidx.navigation.NavController
 @Composable
 fun SignupRoute(
     navController: NavController? = null,
-    viewModel: SignupViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val lifecycle = LocalLifecycleOwner.current
-    val signupState by viewModel.signupState.collectAsState()
+    val signupState by viewModel.signUpViewState.collectAsState()
 
     SignupScreen(
         onSignupClick = { name, surname, email, password ->
-            viewModel.registerUser(name, surname, email, password)
+            viewModel.signUp(name, surname, email, password)
         },
-        signupState = signupState
     )
 }
 
