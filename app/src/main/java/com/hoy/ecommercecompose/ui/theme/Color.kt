@@ -5,12 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-
-val PrimaryColor = Color(0xFFEF8354)
-val SecondaryColor = Color(0xFF2D3142)
-val TertiaryColor = Color(0xFFEFB8C8)
-val PrimaryDarkColor = Color(0xFFD76D77)
-
 fun lightColors(
     primary: Color = Color(0xFFFF5722),
     primaryContainer: Color = Color(0xFF2D3142),
