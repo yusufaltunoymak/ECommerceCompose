@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,6 +34,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
@@ -41,10 +44,17 @@ import com.hoy.ecommercecompose.ui.theme.LocalColors
 @Composable
 fun LoginScreen(
     onBackClick: () -> Unit,
-    onLoginClick: (String, String) -> Unit
+    uiState: LoginContract.LoginUiState,
+    onAction: (LoginContract.LoginUiAction) -> Unit,
+    navController: NavController
 ) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+    LaunchedEffect(uiState.isSignIn) {
+        if (uiState.isSignIn) {
+            navController.navigate("home") {
+                popUpTo("signin") { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -72,8 +82,8 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         CustomTextField(
-            value = email.value,
-            onValueChange = { email.value = it },
+            value = uiState.email,
+            onValueChange = { onAction(LoginContract.LoginUiAction.ChangeEmail(it)) },
             label = "Enter your e-mail",
             leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") }
         )
@@ -81,8 +91,8 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         CustomTextField(
-            value = password.value,
-            onValueChange = { password.value = it },
+            value = uiState.password,
+            onValueChange = { onAction(LoginContract.LoginUiAction.ChangePassword(it)) },
             label = "Enter your password",
             isPassword = true,
             leadingIcon = {
@@ -96,7 +106,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
 
-        CustomButton(text = "Login", onClick = { onLoginClick })
+        CustomButton(text = "Login", onClick = { onAction(LoginContract.LoginUiAction.SignInClick) })
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -132,8 +142,12 @@ fun LoginScreen(
 
         IconButton(
                 onClick = {},
-        modifier = Modifier.size(48.dp)
-            .border(BorderStroke(1.dp, LocalColors.current.primary), shape = RoundedCornerShape(12.dp))
+        modifier = Modifier
+            .size(48.dp)
+            .border(
+                BorderStroke(1.dp, LocalColors.current.primary),
+                shape = RoundedCornerShape(12.dp)
+            )
         ) {
         Image(
             painter = painterResource(id = R.drawable.ic_google),
@@ -149,6 +163,8 @@ fun LoginScreen(
 fun Preview(){
     LoginScreen(
         onBackClick = { },
-        onLoginClick = { username, password ->  }
+        uiState = LoginContract.LoginUiState(),
+        onAction = { },
+        navController = rememberNavController()
     )
 }
