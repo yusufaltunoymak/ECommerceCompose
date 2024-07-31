@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.ui.login
 
 import android.app.Activity
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -74,9 +75,12 @@ fun LoginScreen(
 
     LaunchedEffect(uiState.isSignIn) {
         if (uiState.isSignIn) {
+            Log.e("LoginScreen", "${uiState.isSignIn}")
             navController.navigate("home") {
-                popUpTo("signin") { inclusive = true }
+                Log.e("LoginScreen", "Navigate to home")
+                popUpTo("login") { inclusive = false }
             }
+            uiState.isSignIn = false
         }
     }
 

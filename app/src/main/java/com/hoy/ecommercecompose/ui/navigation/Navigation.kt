@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,8 +34,7 @@ fun SetupNavGraph(
         }
         composable("signup") {
             val viewModel : SignUpViewModel = hiltViewModel()
-            //collectAsStateWithLifecycle daha sağlıklıymış
-            val signupState by viewModel.signUpUiState.collectAsState()
+            val signupState by viewModel.signUpUiState.collectAsStateWithLifecycle()
 
             SignupScreen(
                 uiState = signupState,
@@ -45,7 +45,7 @@ fun SetupNavGraph(
 
         composable("login") {
             val loginViewModel : LoginViewModel = hiltViewModel()
-            val loginViewState by loginViewModel.loginUiState.collectAsState()
+            val loginViewState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
 
             LoginScreen(
                 onBackClick = { navController.popBackStack() },
