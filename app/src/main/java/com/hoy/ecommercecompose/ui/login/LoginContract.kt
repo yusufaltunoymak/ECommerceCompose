@@ -1,5 +1,8 @@
 package com.hoy.ecommercecompose.ui.login
 
+import android.content.Intent
+import android.content.IntentSender
+
 object LoginContract {
     data class LoginUiState(
         val isLoading: Boolean = false,
@@ -10,12 +13,16 @@ object LoginContract {
         val passwordError: Boolean = false,
         val showEmailError: Boolean = false,
         val showPasswordError: Boolean = false
+        val signInError: String? = null,
+        val googleSignInRequest: IntentSender? = null
     )
 
     sealed class LoginUiAction {
         data object SignInClick : LoginUiAction()
         data class ChangeEmail(val email: String) : LoginUiAction()
         data class ChangePassword(val password: String) : LoginUiAction()
+        data class GoogleSignInResult(val intent: Intent) : LoginUiAction()
+        data object GoogleSignInClick : LoginUiAction()
     }
 
     /*fun handleAction(action: LoginContract.LoginUiAction, uiState: LoginContract.LoginUiState, onUiStateChange: (LoginContract.LoginUiState) -> Unit) {

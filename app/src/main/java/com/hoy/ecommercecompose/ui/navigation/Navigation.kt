@@ -4,18 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
+import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
 import com.hoy.ecommercecompose.ui.signup.SignupScreen
 
 @Composable
-fun SetupNavGraph(navController: NavHostController) {
+fun SetupNavGraph(
+    navController: NavHostController,
+    googleAuthUiClient: GoogleAuthUiClient
+) {
 
     NavHost(
         navController = navController,
@@ -29,8 +34,7 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable("signup") {
             val viewModel : SignUpViewModel = hiltViewModel()
-            //collectAsStateWithLifecycle daha sağlıklıymış
-            val signupState by viewModel.signUpUiState.collectAsState()
+            val signupState by viewModel.signUpUiState.collectAsStateWithLifecycle()
 
             SignupScreen(
                 uiState = signupState,
@@ -42,13 +46,14 @@ fun SetupNavGraph(navController: NavHostController) {
 
         composable("login") {
             val loginViewModel : LoginViewModel = hiltViewModel()
-            val loginViewState by loginViewModel.loginUiState.collectAsState()
+            val loginViewState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
 
             LoginScreen(
                 onBackClick = { navController.popBackStack() },
                 uiState = loginViewState,
                 onAction = loginViewModel::onAction,
-                navController = navController
+                navController = navController,
+                googleAuthUiClient = googleAuthUiClient
             )
         }
 
