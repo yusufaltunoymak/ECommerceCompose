@@ -31,15 +31,6 @@ import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
-
-
-/**
- * SignupRoute
- * SignupViewModel'i kullanarak kayıt işlemlerini gerçekleştirir
- * ve gerekli kullanıcı arayüzünü sunar. Kullanıcı kayıt olduktan sonra
- * başarı durumuna göre başka bir sayfaya yönlendirme işlemini gerçekleştiri
- */
-
 @Composable
 fun SignupScreen(
     onBackClick: () -> Unit,

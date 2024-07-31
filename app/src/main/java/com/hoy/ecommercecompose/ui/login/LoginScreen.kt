@@ -76,12 +76,11 @@ fun LoginScreen(
 
     LaunchedEffect(uiState.isSignIn) {
         if (uiState.isSignIn) {
-            Log.e("LoginScreen", "${uiState.isSignIn}")
             navController.navigate("home") {
-                Log.e("LoginScreen", "Navigate to home")
-                popUpTo("login") { inclusive = false }
+                popUpTo("login") { inclusive = true }
+                popUpTo("signup") { inclusive = true }
+                popUpTo("welcome") { inclusive = true }
             }
-            uiState.isSignIn = false
         }
     }
 
