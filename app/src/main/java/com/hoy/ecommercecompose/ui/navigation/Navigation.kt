@@ -10,12 +10,16 @@ import androidx.navigation.compose.composable
 import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
+import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
 import com.hoy.ecommercecompose.ui.signup.SignupScreen
 
 @Composable
-fun SetupNavGraph(navController: NavHostController) {
+fun SetupNavGraph(
+    navController: NavHostController,
+    googleAuthUiClient: GoogleAuthUiClient
+) {
 
     NavHost(
         navController = navController,
@@ -47,7 +51,8 @@ fun SetupNavGraph(navController: NavHostController) {
                 onBackClick = { navController.popBackStack() },
                 uiState = loginViewState,
                 onAction = loginViewModel::onAction,
-                navController = navController
+                navController = navController,
+                googleAuthUiClient = googleAuthUiClient
             )
         }
 

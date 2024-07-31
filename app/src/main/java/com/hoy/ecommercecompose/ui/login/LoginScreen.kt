@@ -1,5 +1,9 @@
 package com.hoy.ecommercecompose.ui.login
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -24,11 +28,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,9 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.auth.api.identity.Identity
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
+import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 
 @Composable
@@ -46,8 +51,27 @@ fun LoginScreen(
     onBackClick: () -> Unit,
     uiState: LoginContract.LoginUiState,
     onAction: (LoginContract.LoginUiAction) -> Unit,
-    navController: NavController
+    navController: NavController,
+    googleAuthUiClient: GoogleAuthUiClient
 ) {
+    val signInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { intent ->
+                onAction(LoginContract.LoginUiAction.GoogleSignInResult(intent))
+            }
+        }
+    }
+
+    LaunchedEffect(uiState.googleSignInRequest) {
+        uiState.googleSignInRequest?.let { intentSender ->
+            signInLauncher.launch(
+                IntentSenderRequest.Builder(intentSender).build()
+            )
+        }
+    }
+
     LaunchedEffect(uiState.isSignIn) {
         if (uiState.isSignIn) {
             navController.navigate("home") {
@@ -141,7 +165,7 @@ fun LoginScreen(
         }
 
         IconButton(
-                onClick = {},
+            onClick = { onAction(LoginContract.LoginUiAction.GoogleSignInClick) },
         modifier = Modifier
             .size(48.dp)
             .border(
@@ -161,10 +185,16 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun Preview(){
+    val context = LocalContext.current
+    val oneTapClient = Identity.getSignInClient(context)
     LoginScreen(
         onBackClick = { },
         uiState = LoginContract.LoginUiState(),
         onAction = { },
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        googleAuthUiClient = GoogleAuthUiClient(
+            context = context,
+            oneTapClient = oneTapClient
+        )
     )
 }
