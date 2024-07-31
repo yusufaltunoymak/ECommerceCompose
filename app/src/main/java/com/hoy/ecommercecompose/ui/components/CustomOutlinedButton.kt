@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.Typography
 
 @Composable
 fun CustomOutlinedButton(
@@ -27,7 +26,7 @@ fun CustomOutlinedButton(
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
-            .padding(8.dp).height(56.dp)
+            .padding(vertical = 8.dp).height(56.dp)
             .fillMaxWidth(),
         border = BorderStroke(1.dp, contentColor),
         shape = RoundedCornerShape(16),
