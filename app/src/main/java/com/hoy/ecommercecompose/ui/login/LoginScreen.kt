@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +21,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -89,16 +90,25 @@ fun LoginScreen(
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
     ) {
         IconButton(
             onClick = onBackClick,
-            modifier = Modifier.align(Alignment.Start)
+            modifier = Modifier
+                .size(48.dp)
+                .border(
+                    BorderStroke(1.dp, LocalColors.current.primary),
+                    shape = RoundedCornerShape(12.dp)
+                )
         ) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            Icon(
+                modifier = Modifier.size(38.dp),
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = null
+            )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
             text = "Welcome back! \nGlad to see you, Again!",
@@ -113,7 +123,8 @@ fun LoginScreen(
             value = uiState.email,
             onValueChange = { onAction(LoginContract.LoginUiAction.ChangeEmail(it)) },
             label = "Enter your e-mail",
-            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") }
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
+            isError = uiState.showEmailError
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -128,22 +139,44 @@ fun LoginScreen(
                     imageVector = Icons.Default.Lock,
                     contentDescription = "Password"
                 )
-            }
+            },
+            isError = uiState.showPasswordError
         )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_forgot_password),
+                contentDescription = null,
+                modifier = Modifier.size(22.dp)
+            )
+            Text(
+                text = "Forgot Password?",
+                fontWeight = FontWeight.Light,
+                fontSize = 12.sp,
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-
-        CustomButton(text = "Login", onClick = { onAction(LoginContract.LoginUiAction.SignInClick) })
+        CustomButton(
+            text = "Login",
+            onClick = { onAction(LoginContract.LoginUiAction.SignInClick) })
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp)
+                .clickable {
+                    onBackClick
+                },
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Divider(
                 color = LocalColors.current.primary,
@@ -183,8 +216,8 @@ fun LoginScreen(
         )
     }
     }
-
 }
+
 
 @Preview(showBackground = true)
 @Composable

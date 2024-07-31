@@ -9,6 +9,10 @@ object LoginContract {
         val email: String = "",
         val password: String = "",
         var isSignIn: Boolean = false,
+        val emailError: Boolean = false,
+        val passwordError: Boolean = false,
+        val showEmailError: Boolean = false,
+        val showPasswordError: Boolean = false,
         val signInError: String? = null,
         val googleSignInRequest: IntentSender? = null
     )
@@ -20,4 +24,21 @@ object LoginContract {
         data class GoogleSignInResult(val intent: Intent) : LoginUiAction()
         data object GoogleSignInClick : LoginUiAction()
     }
+
+    /*fun handleAction(action: LoginContract.LoginUiAction, uiState: LoginContract.LoginUiState, onUiStateChange: (LoginContract.LoginUiState) -> Unit) {
+        when (action) {
+            is LoginContract.LoginUiAction.SignInClick -> {
+                val emailError = uiState.email.isEmpty()
+                val passwordError = uiState.password.isEmpty()
+                onUiStateChange(uiState.copy(
+                    showEmailError = emailError,
+                    showPasswordError = passwordError
+                ))
+                if (!emailError && !passwordError) {
+                }
+            }
+            is LoginContract.LoginUiAction.ChangeEmail -> onUiStateChange(uiState.copy(email = action.email))
+            is LoginContract.LoginUiAction.ChangePassword -> onUiStateChange(uiState.copy(password = action.password))
+        }
+    }*/
 }

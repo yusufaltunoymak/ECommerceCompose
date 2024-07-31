@@ -36,7 +36,7 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.welcome_image), // Replace with your image resource
+            painter = painterResource(id = R.drawable.welcome_image),
             contentDescription = "welcome image",
             modifier = Modifier
                 .height(400.dp)
@@ -51,7 +51,6 @@ fun WelcomeScreen(
         CustomOutlinedButton(text = "Register", onClick = onRegisterClick)
 
         Spacer(modifier = Modifier.fillMaxHeight())
-
     }
 }
 

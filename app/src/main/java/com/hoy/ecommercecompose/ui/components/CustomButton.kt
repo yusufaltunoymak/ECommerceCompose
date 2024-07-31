@@ -1,15 +1,11 @@
 package com.hoy.ecommercecompose.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,7 +25,7 @@ fun CustomButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-            .padding(8.dp).height(56.dp)
+            .padding(vertical = 8.dp).height(56.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(16),
         colors = ButtonDefaults.buttonColors(containerColor = colors)

@@ -1,19 +1,12 @@
 package com.hoy.ecommercecompose.ui.components
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +24,11 @@ fun CustomTextField(
     label: String,
     isPassword: Boolean = false,
     leadingIcon: @Composable () -> Unit,
+    isError: Boolean = false
 ) {
+    val containerColor = if (isError) Color(0xFFFFE5E5) else Color.White
+    val indicatorColor = if (isError) Color.Red else LocalColors.current.primary.copy(alpha = 0.3f)
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -42,19 +39,20 @@ fun CustomTextField(
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.Gray.copy(alpha = 0.1f),
-            focusedIndicatorColor = LocalColors.current.primary.copy(alpha = 0.3f),  // Border color when focused
-            unfocusedIndicatorColor = LocalColors.current.primary.copy(alpha = 0.3f),
-
-            ),
-
-        )
+            focusedContainerColor = containerColor,
+            unfocusedContainerColor = containerColor,
+            focusedIndicatorColor = indicatorColor,
+            unfocusedIndicatorColor = indicatorColor,
+        ),)
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Preview(){
-    CustomTextField(value = "", onValueChange ={} , label = "email", leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Password") }
+fun Preview() {
+    CustomTextField(
+        value = "",
+        onValueChange = {},
+        label = "email",
+        leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Password") }
     )
 }

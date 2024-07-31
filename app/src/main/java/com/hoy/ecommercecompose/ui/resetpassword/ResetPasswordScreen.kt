@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.ui.signup
+package com.hoy.ecommercecompose.ui.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -11,15 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,35 +29,20 @@ import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 
-
-/**
- * SignupRoute
- * SignupViewModel'i kullanarak kayıt işlemlerini gerçekleştirir
- * ve gerekli kullanıcı arayüzünü sunar. Kullanıcı kayıt olduktan sonra
- * başarı durumuna göre başka bir sayfaya yönlendirme işlemini gerçekleştiri
- */
-
 @Composable
-fun SignupScreen(
+fun ResetPasswordScreen(
     onBackClick: () -> Unit,
-    uiState: SignUpContract.UiState,
-    onAction : (SignUpContract.UiAction) -> Unit,
+    uiState: LoginContract.LoginUiState,
+    onAction: (LoginContract.LoginUiAction) -> Unit,
     navController: NavController
 ) {
-    LaunchedEffect(uiState.isSignUp) {
-        if (uiState.isSignUp) {
-            navController.navigate("login") {
-                popUpTo("signup") { inclusive = true }
-            }
-        }
-    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start,
     ) {
         IconButton(
             onClick = onBackClick,
@@ -81,55 +63,53 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Hello! Register to get started!",
+            text = "Ups! \nForgot password",
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             modifier = Modifier.align(Alignment.Start)
         )
 
-        CustomTextField(
-            value = uiState.name,
-            onValueChange = { onAction(SignUpContract.UiAction.ChangeName(it)) },
-            label = "Name",
-            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null) }
-        )
-        CustomTextField(
-            value = uiState.surname,
-            onValueChange = { onAction(SignUpContract.UiAction.ChangeSurname(it)) },
-            label = "Surname",
-            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null) }
-        )
-        CustomTextField(
-            value = uiState.email,
-            onValueChange = { onAction(SignUpContract.UiAction.ChangeEmail(it)) },
-            label = "Email",
-            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = null) }
-        )
-        CustomTextField(
-            value = uiState.password,
-            onValueChange = { onAction(SignUpContract.UiAction.ChangePassword(it)) },
-            label = "Password",
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) }
-        )
-
         Spacer(modifier = Modifier.height(24.dp))
 
+        CustomTextField(
+            value = uiState.email,
+            onValueChange = { onAction(LoginContract.LoginUiAction.ChangeEmail(it)) },
+            label = "Enter new password",
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
+            isError = uiState.showEmailError
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        CustomTextField(
+            value = uiState.password,
+            onValueChange = { onAction(LoginContract.LoginUiAction.ChangePassword(it)) },
+            label = "Enter new password again",
+            isPassword = true,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "Password"
+                )
+            },
+            isError = uiState.showPasswordError
+        )
+        Spacer(modifier = Modifier.height(24.dp))
 
         CustomButton(
-            text = "Register",
-            onClick = {
-                onAction(SignUpContract.UiAction.SignUpClick)
-            }
-        )
+            text = "Change Password",
+            onClick = { })
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun SignupPreview() {
-    SignupScreen(
-        uiState = SignUpContract.UiState(),
+fun ResetPasswordScreenPrew() {
+    ResetPasswordScreen(
+        onBackClick = { },
+        uiState = LoginContract.LoginUiState(),
         onAction = { },
-        navController = rememberNavController(),
-        onBackClick = {  },)
+        navController = rememberNavController()
+    )
 }
