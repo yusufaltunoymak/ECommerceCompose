@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.navigation.compose)
     annotationProcessor(libs.androidx.room.compiler)
+    debugImplementation(libs.androidx.ui.tooling)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
@@ -88,6 +89,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.play.services.auth)
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    debugImplementation(libs.androidx.ui.tooling)
 
 
 

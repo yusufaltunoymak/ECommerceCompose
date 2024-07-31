@@ -18,6 +18,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 hilt = "2.50"
+uiTooling = "1.6.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +50,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
