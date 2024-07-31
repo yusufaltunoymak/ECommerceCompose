@@ -8,11 +8,11 @@ object LoginContract {
         val isLoading: Boolean = false,
         val email: String = "",
         val password: String = "",
-        val isSignIn: Boolean = false,
+        var isSignIn: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
         val showEmailError: Boolean = false,
-        val showPasswordError: Boolean = false
+        val showPasswordError: Boolean = false,
         val signInError: String? = null,
         val googleSignInRequest: IntentSender? = null
     )
