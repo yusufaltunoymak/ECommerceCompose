@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.signup
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
@@ -16,27 +15,56 @@ class SignUpViewModel @Inject constructor(
     private val createUserWithEmailAndPasswordUseCase: CreateUserWithEmailAndPasswordUseCase
 ) : ViewModel() {
 
-    private val _signUpViewState = MutableStateFlow(SignUpViewState())
-    val signUpViewState: StateFlow<SignUpViewState> = _signUpViewState
+    private val _signUpUiState = MutableStateFlow(SignUpContract.UiState())
+    val signUpUiState: StateFlow<SignUpContract.UiState> = _signUpUiState
 
-    fun signUp(name: String, surname: String, email: String, password: String, address: String = "") {
+    fun onAction(action: SignUpContract.UiAction) {
+        when (action) {
+            is SignUpContract.UiAction.SignUpClick -> signUp()
+            is SignUpContract.UiAction.ChangeName -> changeName(action.name)
+            is SignUpContract.UiAction.ChangeEmail -> changeEmail(action.email)
+            is SignUpContract.UiAction.ChangePassword -> changePassword(action.password)
+            is SignUpContract.UiAction.ChangeSurname -> changeSurname(action.surname)
+        }
+    }
+
+    private fun signUp() {
         viewModelScope.launch {
-            createUserWithEmailAndPasswordUseCase(name, surname, email, password, address).collect { resource ->
+            val state = signUpUiState.value
+            createUserWithEmailAndPasswordUseCase(state.name, state.surname,state.email, state.password, state.address).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        _signUpViewState.value = SignUpViewState(isLoading = true)
-                        Log.e("SignUpViewModel", "Loading")
+                        _signUpUiState.value = _signUpUiState.value.copy(isLoading = true)
                     }
                     is Resource.Success -> {
-                        _signUpViewState.value = SignUpViewState(isLoading = false, isSuccess = resource.data)
-                        Log.e("SignUpViewModel", "Success: ${resource.data}")
+                        _signUpUiState.value = _signUpUiState.value.copy(isLoading = false)
                     }
                     is Resource.Error -> {
-                        _signUpViewState.value = SignUpViewState(isLoading = false, errorMessage = resource.message)
-                        Log.e("SignUpViewModel", "Error: ${resource.message}")
+                        _signUpUiState.value = _signUpUiState.value.copy(isLoading = false)
                     }
                 }
             }
         }
     }
+
+    private fun changeName(name : String) {
+        _signUpUiState.value = _signUpUiState.value.copy(name = name)
+    }
+
+    private fun changeSurname(surname : String) {
+        _signUpUiState.value = _signUpUiState.value.copy(surname = surname)
+    }
+
+    private fun changeEmail(email : String) {
+        _signUpUiState.value = _signUpUiState.value.copy(email = email)
+    }
+
+    private fun changePassword(password : String) {
+        _signUpUiState.value = _signUpUiState.value.copy(password = password)
+    }
+
+    fun changeAddress(address : String) {
+        _signUpUiState.value = _signUpUiState.value.copy(address = address)
+    }
+
 }

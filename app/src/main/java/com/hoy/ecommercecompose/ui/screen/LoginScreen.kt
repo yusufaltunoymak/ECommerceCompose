@@ -1,6 +1,8 @@
 package com.hoy.ecommercecompose.ui.screen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
@@ -128,13 +132,13 @@ fun LoginScreen(
             )
         }
 
-        OutlinedButton(
+        IconButton(
                 onClick = {},
-        modifier = Modifier.size(48.dp),
-        border = BorderStroke(1.dp, LocalColors.current.primary)
+        modifier = Modifier.size(48.dp)
+            .border(BorderStroke(1.dp, LocalColors.current.primary), shape = RoundedCornerShape(12.dp))
         ) {
-        Icon(
-            painter = painterResource(id = R.drawable.google),
+        Image(
+            painter = painterResource(id = R.drawable.ic_google),
             contentDescription = null
         )
     }
