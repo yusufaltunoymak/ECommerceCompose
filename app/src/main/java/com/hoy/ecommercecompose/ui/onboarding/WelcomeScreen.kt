@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.ui.screen
+package com.hoy.ecommercecompose.ui.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

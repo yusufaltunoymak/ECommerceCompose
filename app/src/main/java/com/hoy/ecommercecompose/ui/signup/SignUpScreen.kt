@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +28,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 
@@ -41,8 +44,16 @@ import com.hoy.ecommercecompose.ui.components.CustomTextField
 @Composable
 fun SignupScreen(
     uiState: SignUpContract.UiState,
-    onAction : (SignUpContract.UiAction) -> Unit
+    onAction : (SignUpContract.UiAction) -> Unit,
+    navController: NavController
 ) {
+    LaunchedEffect(uiState.isSignUp) {
+        if (uiState.isSignUp) {
+            navController.navigate("login") {
+                popUpTo("signup") { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -95,7 +106,12 @@ fun SignupScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
 
-        CustomButton(text = "Register", onClick = { onAction(SignUpContract.UiAction.SignUpClick) })
+        CustomButton(
+            text = "Register",
+            onClick = {
+                onAction(SignUpContract.UiAction.SignUpClick)
+            }
+        )
     }
 }
 
@@ -104,6 +120,6 @@ fun SignupScreen(
 fun SignupPreview() {
     SignupScreen(
         uiState = SignUpContract.UiState(),
-        onAction = { }
-    )
+        onAction = { },
+        navController = rememberNavController())
 }

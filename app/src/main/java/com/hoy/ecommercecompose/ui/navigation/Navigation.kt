@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
 import com.hoy.ecommercecompose.ui.signup.SignupScreen
 
@@ -24,7 +25,17 @@ fun SetupNavGraph(navController: NavHostController) {
 
             SignupScreen(
                 uiState = signupState,
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                navController = navController
+            )
+        }
+
+        composable("login") {
+            LoginScreen(
+                onBackClick = { navController.popBackStack() },
+                onLoginClick = { email, password ->
+                    // Handle login click
+                }
             )
         }
     }

@@ -31,21 +31,30 @@ class SignUpViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             val state = signUpUiState.value
-            createUserWithEmailAndPasswordUseCase(state.name, state.surname,state.email, state.password, state.address).collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        _signUpUiState.value = _signUpUiState.value.copy(isLoading = true)
-                    }
-                    is Resource.Success -> {
-                        _signUpUiState.value = _signUpUiState.value.copy(isLoading = false)
-                    }
-                    is Resource.Error -> {
-                        _signUpUiState.value = _signUpUiState.value.copy(isLoading = false)
-                    }
+            val resource = createUserWithEmailAndPasswordUseCase(
+                name = state.name,
+                surname = state.surname,
+                email = state.email,
+                password = state.password,
+                address = state.address
+            )
+            when (resource) {
+                is Resource.Loading -> {
+                    _signUpUiState.value = _signUpUiState.value.copy(isLoading = true, isSignUp = false)
+                }
+                is Resource.Success -> {
+                    _signUpUiState.value = _signUpUiState.value.copy(isLoading = false, isSignUp = true)
+                }
+                is Resource.Error -> {
+                    _signUpUiState.value = _signUpUiState.value.copy(
+                        isLoading = false,
+                        isSignUp = false
+                    )
                 }
             }
         }
     }
+
 
     private fun changeName(name : String) {
         _signUpUiState.value = _signUpUiState.value.copy(name = name)

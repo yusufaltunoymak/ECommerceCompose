@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.domain.usecase.auth
 
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.repository.FirebaseAuthRepositoryImpl
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val firebaseAuthRepositoryImpl: FirebaseAuthRepositoryImpl) {
@@ -12,7 +11,7 @@ class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val fire
         email: String,
         password: String,
         address: String
-    ): Flow<Resource<Boolean>> {
+    ): Resource<Unit> {
         return firebaseAuthRepositoryImpl.createUserWithEmailAndPassword(
             name = name,
             surname = surname,

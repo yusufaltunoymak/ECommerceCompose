@@ -8,6 +8,7 @@ object SignUpContract {
         val name: String = "",
         val surname: String = "",
         val address: String = "",
+        val isSignUp: Boolean = false,
     )
 
     sealed class UiAction {
