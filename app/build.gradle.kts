@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.navigation.compose)
     annotationProcessor(libs.androidx.room.compiler)
+    debugImplementation(libs.androidx.ui.tooling)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)

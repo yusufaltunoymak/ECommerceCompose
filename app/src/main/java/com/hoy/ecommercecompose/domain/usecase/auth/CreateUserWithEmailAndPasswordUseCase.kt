@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.domain.usecase
+package com.hoy.ecommercecompose.domain.usecase.auth
 
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.repository.FirebaseAuthRepositoryImpl
