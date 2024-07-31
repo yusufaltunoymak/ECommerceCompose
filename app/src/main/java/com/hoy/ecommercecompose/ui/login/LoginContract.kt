@@ -18,7 +18,7 @@ object LoginContract {
         data class ChangePassword(val password: String) : LoginUiAction()
     }
 
-    fun handleAction(action: LoginContract.LoginUiAction, uiState: LoginContract.LoginUiState, onUiStateChange: (LoginContract.LoginUiState) -> Unit) {
+    /*fun handleAction(action: LoginContract.LoginUiAction, uiState: LoginContract.LoginUiState, onUiStateChange: (LoginContract.LoginUiState) -> Unit) {
         when (action) {
             is LoginContract.LoginUiAction.SignInClick -> {
                 val emailError = uiState.email.isEmpty()
@@ -33,5 +33,5 @@ object LoginContract {
             is LoginContract.LoginUiAction.ChangeEmail -> onUiStateChange(uiState.copy(email = action.email))
             is LoginContract.LoginUiAction.ChangePassword -> onUiStateChange(uiState.copy(password = action.password))
         }
-    }
+    }*/
 }

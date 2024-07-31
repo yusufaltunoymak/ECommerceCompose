@@ -51,7 +51,6 @@ fun WelcomeScreen(
         CustomOutlinedButton(text = "Register", onClick = onRegisterClick)
 
         Spacer(modifier = Modifier.fillMaxHeight())
-
     }
 }
 

@@ -35,7 +35,8 @@ fun SetupNavGraph(navController: NavHostController) {
             SignupScreen(
                 uiState = signupState,
                 onAction = viewModel::onAction,
-                navController = navController
+                navController = navController,
+                onBackClick = { navController.popBackStack() },
             )
         }
 
