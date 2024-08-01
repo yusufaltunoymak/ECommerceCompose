@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.data.repository
 
+import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,6 +47,25 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             Resource.Success(Unit)
         } catch (e: FirebaseException) {
             Resource.Error(e.message ?: "An unknown error occurred")
+        }
+    }
+
+    override suspend fun getUserInformation(): Resource<User> {
+        val currentUser = firebaseAuth.currentUser
+        return if (currentUser != null) {
+            try {
+                val document = firestore.collection("Users").document(currentUser.uid).get().await()
+                val user = document.toObject(User::class.java)
+                if (user != null) {
+                    Resource.Success(user)
+                } else {
+                    Resource.Error("User data is null")
+                }
+            } catch (e: Exception) {
+                Resource.Error(e.message ?: "An unknown error occurred")
+            }
+        } else {
+            Resource.Error("No user is currently logged in")
         }
     }
 }
