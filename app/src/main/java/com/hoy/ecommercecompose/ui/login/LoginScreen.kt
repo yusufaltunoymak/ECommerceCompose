@@ -200,20 +200,27 @@ fun LoginScreen(
             )
         }
 
-        IconButton(
-            onClick = { onAction(LoginContract.LoginUiAction.GoogleSignInClick) },
-        modifier = Modifier
-            .size(48.dp)
-            .border(
-                BorderStroke(1.dp, LocalColors.current.primary),
-                shape = RoundedCornerShape(12.dp)
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp), // Add some top padding for the row
+            horizontalArrangement = Arrangement.Center // Center the Google button
         ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_google),
-            contentDescription = null
-        )
-    }
+            IconButton(
+                onClick = { onAction(LoginContract.LoginUiAction.GoogleSignInClick) },
+                modifier = Modifier
+                    .size(48.dp)
+                    .border(
+                        BorderStroke(1.dp, LocalColors.current.primary),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_google),
+                    contentDescription = null
+                )
+            }
+        }
     }
 }
 
