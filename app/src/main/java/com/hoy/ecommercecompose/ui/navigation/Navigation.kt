@@ -7,6 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hoy.ecommercecompose.ui.home.HomeViewModel
 import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
@@ -56,8 +57,11 @@ fun SetupNavGraph(
             )
         }
 
+
         composable("home") {
-            HomeScreen()
+            val homeViewModel: HomeViewModel = hiltViewModel()
+            val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+            HomeScreen(uiState = uiState)
         }
     }
 }
