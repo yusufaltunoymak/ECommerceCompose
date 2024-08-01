@@ -4,16 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.identity.Identity
+import com.hoy.ecommercecompose.ui.components.BottomNavigationBar
+import com.hoy.ecommercecompose.ui.components.bottomNavItems
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.navigation.SetupNavGraph
 import com.hoy.ecommercecompose.ui.theme.ECommerceComposeTheme
@@ -29,11 +32,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ECommerceComposeTheme {
-                Box(modifier = Modifier.safeDrawingPadding()
-                    .background(Color.White)){
-                    val navController = rememberNavController()
-                    SetupNavGraph(navController = navController, googleAuthUiClient = googleAuthUiClient)
-                }
+                val navController = rememberNavController()
+                MainScreen(navController = navController, googleAuthUiClient = googleAuthUiClient)
             }
         }
     }
@@ -50,7 +50,44 @@ fun GreetingPreview() {
             context = context,
             oneTapClient = oneTapClient
         )
-        SetupNavGraph(navController = navController, googleAuthUiClient = mockGoogleAuthUiClient)
+        MainScreen(navController = navController, googleAuthUiClient = mockGoogleAuthUiClient)
+    }
+}
+
+@Composable
+fun MainScreen(navController: NavHostController, googleAuthUiClient: GoogleAuthUiClient) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val hideBottomNavRoutes = listOf("welcome", "login", "signup")
+    val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
+    Scaffold(
+        bottomBar = {
+            if (shouldShowBottomNav) {
+                BottomNavigationBar(
+                    navController = navController,
+                    items = bottomNavItems,
+                    onItemClick = { item ->
+                        navController.navigate(item.route) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onFabClick = {
+                        // FAB tıklama işlemi burada tanımlanabilir
+                    }
+                )
+            }
+        }
+    ) { innerPadding ->
+        SetupNavGraph(
+            navController = navController,
+            googleAuthUiClient = googleAuthUiClient,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 

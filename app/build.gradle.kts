@@ -93,4 +93,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     implementation ("io.coil-kt:coil-compose:2.1.0")
     implementation (libs.androidx.lifecycle.runtime.compose)
+    //bottom navigation compose
+    implementation(libs.androidx.compose.material3)
+    implementation (libs.ui)
+    implementation (libs.androidx.material)
 }
