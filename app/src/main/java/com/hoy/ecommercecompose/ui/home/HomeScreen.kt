@@ -30,15 +30,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.model.User
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
-import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState) {
+fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState, navController: NavController) {
 
     Column(
         modifier = modifier
@@ -46,7 +47,7 @@ fun HomeScreen(modifier: Modifier = Modifier, uiState: HomeUiState) {
             .fillMaxSize()
     ) {
         with(uiState) {
-            if(currentUser != null) {
+            if (currentUser != null) {
                 Text(
                     text = "Welcome ${currentUser.name}!",
                     style = MaterialTheme.typography.bodyLarge,
@@ -95,9 +96,11 @@ fun HorizontalPager() {
             R.drawable.sale
         )
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+        ) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
@@ -165,6 +168,7 @@ fun Preview() {
     HomeScreen(
         uiState = HomeUiState(
             currentUser = User("John Doe")
-        )
+        ),
+        navController = rememberNavController()
     )
 }
