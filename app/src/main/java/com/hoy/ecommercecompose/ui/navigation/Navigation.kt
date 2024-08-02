@@ -8,6 +8,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
 import com.hoy.ecommercecompose.ui.home.HomeScreen
@@ -26,9 +27,10 @@ fun SetupNavGraph(
     googleAuthUiClient: GoogleAuthUiClient,
     modifier: Modifier = Modifier
 ) {
+    val currentUser = FirebaseAuth.getInstance().currentUser
     NavHost(
         navController = navController,
-        startDestination = "welcome",
+        startDestination = if (currentUser != null) "home" else "welcome",
         modifier = modifier
     ) {
         composable("welcome") {

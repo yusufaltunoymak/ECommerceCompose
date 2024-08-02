@@ -6,12 +6,8 @@ data class ProductUi(
     val description: String,
     val id: Int,
     val imageOne: String,
-    val imageThree: String,
-    val imageTwo: String,
-    val price: Int,
-    val rate: Int,
-    val salePrice: Int,
-    val saleState: Boolean,
+    val price: Double,
     val title: String,
-    val isFavorite: Boolean
+    val isFavorite: Boolean,
+    val rate: Double
 )

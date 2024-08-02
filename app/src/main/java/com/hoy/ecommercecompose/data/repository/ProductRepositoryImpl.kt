@@ -20,8 +20,8 @@ class ProductRepositoryImpl @Inject constructor(
                 response.body()?.let {
                     Resource.Success(it)
                 } ?: Resource.Error("Error: Empty response body")
-            } else {
-                Resource.Error("Error: ${response.message()}")
+            }  else {
+                Resource.Error(response.body()?.message ?: "Error: ${response.message()}")
             }
         } catch (e: Exception) {
             Resource.Error("Exception: ${e.message}")
@@ -31,12 +31,10 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun getCategories() : Resource<GetCategoriesResponse> {
         return try {
             val response = apiService.getCategories()
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    Resource.Success(it)
-                } ?: Resource.Error("Error: Empty response body")
+            if (response.isSuccessful && response.body()?.status == 200) {
+                    Resource.Success(response.body()!!)
             } else {
-                Resource.Error("Error: ${response.message()}")
+                Resource.Error(response.body()?.message ?: "Error: ${response.message()}")
             }
         } catch (e: Exception) {
             Resource.Error("Exception: ${e.message}")
@@ -51,7 +49,7 @@ class ProductRepositoryImpl @Inject constructor(
                     Resource.Success(it)
                 } ?: Resource.Error("Error: Empty response body")
             } else {
-                Resource.Error("Error: ${response.message()}")
+                Resource.Error(response.body()?.message ?: "Error: ${response.message()}")
             }
         } catch (e: Exception) {
             Resource.Error("Exception: ${e.message}")
