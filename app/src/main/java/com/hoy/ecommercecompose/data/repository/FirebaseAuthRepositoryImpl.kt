@@ -1,11 +1,10 @@
 package com.hoy.ecommercecompose.data.repository
 
-import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.model.User
+import com.hoy.ecommercecompose.data.source.remote.model.User
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

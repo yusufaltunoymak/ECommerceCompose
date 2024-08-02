@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -56,9 +55,9 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.data.model.Category
-import com.hoy.ecommercecompose.data.model.User
-import com.hoy.ecommercecompose.data.model.response.GetCategoriesResponse
+import com.hoy.ecommercecompose.data.source.remote.model.Category
+import com.hoy.ecommercecompose.data.source.remote.model.User
+import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.LocalColors

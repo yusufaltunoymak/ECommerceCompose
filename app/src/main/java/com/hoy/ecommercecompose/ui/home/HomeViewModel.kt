@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.mapper.mapToProductUi
-import com.hoy.ecommercecompose.data.model.response.GetCategoriesResponse
+import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.domain.usecase.auth.GetUserInformationUseCase
 import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductsUseCase

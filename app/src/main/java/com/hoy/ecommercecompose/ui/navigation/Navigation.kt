@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.cart.CartScreen
+import com.hoy.ecommercecompose.ui.cart.CartViewModel
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
 import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.home.HomeViewModel
@@ -78,7 +79,13 @@ fun SetupNavGraph(
             FavoriteScreen(navController)
         }
         composable("cart") {
-            CartScreen(navController)
+            val cartViewModel: CartViewModel = hiltViewModel()
+            val cartUiState by cartViewModel.uiState.collectAsStateWithLifecycle()
+
+            CartScreen(
+                navController = navController,
+                uiState = cartUiState
+            )
         }
         composable("profile") {
             ProfileScreen(navController)
