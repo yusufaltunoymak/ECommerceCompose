@@ -1,10 +1,10 @@
 package com.hoy.ecommercecompose.domain.usecase.auth
 
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.repository.FirebaseAuthRepositoryImpl
+import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import javax.inject.Inject
 
-class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val firebaseAuthRepositoryImpl: FirebaseAuthRepositoryImpl) {
+class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRepository) {
     suspend operator fun invoke(
         name: String,
         surname: String,
@@ -12,7 +12,7 @@ class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val fire
         password: String,
         address: String
     ): Resource<Unit> {
-        return firebaseAuthRepositoryImpl.createUserWithEmailAndPassword(
+        return firebaseAuthRepository.createUserWithEmailAndPassword(
             name = name,
             surname = surname,
             email = email,

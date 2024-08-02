@@ -10,7 +10,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.data.model.User
+import com.hoy.ecommercecompose.data.source.remote.model.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException

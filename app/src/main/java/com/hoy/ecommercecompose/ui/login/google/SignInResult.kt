@@ -1,6 +1,6 @@
 package com.hoy.ecommercecompose.ui.login.google
 
-import com.hoy.ecommercecompose.data.model.User
+import com.hoy.ecommercecompose.data.source.remote.model.User
 
 data class SignInResult(
     val data: User?,

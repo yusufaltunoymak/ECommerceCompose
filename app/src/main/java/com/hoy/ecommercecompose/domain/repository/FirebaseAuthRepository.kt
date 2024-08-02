@@ -1,9 +1,10 @@
 package com.hoy.ecommercecompose.domain.repository
 
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.model.User
+import com.hoy.ecommercecompose.data.source.remote.model.User
+import javax.inject.Inject
 
-interface FirebaseAuthRepository {
+interface FirebaseAuthRepository  {
     suspend fun createUserWithEmailAndPassword(
         email: String,
         password: String,

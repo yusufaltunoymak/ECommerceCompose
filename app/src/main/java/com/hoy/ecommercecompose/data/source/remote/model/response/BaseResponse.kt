@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.data.model.response
+package com.hoy.ecommercecompose.data.source.remote.model.response
 
 open class BaseResponse(
     val status: Int? = null,

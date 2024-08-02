@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.data.model
+package com.hoy.ecommercecompose.data.source.remote.model
 
 data class Product(
     val category: String?,

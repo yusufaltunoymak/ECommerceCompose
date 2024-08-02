@@ -1,8 +1,8 @@
 package com.hoy.ecommercecompose.ui.home
 
-import com.hoy.ecommercecompose.data.model.User
-import com.hoy.ecommercecompose.data.model.response.GetCategoriesResponse
-import com.hoy.ecommercecompose.data.model.response.GetProductResponse
+import com.hoy.ecommercecompose.data.source.remote.model.User
+import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
+import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductResponse
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
 data class HomeUiState(
