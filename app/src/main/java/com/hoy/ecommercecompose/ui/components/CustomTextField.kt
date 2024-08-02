@@ -1,6 +1,8 @@
 package com.hoy.ecommercecompose.ui.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -24,27 +26,40 @@ fun CustomTextField(
     label: String,
     isPassword: Boolean = false,
     leadingIcon: @Composable () -> Unit,
-    isError: Boolean = false
+    isError: Boolean = false,
+    errorMessage: String? = null
 ) {
     val containerColor = if (isError) Color(0xFFFFE5E5) else Color.White
     val indicatorColor = if (isError) Color.Red else LocalColors.current.primary.copy(alpha = 0.3f)
 
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        leadingIcon = { leadingIcon() },
-        label = { Text(label) },
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = containerColor,
-            unfocusedContainerColor = containerColor,
-            focusedIndicatorColor = indicatorColor,
-            unfocusedIndicatorColor = indicatorColor,
-        ),)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            leadingIcon = { leadingIcon() },
+            label = { Text(label) },
+            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = containerColor,
+                unfocusedContainerColor = containerColor,
+                focusedIndicatorColor = indicatorColor,
+                unfocusedIndicatorColor = indicatorColor,
+            ),
+            isError = isError
+        )
+        if (isError && errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable

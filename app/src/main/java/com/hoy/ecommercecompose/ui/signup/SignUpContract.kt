@@ -1,5 +1,3 @@
-package com.hoy.ecommercecompose.ui.signup
-
 object SignUpContract {
     data class UiState(
         val isLoading: Boolean = false,
@@ -9,6 +7,11 @@ object SignUpContract {
         val surname: String = "",
         val address: String = "",
         val isSignUp: Boolean = false,
+        val showEmailError: Boolean = false,
+        val showPasswordError: Boolean = false,
+        val showNameError: Boolean = false,
+        val showSurnameError: Boolean = false,
+        val signUpError: String? = null,
     )
 
     sealed class UiAction {

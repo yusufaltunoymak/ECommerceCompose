@@ -1,18 +1,20 @@
-package com.hoy.ecommercecompose.ui.login
+package com.hoy.ecommercecompose.ui.sendcode
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -27,16 +29,16 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
+import com.hoy.ecommercecompose.ui.login.LoginContract
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 
 @Composable
-fun ResetPasswordScreen(
+fun SendCodeScreen(
     onBackClick: () -> Unit,
     uiState: LoginContract.LoginUiState,
     onAction: (LoginContract.LoginUiAction) -> Unit,
     navController: NavController
-) {
-
+){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,15 +65,16 @@ fun ResetPasswordScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Create new password",
+            text = "Ups! \nForgot password?",
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             modifier = Modifier.align(Alignment.Start)
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Your new password must be unique from those previously used.",
+            text = "Don't worry! It occurs. \nPlease enter the email address linked with your account.",
             fontWeight = FontWeight.Thin,
             fontSize = 18.sp,
             modifier = Modifier.align(Alignment.Start)
@@ -80,41 +83,52 @@ fun ResetPasswordScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         CustomTextField(
-            value = uiState.email,
-            onValueChange = { onAction(LoginContract.LoginUiAction.ChangeEmail(it)) },
-            label = "New Password",
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
-            isError = uiState.showEmailError
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        CustomTextField(
             value = uiState.password,
             onValueChange = { onAction(LoginContract.LoginUiAction.ChangePassword(it)) },
-            label = "Confirm Password",
+            label = "Enter your email",
             isPassword = true,
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "Password"
+                    imageVector = Icons.Default.Send,
+                    contentDescription =null
                 )
             },
             isError = uiState.showPasswordError
         )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         CustomButton(
-            text = "Reset Password",
+            text = "Change Password",
             onClick = { })
-    }
-}
 
+        Spacer(modifier = Modifier.height(400.dp))
+
+        Row (modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center, ){
+
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Click to login",
+                fontWeight = FontWeight.Thin,
+                fontSize = 18.sp,
+                color = LocalColors.current.primary
+            )
+        }
+    }
+
+
+
+}
 
 @Preview(showBackground = true)
 @Composable
-fun ResetPasswordScreenPrew() {
-    ResetPasswordScreen(
+fun Prew() {
+    SendCodeScreen(
         onBackClick = { },
         uiState = LoginContract.LoginUiState(),
         onAction = { },

@@ -46,6 +46,7 @@ fun SetupNavGraph(
                 onAction = viewModel::onAction,
                 navController = navController,
                 onBackClick = { navController.popBackStack() },
+                viewModel = viewModel
             )
         }
 
@@ -82,7 +83,3 @@ fun SetupNavGraph(
         }
     }
 }
-
-
-
-

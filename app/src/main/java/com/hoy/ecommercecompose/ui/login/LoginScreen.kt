@@ -1,7 +1,6 @@
 package com.hoy.ecommercecompose.ui.login
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,12 +23,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -82,6 +87,29 @@ fun LoginScreen(
                 popUpTo("welcome") { inclusive = true }
             }
         }
+    }
+
+    var showErrorDialog by remember { mutableStateOf(false) }
+
+    if (uiState.showEmailError || uiState.showPasswordError) {
+        showErrorDialog = true
+    }
+
+    if (showErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showErrorDialog = false },
+            title = { Text("Validation Error") },
+            text = {
+                Text("Please enter valid email and password.")
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showErrorDialog = false }
+                ) {
+                    Text("OK")
+                }
+            }
+        )
     }
 
     Column(
@@ -203,8 +231,8 @@ fun LoginScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp), // Add some top padding for the row
-            horizontalArrangement = Arrangement.Center // Center the Google button
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
             IconButton(
                 onClick = { onAction(LoginContract.LoginUiAction.GoogleSignInClick) },
@@ -224,10 +252,9 @@ fun LoginScreen(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun Preview(){
+fun Preview() {
     val context = LocalContext.current
     val oneTapClient = Identity.getSignInClient(context)
     LoginScreen(
