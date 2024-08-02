@@ -24,5 +24,4 @@ object LoginContract {
         data class GoogleSignInResult(val intent: Intent) : LoginUiAction()
         data object GoogleSignInClick : LoginUiAction()
     }
-
 }

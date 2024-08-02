@@ -231,8 +231,8 @@ fun LoginScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp), // Add some top padding for the row
-            horizontalArrangement = Arrangement.Center // Center the Google button
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
             IconButton(
                 onClick = { onAction(LoginContract.LoginUiAction.GoogleSignInClick) },
@@ -252,10 +252,9 @@ fun LoginScreen(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun Preview(){
+fun Preview() {
     val context = LocalContext.current
     val oneTapClient = Identity.getSignInClient(context)
     LoginScreen(
