@@ -51,6 +51,21 @@ class LoginViewModel @Inject constructor(
     private fun signInWithEmailAndPassword() {
         viewModelScope.launch {
             val state = loginUiState.value
+
+
+            if (validateInputs(state.email, state.password)) {
+                val resource = signInWithEmailAndPasswordUseCase(
+                    email = state.email,
+                    password = state.password
+                )
+                when (resource) {
+                    is Resource.Error -> TODO()
+                    is Resource.Loading -> TODO()
+                    is Resource.Success -> TODO()
+                }
+            }
+
+
             val resource = signInWithEmailAndPasswordUseCase(
                 email = state.email,
                 password = state.password
@@ -82,5 +97,21 @@ class LoginViewModel @Inject constructor(
 
     private fun changePassword(password: String) {
         _loginUiState.value = _loginUiState.value.copy(password = password)
+    }
+
+    private fun validateInputs(email: String, password: String): Boolean {
+        var isValid = true
+        val emailError = email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        val passwordError = password.isEmpty()
+
+        _loginUiState.update {
+            it.copy(
+                showEmailError = emailError,
+                showPasswordError = passwordError
+            )
+        }
+
+        isValid = !emailError && !passwordError
+        return isValid
     }
 }
