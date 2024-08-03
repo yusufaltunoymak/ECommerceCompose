@@ -33,28 +33,41 @@ class SignUpViewModel @Inject constructor(
 
     private fun signUp() {
         viewModelScope.launch {
-            val state = signUpUiState.value
-            if (validateRegisterInputs(state.name, state.surname, state.email, state.password)) {
-                val resource = createUserWithEmailAndPasswordUseCase(
-                    name = state.name,
-                    surname = state.surname,
-                    email = state.email,
-                    password = state.password,
-                    address = state.address
+            _signUpUiState.update { uiState ->
+                uiState.copy(
+                    isLoading = true,
+                    signUpError = null
                 )
-                when (resource) {
-                    is Resource.Loading -> {
-                        _signUpUiState.value =
-                            _signUpUiState.value.copy(isLoading = true, isSignUp = false)
-                    }
+            }
+            val state = signUpUiState.value
+            val resource = createUserWithEmailAndPasswordUseCase(
+                name = state.name,
+                surname = state.surname,
+                email = state.email,
+                password = state.password,
+                address = state.address
+            )
 
-                    is Resource.Success -> {
-                        _signUpUiState.value =
-                            _signUpUiState.value.copy(isLoading = false, isSignUp = true)
+            when (resource) {
+                is Resource.Loading -> {
+                    _signUpUiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = true,
+                            signUpError = null
+                        )
                     }
-
-                    is Resource.Error -> {
-                        _signUpUiState.value = _signUpUiState.value.copy(
+                }
+                is Resource.Success -> {
+                    _signUpUiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = false,
+                            isSignUp = true
+                        )
+                    }
+                }
+                is Resource.Error -> {
+                    _signUpUiState.update {
+                        it.copy(
                             isLoading = false,
                             isSignUp = false,
                             signUpError = resource.message
@@ -65,44 +78,44 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun validateRegisterInputs(
-        name: String,
-        surname: String,
-        email: String,
-        password: String
-    ): Boolean {
-        val nameError = name.isEmpty()
-        val surnameError = surname.isEmpty()
-        val emailError =
-            email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        val passwordError = password.isEmpty()
 
-        _signUpUiState.update {
-            it.copy(
-                showNameError = nameError,
-                showSurnameError = surnameError,
-                showEmailError = emailError,
-                showPasswordError = passwordError
+    fun clearError() {
+        _signUpUiState.update { uiState ->
+            uiState.copy(
+                signUpError = null
             )
         }
-
-        val isValid: Boolean = !(nameError || surnameError || emailError || passwordError)
-        return isValid
     }
 
     private fun changeName(name: String) {
-        _signUpUiState.value = _signUpUiState.value.copy(name = name)
+        _signUpUiState.update { uiState ->
+            uiState.copy(
+                name = name
+            )
+        }
     }
 
     private fun changeSurname(surname: String) {
-        _signUpUiState.value = _signUpUiState.value.copy(surname = surname)
+        _signUpUiState.update { uiState ->
+            uiState.copy(
+                surname = surname
+            )
+        }
     }
 
     private fun changeEmail(email: String) {
-        _signUpUiState.value = _signUpUiState.value.copy(email = email)
+        _signUpUiState.update { uiState ->
+            uiState.copy(
+                email = email
+            )
+        }
     }
 
     private fun changePassword(password: String) {
-        _signUpUiState.value = _signUpUiState.value.copy(password = password)
+        _signUpUiState.update { uiState ->
+            uiState.copy(
+                password = password
+            )
+        }
     }
 }
