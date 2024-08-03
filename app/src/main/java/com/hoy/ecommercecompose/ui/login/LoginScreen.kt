@@ -59,7 +59,8 @@ fun LoginScreen(
     uiState: LoginContract.LoginUiState,
     onAction: (LoginContract.LoginUiAction) -> Unit,
     navController: NavController,
-    googleAuthUiClient: GoogleAuthUiClient
+    googleAuthUiClient: GoogleAuthUiClient,
+    onForgotPasswordClick: () -> Unit,
 ) {
     val signInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult()
@@ -183,6 +184,9 @@ fun LoginScreen(
             )
             Text(
                 text = "Forgot Password?",
+                modifier = Modifier.clickable {
+                    onForgotPasswordClick()
+                },
                 fontWeight = FontWeight.Light,
                 fontSize = 12.sp,
             )
@@ -265,6 +269,7 @@ fun Preview() {
         googleAuthUiClient = GoogleAuthUiClient(
             context = context,
             oneTapClient = oneTapClient
-        )
+        ),
+        onForgotPasswordClick = {}
     )
 }
