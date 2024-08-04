@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.mapper.mapToProductUi
-import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
+import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.domain.usecase.auth.GetUserInformationUseCase
 import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -61,21 +62,24 @@ class HomeViewModel @Inject constructor(
 
     private fun getCategories() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true
-            )
+            _uiState.update { uiState ->
+                uiState.copy(
+                    isLoading = true
+                )
+            }
+
             when (val result = getCategoriesUseCase()) {
                 is Resource.Success -> {
-                    val uniqueCategories =
-                        result.data?.categories?.distinctBy { category -> category.name }
-                    _uiState.value = _uiState.value.copy(
-                        categoryList = uniqueCategories?.let {
-                            GetCategoriesResponse(
-                                categories = it
+                    _uiState.update { uiState ->
+                        result.data?.categories?.map { category ->
+                            Category(name = category.name,image = category.image)
+                        }?.let {
+                            uiState.copy(
+                                categoryList = it,
+                                isLoading = false
                             )
-                        },
-                        isLoading = false
-                    )
+                        }!!
+                    }
                 }
 
                 is Resource.Error -> {
@@ -96,9 +100,11 @@ class HomeViewModel @Inject constructor(
 
     private fun getProducts() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true
-            )
+            _uiState.update { uiState ->
+                uiState.copy(
+                    isLoading = true
+                )
+            }
             when (val result = getProductsUseCase()) {
                 is Resource.Success -> {
                     val filteredList = result.data?.products?.filter { product ->
@@ -107,24 +113,29 @@ class HomeViewModel @Inject constructor(
                     val mappedList = filteredList?.map { product ->
                         product.mapToProductUi()
                     }
-                    _uiState.value = _uiState.value.copy(
-                        productList = mappedList,
-                        isLoading = false
-                    )
-
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            productList = mappedList ?: emptyList(),
+                            isLoading = false
+                        )
+                    }
                 }
 
                 is Resource.Error -> {
-                    _uiState.value = _uiState.value.copy(
-                        errorMessage = result.message,
-                        isLoading = false
-                    )
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            errorMessage = result.message,
+                            isLoading = false
+                        )
+                    }
                 }
 
                 is Resource.Loading -> {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = true
-                    )
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = true
+                        )
+                    }
                 }
             }
         }

@@ -62,7 +62,8 @@ fun SetupNavGraph(
                 uiState = loginViewState,
                 onAction = loginViewModel::onAction,
                 navController = navController,
-                googleAuthUiClient = googleAuthUiClient
+                googleAuthUiClient = googleAuthUiClient,
+                viewModel = loginViewModel
             )
         }
 

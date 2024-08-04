@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.data.repository
 
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hoy.ecommercecompose.common.Resource
@@ -45,7 +44,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             Resource.Success(Unit)
-        } catch (e: FirebaseException) {
+        } catch (e: Exception) {
             Resource.Error(e.message ?: "An unknown error occurred")
         }
     }
