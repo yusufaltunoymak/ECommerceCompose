@@ -68,6 +68,8 @@ fun SetupNavGraph(
                 navController = navController,
                 googleAuthUiClient = googleAuthUiClient,
                 onForgotPasswordClick = { navController.navigate("send_mail") }
+                googleAuthUiClient = googleAuthUiClient,
+                viewModel = loginViewModel
             )
         }
 

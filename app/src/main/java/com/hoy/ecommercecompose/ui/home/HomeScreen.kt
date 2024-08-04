@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -57,7 +56,6 @@ import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.data.source.remote.model.User
-import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.LocalColors
@@ -102,10 +100,7 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-        uiState.categoryList?.let {
-            CategoryList(categoryResponse = uiState.categoryList)
-            Log.e("HomeScreen", "CategoryList: ${uiState.categoryList}")
-        }
+            CategoryList(uiState)
 
         Text(
             text = "Top Rated Products",
@@ -113,9 +108,8 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-        uiState.productList?.let {
-            ProductGrid(productList = uiState.productList)
-        }
+            ProductGrid(uiState = uiState)
+
     }
 }
 
@@ -240,9 +234,9 @@ fun CategoryCard(category: Category, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CategoryList(categoryResponse: GetCategoriesResponse, modifier: Modifier = Modifier) {
+fun CategoryList(uiState: HomeUiState, modifier: Modifier = Modifier) {
     LazyRow(modifier = modifier) {
-        items(categoryResponse.categories) { category ->
+        items(uiState.categoryList) { category ->
             CategoryCard(
                 category = category,
                 modifier = Modifier.padding(8.dp)
@@ -351,9 +345,9 @@ fun ProductCard(
 }
 
 @Composable
-fun ProductGrid(productList: List<ProductUi>) {
+fun ProductGrid(uiState: HomeUiState) {
     LazyRow {
-        items(productList) { product ->
+        items(uiState.productList) { product ->
             ProductCard(product = product, modifier = Modifier.padding(8.dp))
         }
     }

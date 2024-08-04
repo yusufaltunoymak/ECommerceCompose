@@ -9,8 +9,6 @@ object LoginContract {
         val email: String = "",
         val password: String = "",
         var isSignIn: Boolean = false,
-        val emailError: Boolean = false,
-        val passwordError: Boolean = false,
         val showEmailError: Boolean = false,
         val showPasswordError: Boolean = false,
         val signInError: String? = null,

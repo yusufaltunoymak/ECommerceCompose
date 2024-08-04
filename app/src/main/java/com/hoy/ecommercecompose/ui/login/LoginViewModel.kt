@@ -50,26 +50,40 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun signInWithEmailAndPassword() {
+        _loginUiState.update { uiState ->
+            uiState.copy(
+                isLoading = true,
+                signInError = null
+            )
+        }
         val state = loginUiState.value
-        if (validateInputs(state.email, state.password)) {
-            viewModelScope.launch {
-                val resource = signInWithEmailAndPasswordUseCase(
-                    email = state.email,
-                    password = state.password
-                )
-                when (resource) {
-                    is Resource.Loading -> {
-                        _loginUiState.value =
-                            _loginUiState.value.copy(isLoading = true, isSignIn = false)
+        viewModelScope.launch {
+            val resource = signInWithEmailAndPasswordUseCase(
+                email = state.email,
+                password = state.password
+            )
+            when (resource) {
+                is Resource.Loading -> {
+                    _loginUiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = true,
+                            isSignIn = false
+                        )
                     }
+                }
 
-                    is Resource.Success -> {
-                        _loginUiState.value =
-                            _loginUiState.value.copy(isLoading = false, isSignIn = true)
+                is Resource.Success -> {
+                    _loginUiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = false,
+                            isSignIn = true
+                        )
                     }
+                }
 
-                    is Resource.Error -> {
-                        _loginUiState.value = _loginUiState.value.copy(
+                is Resource.Error -> {
+                    _loginUiState.update {
+                        it.copy(
                             isLoading = false,
                             isSignIn = false,
                             signInError = resource.message
@@ -80,26 +94,27 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun validateInputs(email: String, password: String): Boolean {
-        val emailError =
-            email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        val passwordError = password.isEmpty()
-
-        _loginUiState.update {
-            it.copy(
-                showEmailError = emailError,
-                showPasswordError = passwordError
+    fun clearError() {
+        _loginUiState.update { uiState ->
+            uiState.copy(
+                signInError = null
             )
         }
-        return !(emailError || passwordError)
     }
 
     private fun changeEmail(email: String) {
-        _loginUiState.value = _loginUiState.value.copy(email = email, showEmailError = false)
+        _loginUiState.update { uiState ->
+            uiState.copy(
+                email = email
+            )
+        }
     }
 
     private fun changePassword(password: String) {
-        _loginUiState.value =
-            _loginUiState.value.copy(password = password, showPasswordError = false)
+        _loginUiState.update { uiState ->
+            uiState.copy(
+                password = password
+            )
+        }
     }
 }
