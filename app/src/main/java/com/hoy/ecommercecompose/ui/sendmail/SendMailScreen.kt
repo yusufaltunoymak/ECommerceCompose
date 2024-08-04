@@ -1,7 +1,8 @@
-package com.hoy.ecommercecompose.ui.sendcode
+package com.hoy.ecommercecompose.ui.sendmail
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,33 +15,31 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.ui.components.CustomButton
-import com.hoy.ecommercecompose.ui.login.LoginContract
+import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 
 @Composable
-fun OtpVerificationScreen(
+fun SendMailScreen(
     onBackClick: () -> Unit,
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginContract.LoginUiAction) -> Unit,
+    uiState: SendMailContract.SendMailUiState,
+    onAction: (SendMailContract.SendMailUiAction) -> Unit,
     navController: NavController
 ) {
+    val isEmailFieldEmpty = uiState.email.isEmpty()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +66,7 @@ fun OtpVerificationScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "OTP Verification",
+            text = "Ups! \nForgot password?",
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             modifier = Modifier.align(Alignment.Start)
@@ -76,7 +75,7 @@ fun OtpVerificationScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Enter the verification code we just sent on your email address.",
+            text = "Don't worry! It occurs. \nPlease enter the email address linked with your account.",
             fontWeight = FontWeight.Thin,
             fontSize = 18.sp,
             modifier = Modifier.align(Alignment.Start)
@@ -84,44 +83,47 @@ fun OtpVerificationScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            OtpBox()
-            OtpBox()
-            OtpBox()
-            OtpBox()
-        }
+        CustomTextField(
+            value = uiState.email,
+            onValueChange = { onAction(SendMailContract.SendMailUiAction.SendEmailAction(it)) },
+            label = "Enter your email",
+            isPassword = false,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Send,
+                    contentDescription = null
+                )
+            },
+            isError = uiState.showEmailError
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         CustomButton(
-            text = "Verify",
-            onClick = { })
+            text = "Send Mail",
+            onClick = {
+                onAction(
+                    SendMailContract.SendMailUiAction.SendMail,
+                )
+                navController.navigate("login")
+            },
+            enabled = !isEmailFieldEmpty
+        )
 
         Spacer(modifier = Modifier.height(400.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Didn't received code?",
+                text = "Click to login",
                 fontWeight = FontWeight.Thin,
                 fontSize = 18.sp,
-            )
-            Text(
-                text = "Resend",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = LocalColors.current.primary
+                color = LocalColors.current.primary,
+                modifier = Modifier.clickable {
+                    navController.navigate("login")
+                }
             )
         }
     }
@@ -129,34 +131,5 @@ fun OtpVerificationScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun OtpVerificationScreenPrew() {
-    OtpVerificationScreen(
-        onBackClick = { },
-        uiState = LoginContract.LoginUiState(),
-        onAction = { },
-        navController = rememberNavController()
-    )
-}
-
-@Composable
-fun OtpBox() {
-    TextField(
-        value = "",
-        onValueChange = {},
-        modifier = Modifier
-            .size(48.dp)
-            .border(
-                BorderStroke(1.dp, LocalColors.current.primary),
-                shape = RoundedCornerShape(12.dp)
-            ),
-        colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-        ),
-        textStyle = androidx.compose.ui.text.TextStyle(
-            fontSize = 24.sp,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        ),
-        singleLine = true,
-        visualTransformation = VisualTransformation.None
-    )
+fun Prew() {
 }

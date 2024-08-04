@@ -19,6 +19,10 @@ import com.hoy.ecommercecompose.ui.login.LoginViewModel
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.profile.ProfileScreen
+import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
+import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
+import com.hoy.ecommercecompose.ui.sendmail.SendMailScreen
+import com.hoy.ecommercecompose.ui.sendmail.SendMailViewModel
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
 import com.hoy.ecommercecompose.ui.signup.SignupScreen
 
@@ -63,6 +67,7 @@ fun SetupNavGraph(
                 onAction = loginViewModel::onAction,
                 navController = navController,
                 googleAuthUiClient = googleAuthUiClient,
+                onForgotPasswordClick = { navController.navigate("send_mail") },
                 viewModel = loginViewModel
             )
         }
@@ -76,6 +81,31 @@ fun SetupNavGraph(
                 uiState = homeUiState
             )
         }
+
+        composable("reset_password") {
+            val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
+            val resetPasswordUiState by resetPasswordViewModel.resetUiState.collectAsStateWithLifecycle()
+
+            ResetPasswordScreen(
+                onBackClick = { navController.popBackStack() },
+                uiState = resetPasswordUiState,
+                onAction = resetPasswordViewModel::onAction,
+                navController = navController
+            )
+        }
+
+        composable("send_mail") {
+            val sendMailViewModel: SendMailViewModel = hiltViewModel()
+            val sendMailUiState by sendMailViewModel.sendMailUiState.collectAsStateWithLifecycle()
+
+            SendMailScreen(
+                onBackClick = { navController.popBackStack() },
+                uiState = sendMailUiState,
+                onAction = sendMailViewModel::onAction,
+                navController = navController
+            )
+        }
+
         composable("favorite") {
             FavoriteScreen(navController)
         }

@@ -56,7 +56,8 @@ fun LoginScreen(
     onAction: (LoginContract.LoginUiAction) -> Unit,
     navController: NavController,
     googleAuthUiClient: GoogleAuthUiClient,
-    viewModel: LoginViewModel
+    onForgotPasswordClick: () -> Unit,
+    viewModel: LoginViewModel,
 ) {
     val signInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult()
@@ -93,6 +94,7 @@ fun LoginScreen(
         )
     }
 
+    val isFormValid = uiState.email.isNotBlank() && uiState.password.isNotBlank()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -155,6 +157,7 @@ fun LoginScreen(
                     )
                 }
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
@@ -168,6 +171,9 @@ fun LoginScreen(
                     modifier = Modifier.size(22.dp)
                 )
                 Text(
+                    modifier = Modifier.clickable {
+                        navController.navigate("send_mail")
+                    },
                     text = stringResource(id = R.string.forgot_password_text),
                     fontWeight = FontWeight.Light,
                     fontSize = 12.sp,
@@ -178,7 +184,9 @@ fun LoginScreen(
 
             CustomButton(
                 text = stringResource(id = R.string.login_text),
-                onClick = { onAction(LoginContract.LoginUiAction.SignInClick) })
+                onClick = { onAction(LoginContract.LoginUiAction.SignInClick) },
+                enabled = isFormValid
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -250,5 +258,4 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-
 }

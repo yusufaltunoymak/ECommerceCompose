@@ -61,6 +61,8 @@ fun SignupScreen(
             onDismiss = { viewModel.clearError() }
         )
     }
+    val isFormValid =
+        uiState.name.isNotBlank() && uiState.surname.isNotBlank() && uiState.email.isNotBlank() && uiState.password.isNotBlank()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -127,7 +129,8 @@ fun SignupScreen(
                 text = stringResource(id = R.string.register_text),
                 onClick = {
                     viewModel.onAction(SignUpContract.UiAction.SignUpClick)
-                }
+                },
+                enabled = isFormValid
             )
         }
         if (uiState.isLoading) {
