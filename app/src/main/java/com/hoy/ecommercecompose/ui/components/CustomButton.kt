@@ -20,16 +20,19 @@ import com.hoy.ecommercecompose.ui.theme.LocalColors
 fun CustomButton(
     text: String,
     onClick: () -> Unit,
-    colors: Color= LocalColors.current.primary
+    colors: Color = LocalColors.current.primary,
+    enabled: Boolean = true
+
 ) {
     Button(
         onClick = onClick,
         modifier = Modifier
-            .padding(vertical = 8.dp).height(56.dp)
+            .padding(vertical = 8.dp)
+            .height(56.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(16),
-        colors = ButtonDefaults.buttonColors(containerColor = colors)
-        
+        colors = ButtonDefaults.buttonColors(containerColor = colors),
+        enabled = enabled
     ) {
         Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
@@ -37,6 +40,6 @@ fun CustomButton(
 
 @Preview(showBackground = true)
 @Composable
-fun CustomButtonPreview(){
+fun CustomButtonPreview() {
     CustomButton(text = "asdas", onClick = { /*TODO*/ })
 }

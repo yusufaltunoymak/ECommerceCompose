@@ -37,7 +37,9 @@ fun SendMailScreen(
     uiState: SendMailContract.SendMailUiState,
     onAction: (SendMailContract.SendMailUiAction) -> Unit,
     navController: NavController
-){
+) {
+    val isEmailFieldEmpty = uiState.email.isEmpty()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +91,7 @@ fun SendMailScreen(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Send,
-                    contentDescription =null
+                    contentDescription = null
                 )
             },
             isError = uiState.showEmailError
@@ -99,7 +101,14 @@ fun SendMailScreen(
 
         CustomButton(
             text = "Send Mail",
-            onClick = { onAction(SendMailContract.SendMailUiAction.SendMail) })
+            onClick = {
+                onAction(
+                    SendMailContract.SendMailUiAction.SendMail,
+                )
+                navController.navigate("login")
+            },
+            enabled = !isEmailFieldEmpty
+        )
 
         Spacer(modifier = Modifier.height(400.dp))
 
