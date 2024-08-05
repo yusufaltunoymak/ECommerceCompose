@@ -1,9 +1,9 @@
 package com.hoy.ecommercecompose.data.mapper
 
-import com.hoy.ecommercecompose.data.source.remote.model.Product
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
-fun Product.mapToProductUi() : ProductUi {
+fun ProductDto.mapToProductUi() : ProductUi {
     return ProductUi(
         category = this.category ?: "",
         count = this.count ?: 0,

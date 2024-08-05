@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.cart
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import com.hoy.ecommercecompose.data.source.remote.model.Product
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 
@@ -66,9 +65,9 @@ fun CartScreen(
                 .weight(1f)  // Allow this Column to take up available space
                 .verticalScroll(rememberScrollState())
         ) {
-            uiState.cartProductList.forEach { product ->
+            uiState.cartProductDtoList.forEach { product ->
                 CartItem(
-                    product = product,
+                    productDto = product,
                     onQuantityChange = { /* Handle quantity change */ },
                     onRemoveItem = { /* Handle item removal */ }
                 )
@@ -89,7 +88,7 @@ fun CartScreen(
 
 @Composable
 fun CartItem(
-    product: Product,
+    productDto: ProductDto,
     onQuantityChange: (Int) -> Unit,
     onRemoveItem: () -> Unit
 ) {
@@ -102,18 +101,18 @@ fun CartItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = rememberAsyncImagePainter(model = product.imageOne),
+            painter = rememberAsyncImagePainter(model = productDto.imageOne),
             contentDescription = null,
             modifier = Modifier.size(64.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = product.title ?: "Product Title", color = Color.Gray)
-            Text(text = "$${product.price}", color = Color.Gray)
+            Text(text = productDto.title ?: "Product Title", color = Color.Gray)
+            Text(text = "$${productDto.price}", color = Color.Gray)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = {
-                if (product.count ?: 0 > 1) onQuantityChange((product.count ?: 1) - 1)
+                if (productDto.count ?: 0 > 1) onQuantityChange((productDto.count ?: 1) - 1)
             }) {
                 Icon(
                     Icons.Default.Edit,
@@ -121,8 +120,8 @@ fun CartItem(
                     tint = LocalColors.current.primary
                 )
             }
-            Text(text = "${product.count ?: 1}")
-            IconButton(onClick = { onQuantityChange((product.count ?: 1) + 1) }) {
+            Text(text = "${productDto.count ?: 1}")
+            IconButton(onClick = { onQuantityChange((productDto.count ?: 1) + 1) }) {
                 Icon(Icons.Default.Add, contentDescription = "Increase Quantity")
             }
         }
@@ -184,8 +183,8 @@ fun CartFooter(
 fun CartScreenPreview() {
     CartScreen(
         uiState = CartUiState(
-            cartProductList = listOf(
-                Product(
+            cartProductDtoList = listOf(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -199,7 +198,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -213,7 +212,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -227,7 +226,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -241,7 +240,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -255,7 +254,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -269,7 +268,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -283,7 +282,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -297,7 +296,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,
@@ -311,7 +310,7 @@ fun CartScreenPreview() {
                     imageThree = "https://via.placeholder.com/64",
                     saleState = false
                 ),
-                Product(
+                ProductDto(
                     title = "Woman Sweater",
                     price = 70.00,
                     count = 1,

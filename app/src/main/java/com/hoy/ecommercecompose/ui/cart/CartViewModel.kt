@@ -41,12 +41,12 @@ class CartViewModel @Inject constructor(
             when (val result = getCartProductsUseCase(userId)) {
                 is Resource.Success -> {
                     _uiState.value = _uiState.value.copy(
-                        cartProductList = result.data?.products ?: emptyList(),
-                        totalCartPrice = result.data?.products?.sumOf { it.price ?: 0.0 } ?: 0.0,
-                        totalCartCount = result.data?.products?.size ?: 0,
+                        cartProductDtoList = result.data?.productDtos ?: emptyList(),
+                        totalCartPrice = result.data?.productDtos?.sumOf { it.price ?: 0.0 } ?: 0.0,
+                        totalCartCount = result.data?.productDtos?.size ?: 0,
                         isLoading = false
                     )
-                    Log.e("CartViewModel", "getCartProducts: ${result.data?.products}")
+                    Log.e("CartViewModel", "getCartProducts: ${result.data?.productDtos}")
                 }
 
                 is Resource.Error -> {

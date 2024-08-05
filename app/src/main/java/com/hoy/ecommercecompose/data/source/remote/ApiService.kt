@@ -4,8 +4,7 @@ import com.hoy.ecommercecompose.common.Constants.USER
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDetailResponse
-import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductResponse
-import retrofit2.Response
+import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -15,7 +14,7 @@ interface ApiService {
     @GET("get_products")
     suspend fun getProducts(
         @Header("store") store: String = USER
-    ): GetProductResponse
+    ): ProductListDto
 
     @GET("get_categories")
     suspend fun getCategories(

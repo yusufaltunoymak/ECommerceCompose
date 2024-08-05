@@ -1,6 +1,6 @@
 package com.hoy.ecommercecompose.data.source.remote.model
 
-data class Product(
+data class ProductDto(
     val category: String?,
     val count: Int?,
     val description: String?,
@@ -13,5 +13,4 @@ data class Product(
     val salePrice: Double?,
     val saleState: Boolean?,
     val title: String?
-
 )
