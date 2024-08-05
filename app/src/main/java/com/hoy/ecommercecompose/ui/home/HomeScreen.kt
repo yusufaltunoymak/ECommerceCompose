@@ -2,9 +2,7 @@ package com.hoy.ecommercecompose.ui.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,10 +29,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,16 +43,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.data.source.remote.model.User
 import com.hoy.ecommercecompose.domain.model.ProductUi
+import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -68,6 +61,13 @@ fun HomeScreen(
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
+
+    val imageUrls = listOf(
+        R.drawable.sale,
+        R.drawable.sale2,
+        R.drawable.sale
+    )
+
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -92,7 +92,12 @@ fun HomeScreen(
             onCloseClicked = { /*TODO*/ }) {
         }
 
-        HorizontalPager()
+        CustomHorizontalPager(
+            imageUrls = imageUrls,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+        )
 
         Text(
             text = "Categories",
@@ -110,93 +115,6 @@ fun HomeScreen(
         )
             ProductGrid(uiState = uiState)
 
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun HorizontalPager() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        val pageCount by remember {
-            mutableIntStateOf(3)
-        }
-
-        val pagerState = rememberPagerState(pageCount = { pageCount })
-        val imageUrls = listOf(
-            R.drawable.sale,
-            R.drawable.sale2,
-            R.drawable.sale
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val painter = rememberAsyncImagePainter(model = imageUrls[page])
-                    Image(
-                        painter = painter,
-                        contentDescription = "Image $page",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp))
-                    )
-                }
-            }
-
-            val currentPage by remember {
-                derivedStateOf { pagerState.currentPage }
-            }
-
-            DotIndicator(
-                pageCount = pageCount,
-                currentPage = currentPage,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun DotIndicator(
-    pageCount: Int,
-    currentPage: Int,
-    modifier: Modifier = Modifier,
-    activeColor: Color = Color.DarkGray,
-    inactiveColor: Color = Color.White
-) {
-    Row(
-        modifier = modifier.padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-    ) {
-        repeat(pageCount) { index ->
-            val color = if (index == currentPage) activeColor else inactiveColor
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .background(color, shape = CircleShape)
-                    .padding(horizontal = 16.dp)
-            )
-        }
     }
 }
 
