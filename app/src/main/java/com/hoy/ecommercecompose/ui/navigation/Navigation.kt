@@ -11,6 +11,8 @@ import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
+import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
+import com.hoy.ecommercecompose.ui.detail.ProductDetailViewModel
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
 import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.home.HomeViewModel
@@ -104,6 +106,13 @@ fun SetupNavGraph(
                 onAction = sendMailViewModel::onAction,
                 navController = navController
             )
+        }
+
+        composable("product_detail") {
+            val productDetailViewModel: ProductDetailViewModel = hiltViewModel()
+            val productDetailUiState by productDetailViewModel.detailUiState.collectAsStateWithLifecycle()
+
+            ProductDetailScreen()
         }
 
         composable("favorite") {

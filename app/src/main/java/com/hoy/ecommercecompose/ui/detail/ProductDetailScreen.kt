@@ -108,7 +108,7 @@ fun ProductDetailScreen() {
             ) {
                 Column(
                     modifier = Modifier
-                        .background(color = Color.Cyan)
+                        .background(color = Color.White)
                         .fillMaxSize()
                         .padding(16.dp)
                         .clip(
@@ -149,10 +149,9 @@ fun ProductDetailScreen() {
                                 modifier = Modifier.size(14.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "4.8")
+                            Text(text = "4.8", style = TextStyle(color = Color.White))
                         }
                     }
-                    Text(text = "(320 Reviews)", color = Color.Black)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
@@ -169,13 +168,12 @@ fun ProductDetailScreen() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-
-                    Row(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.Bottom
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Bottom
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -217,8 +215,11 @@ fun ProductDetailScreen() {
                                     text = "Add to Cart", modifier = Modifier.padding(6.dp),
                                 )
                             }
+
                         }
+                        Spacer(modifier = Modifier.height(30.dp))
                     }
+
                 }
             }
         }
