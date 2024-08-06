@@ -9,6 +9,7 @@ import com.hoy.ecommercecompose.domain.usecase.auth.GetUserInformationUseCase
 import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.GetFavoriteUseCase
+import com.hoy.ecommercecompose.domain.usecase.product.GetAllProductUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,8 @@ class HomeViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getProductsUseCase: GetProductsUseCase,
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
-    private val getFavoriteUseCase: GetFavoriteUseCase
+    private val getFavoriteUseCase: GetFavoriteUseCase,
+
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<HomeUiState> =
         MutableStateFlow(HomeUiState())
@@ -33,7 +35,6 @@ class HomeViewModel @Inject constructor(
         getUserInformation()
         getCategories()
         getProducts()
-        loadFavorites()
     }
 
     private fun getUserInformation() {
@@ -197,47 +198,5 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
-    private fun loadFavorites() {
-        val userId = uiState.value.currentUser?.id ?: return
-        viewModelScope.launch {
-            getFavoriteUseCase(userId).collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        result.data?.let { favoriteProducts ->
-                            _uiState.update { uiState ->
-                                val updatedProductList = uiState.productList.map { product ->
-                                    if (favoriteProducts.any { it.id == product.id }) {
-                                        product.copy(isFavorite = true)
-                                    } else {
-                                        product
-                                    }
-                                }
-                                uiState.copy(
-                                    productList = updatedProductList
-                                )
-                            }
-                        }
-                    }
-                    is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                errorMessage = result.message,
-                                isLoading = false
-                            )
-                        }
-                    }
-                    is Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = true
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
 }

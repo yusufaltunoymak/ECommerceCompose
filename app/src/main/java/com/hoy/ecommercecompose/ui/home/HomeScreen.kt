@@ -4,6 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +26,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -55,7 +59,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.domain.model.ProductUi
-import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
@@ -64,10 +67,11 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     navController: NavController,
-    viewModel : HomeViewModel
+    viewModel: HomeViewModel
 ) {
     val scrollState = rememberScrollState()
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -85,13 +89,12 @@ fun HomeScreen(
             }
         }
 
-        CustomSearchView(
-            text = "",
-            onTextChange = { /*TODO*/ },
-            placeHolder = "Search for products",
-            onCloseClicked = { /*TODO*/ }) {
-        }
-
+        SearchNavigationView(
+            onNavigateToSearch = {
+                navController.navigate("search") // Trigger navigation on click
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         HorizontalPager()
 
         Text(
@@ -100,7 +103,7 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-            CategoryList(uiState)
+        CategoryList(uiState)
 
         Text(
             text = "Top Rated Products",
@@ -115,6 +118,53 @@ fun HomeScreen(
 
     }
 }
+
+@Composable
+fun SearchNavigationView(
+    modifier: Modifier = Modifier,
+    onNavigateToSearch: () -> Unit
+) {
+    val containerColor = Color.White
+    val indicatorColor = LocalColors.current.primary.copy(alpha = 0.3f)
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .clickable {
+                onNavigateToSearch() // Navigate to SearchScreen
+            }
+            .background(containerColor) // Set background color
+            .border(1.dp, indicatorColor, RoundedCornerShape(8.dp)) // Add border
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search Icon",
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 8.dp)
+            )
+            Text(
+                text = "Search for products",
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.List,
+                contentDescription = "List Icon",
+                modifier = Modifier
+                    .padding(end = 8.dp)
+            )
+        }
+    }
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -253,7 +303,7 @@ fun ProductCard(
     product: ProductUi,
     modifier: Modifier = Modifier,
     onFavoriteClick: (ProductUi) -> Unit,
-    ) {
+) {
     val iconColor = if (product.isFavorite) Color(0xFFFFA500) else Color.Gray
     Card(
         modifier = modifier
