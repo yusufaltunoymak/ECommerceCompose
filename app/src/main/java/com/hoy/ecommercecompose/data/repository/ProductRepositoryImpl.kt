@@ -1,6 +1,8 @@
 package com.hoy.ecommercecompose.data.repository
 
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.data.source.local.ProductDao
+import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.ApiService
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 
 class ProductRepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val productDao: ProductDao
 ) : ProductRepository {
 
     override suspend fun getProducts(): ProductListDto {
@@ -51,4 +54,15 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun getFavoriteProducts(userId: String): ProductListDto {
         return apiService.getFavorites(userId = userId)
     }
+
+    override suspend fun  addFavoriteProduct(product: ProductEntity) {
+        productDao.addFavoriteProduct(product)
+    }
+    override suspend fun  removeFavoriteProduct(product: ProductEntity) {
+        productDao.removeFavoriteProduct(product)
+    }
+    override suspend fun  getFavoriteProducts(): List<ProductEntity> {
+        return productDao.getFavoriteProducts()
+    }
+
 }

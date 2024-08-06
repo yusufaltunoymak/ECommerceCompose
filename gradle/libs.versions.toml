@@ -25,6 +25,7 @@ hilt = "2.50"
 uiTooling = "1.6.8"
 lifecycleRuntimeComposeAndroid = "2.8.4"
 uiToolingPreview = "1.6.8"
+engageCore = "1.5.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +65,7 @@ androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", nam
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
