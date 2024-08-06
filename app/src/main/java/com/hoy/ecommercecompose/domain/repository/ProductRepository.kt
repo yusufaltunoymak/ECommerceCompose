@@ -8,6 +8,7 @@ import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesR
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDetailResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
 import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
+import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 
 interface ProductRepository {
 
@@ -22,4 +23,5 @@ interface ProductRepository {
 
     suspend fun addFavoriteProduct(addToFavoriteBody: AddToFavoriteBody): BaseResponse
     suspend fun getFavoriteProducts(userId: String): ProductListDto
+    suspend fun deleteFavoriteProduct(deleteFromFavoriteBody: DeleteFromFavoriteBody): BaseResponse
 }

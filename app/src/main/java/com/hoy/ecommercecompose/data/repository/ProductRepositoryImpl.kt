@@ -10,6 +10,7 @@ import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesR
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDetailResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
 import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
+import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.ProductRepository
 import javax.inject.Inject
 
@@ -55,12 +56,18 @@ class ProductRepositoryImpl @Inject constructor(
         return apiService.getFavorites(userId = userId)
     }
 
+    override suspend fun deleteFavoriteProduct(deleteFromFavoriteBody: DeleteFromFavoriteBody): BaseResponse {
+        return apiService.deleteFromFavorites(deleteFromFavoriteBody = deleteFromFavoriteBody)
+    }
+
+
     override suspend fun  addFavoriteProduct(product: ProductEntity) {
         productDao.addFavoriteProduct(product)
     }
     override suspend fun  removeFavoriteProduct(product: ProductEntity) {
         productDao.removeFavoriteProduct(product)
     }
+
     override suspend fun  getFavoriteProducts(): List<ProductEntity> {
         return productDao.getFavoriteProducts()
     }
