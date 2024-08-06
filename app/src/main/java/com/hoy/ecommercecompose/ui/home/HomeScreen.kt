@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.home
 
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -112,8 +113,7 @@ fun HomeScreen(
             fontFamily = displayFontFamily
         )
         ProductGrid(uiState = uiState, onFavoriteClick = { product ->
-            val updatedProduct = product.copy(isFavorite = !product.isFavorite)
-            viewModel.addToFavorites(userId, updatedProduct.id)
+            viewModel.toggleFavorite(userId, product)
         })
 
     }
@@ -304,26 +304,24 @@ fun ProductCard(
     modifier: Modifier = Modifier,
     onFavoriteClick: (ProductUi) -> Unit,
 ) {
-    val iconColor = if (product.isFavorite) Color(0xFFFFA500) else Color.Gray
+    val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
     Card(
         modifier = modifier
             .size(170.dp, 260.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        border = BorderStroke(1.dp, Color.Gray),
+            .clip(RoundedCornerShape(12.dp))
+            .shadow(8.dp, RoundedCornerShape(12.dp)),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        )
+        ),
     ) {
         Column(
             modifier = Modifier
-                .padding(8.dp)
                 .fillMaxSize()
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
-                    .padding(top = 8.dp)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
@@ -334,14 +332,16 @@ fun ProductCard(
                     error = painterResource(id = R.drawable.ic_broken_image),
                     placeholder = painterResource(id = R.drawable.loading_img),
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(150.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(12.dp))
                 )
 
                 IconButton(
                     onClick = { onFavoriteClick(product) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .background(color = Color.White, shape = CircleShape)
+                        .background(color = Color.DarkGray, shape = CircleShape)
                         .padding(4.dp)
                         .size(36.dp)
                 ) {
@@ -349,7 +349,7 @@ fun ProductCard(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Favorite",
                         tint = iconColor,
-                        modifier = modifier.size(16.dp)
+                        modifier = modifier.size(20.dp)
                     )
                 }
             }
@@ -377,7 +377,6 @@ fun ProductCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -398,6 +397,7 @@ fun ProductCard(
         }
     }
 }
+
 
 @Composable
 fun ProductGrid(uiState: HomeUiState, onFavoriteClick: (ProductUi) -> Unit) {
