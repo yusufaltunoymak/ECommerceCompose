@@ -78,7 +78,8 @@ fun SetupNavGraph(
 
             HomeScreen(
                 navController = navController,
-                uiState = homeUiState
+                uiState = homeUiState,
+                viewModel = homeViewModel
             )
         }
 

@@ -22,5 +22,7 @@ abstract class UseCaseModule {
     abstract fun bindFirebaseRepository(
         firebaseAuthRepositoryImpl: FirebaseAuthRepositoryImpl
     ): FirebaseAuthRepository
+
+
 }
 
