@@ -46,16 +46,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.remote.model.Category
-import com.hoy.ecommercecompose.data.source.remote.model.User
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.LocalColors
@@ -65,9 +63,11 @@ import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
-    navController: NavController
+    navController: NavController,
+    viewModel : HomeViewModel
 ) {
     val scrollState = rememberScrollState()
+    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -108,7 +108,10 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-            ProductGrid(uiState = uiState)
+        ProductGrid(uiState = uiState, onFavoriteClick = { product ->
+            val updatedProduct = product.copy(isFavorite = !product.isFavorite)
+            viewModel.addToFavorites(userId, updatedProduct.id)
+        })
 
     }
 }
@@ -248,8 +251,10 @@ fun CategoryList(uiState: HomeUiState, modifier: Modifier = Modifier) {
 @Composable
 fun ProductCard(
     product: ProductUi,
-    modifier: Modifier = Modifier
-) {
+    modifier: Modifier = Modifier,
+    onFavoriteClick: (ProductUi) -> Unit,
+    ) {
+    val iconColor = if (product.isFavorite) Color(0xFFFFA500) else Color.Gray
     Card(
         modifier = modifier
             .size(170.dp, 260.dp)
@@ -283,17 +288,17 @@ fun ProductCard(
                 )
 
                 IconButton(
-                    onClick = { /* Favori butonu tıklama işlemi */ },
+                    onClick = { onFavoriteClick(product) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .background(color = LocalColors.current.primary, shape = CircleShape)
+                        .background(color = Color.White, shape = CircleShape)
                         .padding(4.dp)
                         .size(36.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Favorite",
-                        tint = Color.White,
+                        tint = iconColor,
                         modifier = modifier.size(16.dp)
                     )
                 }
@@ -345,33 +350,38 @@ fun ProductCard(
 }
 
 @Composable
-fun ProductGrid(uiState: HomeUiState) {
+fun ProductGrid(uiState: HomeUiState, onFavoriteClick: (ProductUi) -> Unit) {
     LazyRow {
         items(uiState.productList) { product ->
-            ProductCard(product = product, modifier = Modifier.padding(8.dp))
+            ProductCard(
+                product = product,
+                onFavoriteClick = onFavoriteClick,
+                modifier = Modifier.padding(8.dp)
+            )
         }
     }
 }
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun Preview() {
-    HomeScreen(
-        uiState = HomeUiState(
-            currentUser = User("John Doe"),
-            productList = listOf(
-                ProductUi(
-                    category = "Electronics",
-                    count = 10,
-                    description = "Description",
-                    id = 1,
-                    imageOne = "https://via.placeholder.com/150",
-                    price = 100.0,
-                    title = "Product1",
-                    isFavorite = false,
-                    rate = 4.5
-                )
-                )
-        ),
-        navController = rememberNavController()
-    )
-}
+
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun Preview() {
+//    HomeScreen(
+//        uiState = HomeUiState(
+//            currentUser = User("John Doe"),
+//            productList = listOf(
+//                ProductUi(
+//                    category = "Electronics",
+//                    count = 10,
+//                    description = "Description",
+//                    id = 1,
+//                    imageOne = "https://via.placeholder.com/150",
+//                    price = 100.0,
+//                    title = "Product1",
+//                    isFavorite = false,
+//                    rate = 4.5
+//                )
+//                )
+//        ),
+//        navController = rememberNavController()
+//    )
+//}

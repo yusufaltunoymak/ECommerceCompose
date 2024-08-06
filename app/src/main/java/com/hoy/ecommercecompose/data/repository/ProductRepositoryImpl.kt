@@ -2,10 +2,12 @@ package com.hoy.ecommercecompose.data.repository
 
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.source.remote.ApiService
+import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDetailResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
+import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.ProductRepository
 import javax.inject.Inject
 
@@ -38,5 +40,15 @@ class ProductRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Resource.Error("Exception: ${e.message}")
         }
+    }
+
+    override suspend fun addFavoriteProduct(
+        addToFavoriteBody: AddToFavoriteBody
+    ): BaseResponse {
+        return apiService.addToFavorites(addToFavoriteBody = addToFavoriteBody)
+    }
+
+    override suspend fun getFavoriteProducts(userId: String): ProductListDto {
+        return apiService.getFavorites(userId = userId)
     }
 }
