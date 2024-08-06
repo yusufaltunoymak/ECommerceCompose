@@ -9,6 +9,7 @@ import com.hoy.ecommercecompose.domain.usecase.product.GetCartProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,32 +36,36 @@ class CartViewModel @Inject constructor(
 
     private fun getCartProducts(userId: String) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isLoading = true
-            )
+            _uiState.update { currentState ->
+                currentState.copy(isLoading = true)
+            }
+
             when (val result = getCartProductsUseCase(userId)) {
                 is Resource.Success -> {
-                    _uiState.value = _uiState.value.copy(
-                        cartProductDtoList = result.data?.productDtos ?: emptyList(),
-                        totalCartPrice = result.data?.productDtos?.sumOf { it.price ?: 0.0 } ?: 0.0,
-                        totalCartCount = result.data?.productDtos?.size ?: 0,
-                        isLoading = false
-                    )
-                    Log.e("CartViewModel", "getCartProducts: ${result.data?.productDtos}")
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            cartProductDtoList = result.data?.productDtos ?: emptyList(),
+                            totalCartPrice = result.data?.productDtos?.sumOf { it.price ?: 0.0 } ?: 0.0,
+                            totalCartCount = result.data?.productDtos?.size ?: 0,
+                            isLoading = false
+                        )
+                    }
                 }
 
                 is Resource.Error -> {
-                    _uiState.value = _uiState.value.copy(
-                        errorMessage = result.message,
-                        isLoading = false
-                    )
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            errorMessage = result.message,
+                            isLoading = false
+                        )
+                    }
                     Log.e("CartViewModel", "getCartProducts: ${result.message}")
                 }
 
                 is Resource.Loading -> {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = true
-                    )
+                    _uiState.update { currentState ->
+                        currentState.copy(isLoading = true)
+                    }
                 }
             }
         }

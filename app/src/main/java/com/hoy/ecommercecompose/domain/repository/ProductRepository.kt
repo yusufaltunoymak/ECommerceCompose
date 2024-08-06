@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.domain.repository
 
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
@@ -14,6 +15,11 @@ interface ProductRepository {
     suspend fun getCategories(): GetCategoriesResponse
     suspend fun getProductDetail(id: Int): Resource<GetProductDetailResponse>
     suspend fun getCartProducts(id: String): Resource<GetCartProductResponse>
+
+    suspend fun getFavoriteProducts(): List<ProductEntity>
+    suspend fun addFavoriteProduct(product: ProductEntity)
+    suspend fun removeFavoriteProduct(product: ProductEntity)
+
     suspend fun addFavoriteProduct(addToFavoriteBody: AddToFavoriteBody): BaseResponse
     suspend fun getFavoriteProducts(userId: String): ProductListDto
 }
