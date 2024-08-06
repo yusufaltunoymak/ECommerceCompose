@@ -11,18 +11,26 @@ import javax.inject.Inject
 class GetProductsUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
-    suspend operator fun invoke(): Flow<Resource<List<ProductUi>>> {
+    suspend operator fun invoke(userId : String): Flow<Resource<List<ProductUi>>> {
         return flow {
             emit(Resource.Loading())
             try {
                 val response = productRepository.getProducts()
+
+                val favoriteResponse = productRepository.getFavoriteProducts(userId = userId)
+                val favoriteProductIds = favoriteResponse.productDto.map { it.id }
 
                 val filteredList = response.productDto.filter { product ->
                     product.rate?.let { rate ->
                         rate > 4.0
                     } == true
                 }
-                emit(Resource.Success(data = filteredList.map { it.mapToProductUi() }))
+
+                val updatedProductList = filteredList.map { productDto ->
+                    val isFavorite = favoriteProductIds.contains(productDto.id)
+                    productDto.mapToProductUi().copy(isFavorite = isFavorite)
+                }
+                emit(Resource.Success(data = updatedProductList))
             } catch (e: Exception) {
                 emit(Resource.Error(message = e.localizedMessage ?: "Unknown error!"))
             }

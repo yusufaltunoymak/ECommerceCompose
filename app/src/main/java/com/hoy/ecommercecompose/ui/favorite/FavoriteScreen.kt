@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -100,7 +106,9 @@ fun FavoriteScreen(
                     )
                 }
                 else -> {
-                    LazyColumn {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2)
+                    ) {
                         items(uiState.favoriteProducts) { product ->
                             ProductCard(product = product, onFavoriteClick = { /* Handle click */ })
                         }
@@ -119,7 +127,8 @@ fun ProductCard(
 ) {
     Card(
         modifier = modifier
-            .size(170.dp, 260.dp)
+            .size(170.dp, 270.dp)
+            .padding(8.dp)
             .clip(RoundedCornerShape(8.dp)),
         border = BorderStroke(1.dp, Color.Gray),
         colors = CardDefaults.cardColors(

@@ -12,5 +12,6 @@ data class HomeUiState(
     val categoryList : List<Category> = emptyList(),
     val productList : List<ProductUi> = emptyList(),
     val addToFavorites: FavoriteResponse? = null,
+    val deleteFromFavorites: FavoriteResponse? = null
 
     )
