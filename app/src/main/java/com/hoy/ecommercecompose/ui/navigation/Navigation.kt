@@ -6,8 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
@@ -23,6 +25,7 @@ import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.profile.ProfileScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
+import com.hoy.ecommercecompose.ui.search.SearchScreen
 import com.hoy.ecommercecompose.ui.sendmail.SendMailScreen
 import com.hoy.ecommercecompose.ui.sendmail.SendMailViewModel
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
@@ -80,7 +83,8 @@ fun SetupNavGraph(
 
             HomeScreen(
                 navController = navController,
-                uiState = homeUiState
+                uiState = homeUiState,
+                viewModel = homeViewModel
             )
         }
 
@@ -129,6 +133,20 @@ fun SetupNavGraph(
         }
         composable("profile") {
             ProfileScreen(navController)
+        }
+        // Add search route
+        // Add search route in SetupNavGraph
+        composable("search") {
+            SearchScreen(navController = navController)
+        }
+
+        // Add product detail route
+        composable(
+            route = "product_detail/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+//            ProductDetailScreen(navController = navController, productId = productId)
         }
     }
 }

@@ -1,11 +1,13 @@
 package com.hoy.ecommercecompose.ui.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,64 +30,66 @@ fun CustomSearchView(
     onTextChange: (String) -> Unit,
     placeHolder: String,
     onCloseClicked: () -> Unit,
-    onMicClicked: () -> Unit
+    onSearchClick: () -> Unit // Used for triggering page navigation
 ) {
     val containerColor = Color.White
     val indicatorColor = LocalColors.current.primary.copy(alpha = 0.3f)
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            onTextChange(it)
-        },
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = containerColor,
-            unfocusedContainerColor = containerColor,
-            focusedIndicatorColor = indicatorColor,
-            unfocusedIndicatorColor = indicatorColor,
-        ),
-        placeholder = {
-            Text(
-                text = placeHolder,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
-                fontWeight = FontWeight.Normal,
-            )
-        },
-        leadingIcon = {
-            IconButton(onClick = { }) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp)
-                )
-            }
-        },
-        trailingIcon = {
-            IconButton(onClick = {
-                if (text.isNotBlank()) {
-                    onCloseClicked()
-                } else {
-                    onMicClicked()
-                }
-            }) {
-                if (text.isNotBlank()) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = null,
-                        modifier = Modifier.size(22.dp)
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.List,
-                        contentDescription = null,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
-            }
-        },
+
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp)
-    )
+            .clip(RoundedCornerShape(8.dp))
+            .clickable {
+                onSearchClick() // Trigger page navigation on click
+            }
+    ) {
+        OutlinedTextField(
+            value = text,
+            onValueChange = { newText ->
+                onTextChange(newText) // Update text as the user types
+            },
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = containerColor,
+                unfocusedContainerColor = containerColor,
+                focusedIndicatorColor = indicatorColor,
+                unfocusedIndicatorColor = indicatorColor,
+            ),
+            placeholder = {
+                Text(
+                    text = placeHolder,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                    fontWeight = FontWeight.Normal,
+                )
+            },
+            leadingIcon = { // Use leadingIcon to place the search icon at the start
+                IconButton(onClick = {
+                    onSearchClick() // Search icon click behavior
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Search, // Use Search icon
+                        contentDescription = "Search",
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            },
+            trailingIcon = {
+                IconButton(onClick = {
+                    if (text.isNotBlank()) {
+                        onCloseClicked()
+                    }
+                }) {
+                    Icon(
+                        imageVector = if (text.isNotBlank()) Icons.Default.Clear else Icons.AutoMirrored.Filled.List,
+                        contentDescription = "Clear or Mic",
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth(), // Make the OutlinedTextField fill the width
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true // Keep it single line
+        )
+    }
 }
+
