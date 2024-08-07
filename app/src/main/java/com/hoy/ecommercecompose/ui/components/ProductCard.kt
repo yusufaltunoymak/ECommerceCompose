@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,7 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -50,30 +52,30 @@ import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 fun ProductCard(
     product: ProductUi,
     modifier: Modifier = Modifier,
+    onFavoriteClick: (ProductUi) -> Unit,
     navController: NavController,
 ) {
+    val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
     Card(
         modifier = modifier
-            .size(170.dp, 260.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        border = BorderStroke(1.dp, Color.Gray),
+            .size(170.dp, 280.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable {
+                navController.navigate("product_detail")
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        )
+        ),
+        elevation = CardDefaults.cardElevation(8.dp) // Use elevation for shadow
     ) {
         Column(
             modifier = Modifier
-                .padding(8.dp)
                 .fillMaxSize()
-                .clickable {
-                    navController.navigate("product_detail")
-                }
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
-                    .padding(top = 8.dp)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
@@ -84,22 +86,23 @@ fun ProductCard(
                     error = painterResource(id = R.drawable.ic_broken_image),
                     placeholder = painterResource(id = R.drawable.loading_img),
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(150.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(12.dp))
                 )
 
                 IconButton(
-                    onClick = { /* Favori butonu tıklama işlemi */ },
+                    onClick = { onFavoriteClick(product) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .background(color = LocalColors.current.primary, shape = CircleShape)
-                        .padding(4.dp)
+                        .padding(top = 8.dp, end = 8.dp) // Add padding to top and end
+                        .background(color = Color.LightGray, shape = CircleShape)
                         .size(36.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Favorite",
-                        tint = Color.White,
-                        modifier = modifier.size(16.dp)
+                        tint = iconColor,
                     )
                 }
             }
@@ -109,27 +112,53 @@ fun ProductCard(
             Text(
                 text = product.title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.DarkGray,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
                 fontFamily = displayFontFamily,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(start = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "$${product.price}",
+                text = AnnotatedString(
+                    text = "$${product.price}",
+                    spanStyles = listOf(
+                        AnnotatedString.Range(
+                            item = SpanStyle(
+                                color = Color.Red.copy(alpha = 0.6f), // Lighter color
+                                fontWeight = FontWeight.Light,
+                                textDecoration = TextDecoration.LineThrough
+                            ),
+                            start = 0,
+                            end = "$${product.price}".length
+                        )
+                    )
+                ),
                 fontFamily = displayFontFamily,
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
+                modifier = Modifier.padding(start = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
+            Text(
+                text = "$${product.salePrice}",
+                fontFamily = displayFontFamily,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 8.dp)
+
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
@@ -150,11 +179,16 @@ fun ProductCard(
 }
 
 @Composable
-fun ProductGrid(uiState: HomeUiState, navController: NavController) {
+fun ProductList(
+    uiState: HomeUiState,
+    onFavoriteClick: (ProductUi) -> Unit,
+    navController: NavController
+) {
     LazyRow {
         items(uiState.productList) { product ->
             ProductCard(
                 product = product,
+                onFavoriteClick = onFavoriteClick,
                 modifier = Modifier.padding(8.dp),
                 navController = navController
             )
