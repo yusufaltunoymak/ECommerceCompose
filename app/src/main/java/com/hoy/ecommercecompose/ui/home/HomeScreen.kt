@@ -1,69 +1,35 @@
 package com.hoy.ecommercecompose.ui.home
 
-import androidx.compose.ui.draw.shadow
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.data.source.remote.model.Category
-import com.hoy.ecommercecompose.domain.model.ProductUi
+import com.hoy.ecommercecompose.ui.components.CategoryList
+import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
+import com.hoy.ecommercecompose.ui.components.ProductList
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
@@ -76,6 +42,12 @@ fun HomeScreen(
 ) {
     val scrollState = rememberScrollState()
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
+    val imageUrls = listOf(
+        R.drawable.sale,
+        R.drawable.sale2,
+        R.drawable.sale
+    )
 
     Column(
         modifier = modifier
@@ -100,7 +72,7 @@ fun HomeScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-        HorizontalPager()
+        CustomHorizontalPager(imageUrls = imageUrls)
 
         Text(
             text = "Categories",
@@ -116,7 +88,7 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-        ProductList(uiState = uiState, onFavoriteClick = { product ->
+        ProductList(uiState = uiState, navController = navController, onFavoriteClick = { product ->
             viewModel.toggleFavorite(userId, product)
         })
 
@@ -168,280 +140,6 @@ fun SearchNavigationView(
         }
     }
 }
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun HorizontalPager() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        val pageCount by remember {
-            mutableIntStateOf(3)
-        }
-
-        val pagerState = rememberPagerState(pageCount = { pageCount })
-        val imageUrls = listOf(
-            R.drawable.sale,
-            R.drawable.sale2,
-            R.drawable.sale
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val painter = rememberAsyncImagePainter(model = imageUrls[page])
-                    Image(
-                        painter = painter,
-                        contentDescription = "Image $page",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp))
-                    )
-                }
-            }
-
-            val currentPage by remember {
-                derivedStateOf { pagerState.currentPage }
-            }
-
-            DotIndicator(
-                pageCount = pageCount,
-                currentPage = currentPage,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun DotIndicator(
-    pageCount: Int,
-    currentPage: Int,
-    modifier: Modifier = Modifier,
-    activeColor: Color = Color.DarkGray,
-    inactiveColor: Color = Color.White
-) {
-    Row(
-        modifier = modifier.padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-    ) {
-        repeat(pageCount) { index ->
-            val color = if (index == currentPage) activeColor else inactiveColor
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .background(color, shape = CircleShape)
-                    .padding(horizontal = 16.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun CategoryCard(category: Category, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        border = BorderStroke(1.dp, Color.Gray),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
-    ) {
-        Row {
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(category.image)
-                    .crossfade(true)
-                    .build(),
-                error = painterResource(id = R.drawable.ic_broken_image),
-                placeholder = painterResource(id = R.drawable.loading_img),
-                contentDescription = "Category Image",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(48.dp)
-            )
-            Text(
-                text = category.name,
-                fontFamily = displayFontFamily,
-                modifier = modifier
-                    .align(Alignment.CenterVertically),
-            )
-
-        }
-    }
-}
-
-@Composable
-fun CategoryList(uiState: HomeUiState, modifier: Modifier = Modifier) {
-    LazyRow(modifier = modifier) {
-        items(uiState.categoryList) { category ->
-            CategoryCard(
-                category = category,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun ProductCard(
-    product: ProductUi,
-    modifier: Modifier = Modifier,
-    onFavoriteClick: (ProductUi) -> Unit,
-) {
-    val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
-    Card(
-        modifier = modifier
-            .size(170.dp, 280.dp)
-            .clip(RoundedCornerShape(12.dp)),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(8.dp) // Use elevation for shadow
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(product.imageOne)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Product Image",
-                    error = painterResource(id = R.drawable.ic_broken_image),
-                    placeholder = painterResource(id = R.drawable.loading_img),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp))
-                )
-
-                IconButton(
-                    onClick = { onFavoriteClick(product) },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 8.dp, end = 8.dp) // Add padding to top and end
-                        .background(color = Color.LightGray, shape = CircleShape)
-                        .size(36.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favorite",
-                        tint = iconColor,
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = product.title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontFamily = displayFontFamily,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = AnnotatedString(
-                    text = "$${product.price}",
-                    spanStyles = listOf(
-                        AnnotatedString.Range(
-                            item = SpanStyle(
-                                color = Color.Red.copy(alpha = 0.6f), // Lighter color
-                                fontWeight = FontWeight.Light,
-                                textDecoration = TextDecoration.LineThrough
-                            ),
-                            start = 0,
-                            end = "$${product.price}".length
-                        )
-                    )
-                ),
-                fontFamily = displayFontFamily,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = "$${product.salePrice}",
-                fontFamily = displayFontFamily,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 8.dp)
-
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = "Rating",
-                    tint = LocalColors.current.primary,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = product.rate.toString(),
-                    fontFamily = displayFontFamily,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
-fun ProductList(uiState: HomeUiState, onFavoriteClick: (ProductUi) -> Unit) {
-    LazyRow {
-        items(uiState.productList) { product ->
-            ProductCard(
-                product = product,
-                onFavoriteClick = onFavoriteClick,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
-}
-
 //@Preview(showBackground = true, showSystemUi = true)
 //@Composable
 //fun Preview() {
