@@ -49,7 +49,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -112,7 +116,7 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-        ProductGrid(uiState = uiState, onFavoriteClick = { product ->
+        ProductList(uiState = uiState, onFavoriteClick = { product ->
             viewModel.toggleFavorite(userId, product)
         })
 
@@ -307,12 +311,12 @@ fun ProductCard(
     val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
     Card(
         modifier = modifier
-            .size(170.dp, 260.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .shadow(8.dp, RoundedCornerShape(12.dp)),
+            .size(170.dp, 280.dp)
+            .clip(RoundedCornerShape(12.dp)),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
+        elevation = CardDefaults.cardElevation(8.dp) // Use elevation for shadow
     ) {
         Column(
             modifier = Modifier
@@ -341,15 +345,14 @@ fun ProductCard(
                     onClick = { onFavoriteClick(product) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .background(color = Color.DarkGray, shape = CircleShape)
-                        .padding(4.dp)
+                        .padding(top = 8.dp, end = 8.dp) // Add padding to top and end
+                        .background(color = Color.LightGray, shape = CircleShape)
                         .size(36.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Favorite",
                         tint = iconColor,
-                        modifier = modifier.size(20.dp)
                     )
                 }
             }
@@ -359,26 +362,53 @@ fun ProductCard(
             Text(
                 text = product.title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.DarkGray,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
                 fontFamily = displayFontFamily,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(start = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "$${product.price}",
+                text = AnnotatedString(
+                    text = "$${product.price}",
+                    spanStyles = listOf(
+                        AnnotatedString.Range(
+                            item = SpanStyle(
+                                color = Color.Red.copy(alpha = 0.6f), // Lighter color
+                                fontWeight = FontWeight.Light,
+                                textDecoration = TextDecoration.LineThrough
+                            ),
+                            start = 0,
+                            end = "$${product.price}".length
+                        )
+                    )
+                ),
+                fontFamily = displayFontFamily,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = "$${product.salePrice}",
                 fontFamily = displayFontFamily,
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 8.dp)
+
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
@@ -400,7 +430,7 @@ fun ProductCard(
 
 
 @Composable
-fun ProductGrid(uiState: HomeUiState, onFavoriteClick: (ProductUi) -> Unit) {
+fun ProductList(uiState: HomeUiState, onFavoriteClick: (ProductUi) -> Unit) {
     LazyRow {
         items(uiState.productList) { product ->
             ProductCard(

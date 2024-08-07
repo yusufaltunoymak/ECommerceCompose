@@ -119,6 +119,9 @@ fun ProductListItem(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable { onClick() },
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
