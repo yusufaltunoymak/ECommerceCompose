@@ -118,8 +118,7 @@ fun SetupNavGraph(
                 defaultValue = 423334
             })
         ) {
-            val productId = it.arguments?.getInt("productId") ?: 423334
-            ProductDetailScreen(productId = productId)
+            ProductDetailScreen()
         }
 
         composable("favorite") {
@@ -141,15 +140,6 @@ fun SetupNavGraph(
         // Add search route in SetupNavGraph
         composable("search") {
             SearchScreen(navController = navController)
-        }
-
-        // Add product detail route
-        composable(
-            route = "product_detail/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?: 0
-//            ProductDetailScreen(navController = navController, productId = productId)
         }
     }
 }

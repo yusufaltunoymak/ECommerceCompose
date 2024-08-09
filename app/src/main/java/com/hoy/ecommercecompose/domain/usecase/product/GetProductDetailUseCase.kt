@@ -16,9 +16,9 @@ class GetProductDetailUseCase @Inject constructor(
             emit(Resource.Loading())
             try {
                 val response = productRepository.getProductDetail(productId)
-                response.productDto?.let {
-                    emit(Resource.Success(data = it.mapToProductDetail()))
-                } ?: run {
+                if (response.productDto != null) {
+                    emit(Resource.Success(data = response.productDto.mapToProductDetail()))
+                } else {
                     emit(Resource.Error(message = "Product not found"))
                 }
             } catch (e: Exception) {

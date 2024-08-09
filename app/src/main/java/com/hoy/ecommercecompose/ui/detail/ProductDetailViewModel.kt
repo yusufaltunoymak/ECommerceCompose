@@ -24,8 +24,7 @@ class ProductDetailViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<Int>("productId")?.let {
-            println("ürün ${it}")
-            getProductDetail(it.toInt())
+            getProductDetail(it)
         }
     }
 
@@ -34,20 +33,14 @@ class ProductDetailViewModel @Inject constructor(
             getProductDetailUseCase(productId).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        println("alo")
-
                         _detailUiState.value = DetailUiState(isLoading = true)
                     }
 
                     is Resource.Success -> {
-                        println("aloo")
-                        println("gelen data ${resource.data}")
                         _detailUiState.value = DetailUiState(productDetail = resource.data)
                     }
 
                     is Resource.Error -> {
-                        println("alooo")
-
                         _detailUiState.value = DetailUiState(error = resource.message)
                     }
                 }

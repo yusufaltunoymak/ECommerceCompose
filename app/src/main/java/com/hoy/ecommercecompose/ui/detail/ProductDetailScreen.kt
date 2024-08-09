@@ -31,7 +31,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,14 +50,9 @@ import com.hoy.ecommercecompose.ui.theme.LocalColors
 
 @Composable
 fun ProductDetailScreen(
-    productId: Int,
     viewModel: ProductDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(productId) {
-        viewModel.getProductDetail(productId)
-    }
 
     val images = listOf(
         R.drawable.log1,
