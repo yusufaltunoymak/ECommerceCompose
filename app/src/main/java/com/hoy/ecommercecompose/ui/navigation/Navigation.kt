@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
+import com.hoy.ecommercecompose.ui.category.CategoryScreen
 import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
 import com.hoy.ecommercecompose.ui.home.HomeScreen
@@ -59,7 +60,6 @@ fun SetupNavGraph(
                 viewModel = viewModel
             )
         }
-
         composable("login") {
             val loginViewModel: LoginViewModel = hiltViewModel()
             val loginViewState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
@@ -74,19 +74,6 @@ fun SetupNavGraph(
                 viewModel = loginViewModel
             )
         }
-
-        composable("home") {
-
-            HomeScreen(
-                onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=${it}")
-                },
-                onNavigateToSearch = {
-                    navController.navigate("search")
-                }
-            )
-        }
-
         composable("reset_password") {
             val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
             val resetPasswordUiState by resetPasswordViewModel.resetUiState.collectAsStateWithLifecycle()
@@ -98,7 +85,6 @@ fun SetupNavGraph(
                 navController = navController
             )
         }
-
         composable("send_mail") {
             val sendMailViewModel: SendMailViewModel = hiltViewModel()
             val sendMailUiState by sendMailViewModel.sendMailUiState.collectAsStateWithLifecycle()
@@ -111,6 +97,21 @@ fun SetupNavGraph(
             )
         }
 
+        composable("home") {
+
+            HomeScreen(
+                onNavigateToDetail = {
+                    navController.navigate("product_detail?productId=${it}")
+                },
+                onNavigateToSearch = {
+                    navController.navigate("search")
+                },
+                onCategoryListClick = {
+                    navController.navigate("category_screen?category=${it}")
+                }
+            )
+        }
+
         composable(
             route = "product_detail?productId={productId}",
             arguments = listOf(navArgument(name = "productId") {
@@ -119,6 +120,16 @@ fun SetupNavGraph(
             })
         ) {
             ProductDetailScreen()
+        }
+
+        composable(
+            route = "category_screen?category={category}",
+            arguments = listOf(navArgument(name = "category") {
+                type = NavType.StringType
+                defaultValue = "milk"
+            })
+        ) {
+            CategoryScreen()
         }
 
         composable("favorite") {
@@ -136,8 +147,6 @@ fun SetupNavGraph(
         composable("profile") {
             ProfileScreen(navController)
         }
-        // Add search route
-        // Add search route in SetupNavGraph
         composable("search") {
             SearchScreen(navController = navController)
         }

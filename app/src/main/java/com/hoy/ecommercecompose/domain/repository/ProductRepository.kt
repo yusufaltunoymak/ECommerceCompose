@@ -21,6 +21,8 @@ interface ProductRepository {
     suspend fun addFavoriteProduct(product: ProductEntity)
     suspend fun removeFavoriteProduct(product: ProductEntity)
 
+    suspend fun getByCategory(category: String): ProductListDto
+
     suspend fun addFavoriteProduct(addToFavoriteBody: AddToFavoriteBody): BaseResponse
     suspend fun getFavoriteProducts(userId: String): ProductListDto
     suspend fun deleteFavoriteProduct(deleteFromFavoriteBody: DeleteFromFavoriteBody): BaseResponse

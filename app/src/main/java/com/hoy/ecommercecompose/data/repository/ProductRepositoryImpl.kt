@@ -25,7 +25,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCategories(): GetCategoriesResponse {
-       return apiService.getCategories()
+        return apiService.getCategories()
     }
 
     override suspend fun getProductDetail(id: Int): GetProductDetailResponse {
@@ -55,15 +55,20 @@ class ProductRepositoryImpl @Inject constructor(
         return apiService.deleteFromFavorites(deleteFromFavoriteBody = deleteFromFavoriteBody)
     }
 
+    override suspend fun getByCategory(category: String): ProductListDto {
+        return apiService.getProductsByCategory(category = category)
+    }
 
-    override suspend fun  addFavoriteProduct(product: ProductEntity) {
+
+    override suspend fun addFavoriteProduct(product: ProductEntity) {
         productDao.addFavoriteProduct(product)
     }
-    override suspend fun  removeFavoriteProduct(product: ProductEntity) {
+
+    override suspend fun removeFavoriteProduct(product: ProductEntity) {
         productDao.removeFavoriteProduct(product)
     }
 
-    override suspend fun  getFavoriteProducts(): List<ProductEntity> {
+    override suspend fun getFavoriteProducts(): List<ProductEntity> {
         return productDao.getFavoriteProducts()
     }
 
