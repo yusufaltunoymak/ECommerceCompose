@@ -44,9 +44,10 @@ class CartViewModel @Inject constructor(
                 is Resource.Success -> {
                     _uiState.update { currentState ->
                         currentState.copy(
-                            cartProductDtoList = result.data?.productDtos ?: emptyList(),
-                            totalCartPrice = result.data?.productDtos?.sumOf { it.price ?: 0.0 } ?: 0.0,
-                            totalCartCount = result.data?.productDtos?.size ?: 0,
+                            cartProductDtoList = result.data?.productDto ?: emptyList(),
+                            totalCartPrice = result.data?.productDto?.sumOf { it.price ?: 0.0 }
+                                ?: 0.0,
+                            totalCartCount = result.data?.productDto?.size ?: 0,
                             isLoading = false
                         )
                     }

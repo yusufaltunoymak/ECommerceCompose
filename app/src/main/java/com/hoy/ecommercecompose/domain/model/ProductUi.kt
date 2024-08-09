@@ -15,5 +15,3 @@ data class ProductUi(
     val salePrice: Double,
     val saleState: Boolean
 )
-
-

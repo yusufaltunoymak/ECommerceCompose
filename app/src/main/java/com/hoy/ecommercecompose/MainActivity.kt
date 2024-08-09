@@ -57,7 +57,8 @@ fun MainScreen(navController: NavHostController, googleAuthUiClient: GoogleAuthU
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val hideBottomNavRoutes = listOf("welcome", "login", "signup")
+    val hideBottomNavRoutes =
+        listOf("welcome", "login", "signup", "search", "product_detail?productId={productId}")
     val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
     Scaffold(
         bottomBar = {

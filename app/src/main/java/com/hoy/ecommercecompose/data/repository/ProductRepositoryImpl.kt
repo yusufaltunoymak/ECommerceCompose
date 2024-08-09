@@ -28,13 +28,8 @@ class ProductRepositoryImpl @Inject constructor(
        return apiService.getCategories()
     }
 
-    override suspend fun getProductDetail(id: Int): Resource<GetProductDetailResponse> {
-        return try {
-            val response = apiService.getProductDetail(id = id)
-            Resource.Success(response)
-        } catch (e: Exception) {
-            Resource.Error("Exception: ${e.message}")
-        }
+    override suspend fun getProductDetail(id: Int): GetProductDetailResponse {
+        return apiService.getProductDetail(id = id)
     }
 
     override suspend fun getCartProducts(id: String): Resource<GetCartProductResponse> {

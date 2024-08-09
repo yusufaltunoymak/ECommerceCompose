@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,19 +42,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 
 @Composable
-fun ProductDetailScreen() {
+fun ProductDetailScreen(
+    viewModel: ProductDetailViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
 
     val images = listOf(
         R.drawable.log1,
         R.drawable.log2,
         R.drawable.log3
     )
-
+    println("ürünid ${uiState.productDetail?.id}")
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -115,13 +121,15 @@ fun ProductDetailScreen() {
                             RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                         )
                 ) {
+                    uiState.productDetail?.title?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 24.sp
+                        )
+                    }
                     Text(
-                        text = "Wireless Headphone",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
-                    )
-                    Text(
-                        text = "$520.00",
+                        text = "${uiState.productDetail?.price}",
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic
                     )
@@ -144,7 +152,7 @@ fun ProductDetailScreen() {
                         ) {
                             Icon(
                                 Icons.Default.Star,
-                                contentDescription = "Rating",
+                                contentDescription = "${uiState.productDetail?.rate}",
                                 tint = Color.White,
                                 modifier = Modifier.size(14.dp)
                             )
@@ -162,7 +170,7 @@ fun ProductDetailScreen() {
                     )
 
                     Text(
-                        text = "Pellentesque faucibus elementum nisi eu eleifend. Aenean ultrices et massa nec consectetur. Donec venenatis nec metus auctor rhoncus. Nam vehicula eros id quam tincidunt, a finibus quam malesuada. Nulla et ante ullamcorper leo aliquet varius. ",
+                        text = "${uiState.productDetail}",
                         color = Color.Gray
                     )
 
@@ -229,5 +237,4 @@ fun ProductDetailScreen() {
 @Preview(showBackground = true)
 @Composable
 fun Prew() {
-    ProductDetailScreen()
 }

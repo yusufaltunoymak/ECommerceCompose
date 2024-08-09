@@ -14,7 +14,7 @@ interface ProductRepository {
 
     suspend fun getProducts(): ProductListDto
     suspend fun getCategories(): GetCategoriesResponse
-    suspend fun getProductDetail(id: Int): Resource<GetProductDetailResponse>
+    suspend fun getProductDetail(id: Int): GetProductDetailResponse
     suspend fun getCartProducts(id: String): Resource<GetCartProductResponse>
 
     suspend fun getFavoriteProducts(): List<ProductEntity>

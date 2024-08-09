@@ -14,10 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
 import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
-import com.hoy.ecommercecompose.ui.detail.ProductDetailViewModel
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
 import com.hoy.ecommercecompose.ui.home.HomeScreen
-import com.hoy.ecommercecompose.ui.home.HomeViewModel
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
@@ -78,13 +76,14 @@ fun SetupNavGraph(
         }
 
         composable("home") {
-            val homeViewModel: HomeViewModel = hiltViewModel()
-            val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
             HomeScreen(
-                navController = navController,
-                uiState = homeUiState,
-                viewModel = homeViewModel
+                onNavigateToDetail = {
+                    navController.navigate("product_detail?productId=${it}")
+                },
+                onNavigateToSearch = {
+                    navController.navigate("search")
+                }
             )
         }
 
@@ -112,10 +111,13 @@ fun SetupNavGraph(
             )
         }
 
-        composable("product_detail") {
-            val productDetailViewModel: ProductDetailViewModel = hiltViewModel()
-            val productDetailUiState by productDetailViewModel.detailUiState.collectAsStateWithLifecycle()
-
+        composable(
+            route = "product_detail?productId={productId}",
+            arguments = listOf(navArgument(name = "productId") {
+                type = NavType.IntType
+                defaultValue = 423334
+            })
+        ) {
             ProductDetailScreen()
         }
 
@@ -138,15 +140,6 @@ fun SetupNavGraph(
         // Add search route in SetupNavGraph
         composable("search") {
             SearchScreen(navController = navController)
-        }
-
-        // Add product detail route
-        composable(
-            route = "product_detail/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?: 0
-//            ProductDetailScreen(navController = navController, productId = productId)
         }
     }
 }

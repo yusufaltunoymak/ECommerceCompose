@@ -19,12 +19,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CategoryList
@@ -36,10 +39,16 @@ import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    uiState: HomeUiState,
-    navController: NavController,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel = hiltViewModel(),
+    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToSearch: () -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getProducts()
+    }
+
     val scrollState = rememberScrollState()
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
@@ -67,9 +76,7 @@ fun HomeScreen(
         }
 
         SearchNavigationView(
-            onNavigateToSearch = {
-                navController.navigate("search") // Trigger navigation on click
-            },
+            onNavigateToSearch = onNavigateToSearch,
             modifier = Modifier.fillMaxWidth()
         )
         CustomHorizontalPager(imageUrls = imageUrls)
@@ -88,9 +95,13 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-        ProductList(uiState = uiState, navController = navController, onFavoriteClick = { product ->
-            viewModel.toggleFavorite(userId, product)
-        })
+        ProductList(
+            uiState = uiState,
+            onFavoriteClick = { product ->
+                viewModel.toggleFavorite(userId, product)
+            },
+            onNavigateToDetail = onNavigateToDetail
+        )
 
     }
 }
