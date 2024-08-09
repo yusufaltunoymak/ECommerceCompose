@@ -117,7 +117,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getProducts() {
+     fun getProducts() {
         viewModelScope.launch {
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
