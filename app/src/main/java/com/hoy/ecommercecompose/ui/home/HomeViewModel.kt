@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getProductsUseCase: GetProductsUseCase,
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
-    private val deleteFavoriteUseCase: DeleteFavoriteUseCase
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<HomeUiState> =
         MutableStateFlow(HomeUiState())

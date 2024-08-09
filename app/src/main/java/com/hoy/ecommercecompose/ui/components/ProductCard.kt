@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
@@ -53,7 +52,7 @@ fun ProductCard(
     product: ProductUi,
     modifier: Modifier = Modifier,
     onFavoriteClick: (ProductUi) -> Unit,
-    navController: NavController,
+    onNavigateToDetail: (Int) -> Unit
 ) {
     val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
     Card(
@@ -61,7 +60,7 @@ fun ProductCard(
             .size(170.dp, 280.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
-                navController.navigate("product_detail")
+                onNavigateToDetail(product.id)
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -182,7 +181,7 @@ fun ProductCard(
 fun ProductList(
     uiState: HomeUiState,
     onFavoriteClick: (ProductUi) -> Unit,
-    navController: NavController
+    onNavigateToDetail: (Int) -> Unit,
 ) {
     LazyRow {
         items(uiState.productList) { product ->
@@ -190,7 +189,7 @@ fun ProductList(
                 product = product,
                 onFavoriteClick = onFavoriteClick,
                 modifier = Modifier.padding(8.dp),
-                navController = navController
+                onNavigateToDetail = onNavigateToDetail
             )
         }
     }

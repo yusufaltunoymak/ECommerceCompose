@@ -1,9 +1,11 @@
 package com.hoy.ecommercecompose.data.mapper
 
+import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.domain.model.FavoriteResponse
+import com.hoy.ecommercecompose.domain.model.ProductDetail
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
 fun ProductDto.mapToProductUi() : ProductUi {
@@ -24,6 +26,22 @@ fun ProductDto.mapToProductUi() : ProductUi {
     )
 }
 
+fun ProductDto.mapToProductDetail(): ProductDetail {
+    return ProductDetail(
+        description = this.description.orEmpty(),
+        id = this.id.orEmpty(),
+        imageOne = this.imageOne.orEmpty(),
+        price = this.price.orEmpty(),
+        title = this.title.orEmpty(),
+        isFavorite = false.orEmpty(),
+        rate = this.rate.orEmpty(),
+        salePrice = this.salePrice.orEmpty(),
+        saleState = this.saleState.orEmpty(),
+        imageThree = this.imageThree.orEmpty(),
+        imageTwo = this.imageTwo.orEmpty(),
+    )
+}
+
 fun ProductEntity.mapToProductEntity() : ProductUi {
     return ProductUi(
         category = this.category,
@@ -41,11 +59,6 @@ fun ProductEntity.mapToProductEntity() : ProductUi {
         isFavorite = this.isFavorite
     )
 }
-
-
-
-
-
 
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(
