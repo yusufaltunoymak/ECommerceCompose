@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.domain.usecase.category.GetProductsByCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,13 +22,19 @@ class CategoryViewModel @Inject constructor(
     private var _uiState = MutableStateFlow(CategoryUiState())
     val uiState : StateFlow<CategoryUiState> = _uiState.asStateFlow()
 
+    private val categoryList = mutableListOf<ProductUi>()
+
     init {
         savedStateHandle.get<String>("category")?.let {
             getProductsByCategory(it)
         }
     }
 
-    private fun getProductsByCategory(category: String) {
+    fun getCategory(): String {
+        return savedStateHandle.get<String>("category") ?: ""
+    }
+
+    fun getProductsByCategory(category: String) {
         viewModelScope.launch {
             getProductsByCategoryUseCase(category).collect { result ->
                 when (result) {
@@ -35,7 +42,9 @@ class CategoryViewModel @Inject constructor(
                         _uiState.value = CategoryUiState(isLoading = true)
                     }
                     is Resource.Success -> {
-                        _uiState.value = CategoryUiState(categoryList = result.data ?: emptyList())
+                        categoryList.clear()
+                        categoryList.addAll(result.data ?: emptyList()) // categoryList'i doldur
+                        _uiState.value = CategoryUiState(categoryList = categoryList)
                     }
                     is Resource.Error -> {
                         _uiState.value = CategoryUiState(errorMessage = result.message)
@@ -44,4 +53,18 @@ class CategoryViewModel @Inject constructor(
             }
         }
     }
+
+    fun sortProducts(option: SortOption) {
+    }
+
+
+    fun searchProducts(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            categoryList
+        } else {
+            categoryList.filter { it.title.contains(query, ignoreCase = true) }
+        }
+        _uiState.update { it.copy(categoryList = filteredList) }
+    }
+
 }

@@ -170,7 +170,7 @@ fun SearchNavigationView(
 //                    description = "Description",
 //                    id = 1,
 //                    imageOne = "https://via.placeholder.com/150",
-//                    price = 100.0,
+//             ,       price = 100.0,
 //                    title = "Product1",
 //                    isFavorite = false,
 //                    rate = 4.5

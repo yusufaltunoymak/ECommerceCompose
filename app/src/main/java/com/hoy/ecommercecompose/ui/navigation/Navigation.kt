@@ -129,7 +129,11 @@ fun SetupNavGraph(
                 defaultValue = "milk"
             })
         ) {
-            CategoryScreen()
+            CategoryScreen(
+                onNavigateToDetail = {
+                    navController.navigate("product_detail?productId=${it}")
+                }
+            )
         }
 
         composable("favorite") {
