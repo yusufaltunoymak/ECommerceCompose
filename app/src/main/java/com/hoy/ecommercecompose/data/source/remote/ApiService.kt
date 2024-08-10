@@ -56,4 +56,11 @@ interface ApiService {
         @Body deleteFromFavoriteBody: DeleteFromFavoriteBody
     ): BaseResponse
 
+    @GET("get_products_by_category")
+    suspend fun getProductsByCategory(
+        @Header("store") store: String = USER,
+        @Query("category") category: String
+    ): ProductListDto
+
+
 }

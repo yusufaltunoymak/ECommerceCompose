@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,9 +26,10 @@ import com.hoy.ecommercecompose.ui.home.HomeUiState
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
 @Composable
-fun CategoryCard(category: Category, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
+fun CategoryCard(category: Category, modifier: Modifier = Modifier, onCategoryListClick: (String) -> Unit) {
+    (Card(
+        modifier = modifier
+            .clickable { onCategoryListClick(category.name) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         border = BorderStroke(1.dp, Color.Gray),
         colors = CardDefaults.cardColors(
@@ -54,14 +56,19 @@ fun CategoryCard(category: Category, modifier: Modifier = Modifier) {
             )
 
         }
-    }
+    })
 }
 
 @Composable
-fun CategoryList(uiState: HomeUiState, modifier: Modifier = Modifier) {
+fun CategoryList(
+    uiState: HomeUiState,
+    modifier: Modifier = Modifier,
+    onCategoryListClick: (String) -> Unit
+) {
     LazyRow(modifier = modifier) {
         items(uiState.categoryList) { category ->
             CategoryCard(
+                onCategoryListClick = onCategoryListClick,
                 category = category,
                 modifier = Modifier.padding(8.dp)
             )

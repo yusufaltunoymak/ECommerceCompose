@@ -42,6 +42,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToSearch: () -> Unit,
+    onCategoryListClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -87,7 +88,10 @@ fun HomeScreen(
             color = Color.DarkGray,
             fontFamily = displayFontFamily
         )
-        CategoryList(uiState)
+        CategoryList(
+            uiState = uiState,
+            onCategoryListClick = onCategoryListClick
+        )
 
         Text(
             text = "Top Rated Products",
@@ -151,6 +155,8 @@ fun SearchNavigationView(
         }
     }
 }
+
+
 //@Preview(showBackground = true, showSystemUi = true)
 //@Composable
 //fun Preview() {
