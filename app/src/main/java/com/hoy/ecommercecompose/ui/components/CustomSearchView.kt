@@ -30,7 +30,8 @@ fun CustomSearchView(
     onTextChange: (String) -> Unit,
     placeHolder: String,
     onCloseClicked: () -> Unit,
-    onSearchClick: () -> Unit // Used for triggering page navigation
+    onSearchClick: () -> Unit,
+    onSortClick: () -> Unit
 ) {
     val containerColor = Color.White
     val indicatorColor = LocalColors.current.primary.copy(alpha = 0.3f)
@@ -77,11 +78,13 @@ fun CustomSearchView(
                 IconButton(onClick = {
                     if (text.isNotBlank()) {
                         onCloseClicked()
+                    } else {
+                        onSortClick()
                     }
                 }) {
                     Icon(
                         imageVector = if (text.isNotBlank()) Icons.Default.Clear else Icons.AutoMirrored.Filled.List,
-                        contentDescription = "Clear or Mic",
+                        contentDescription = if (text.isNotBlank()) "Clear" else "Sort",
                         modifier = Modifier.size(22.dp)
                     )
                 }

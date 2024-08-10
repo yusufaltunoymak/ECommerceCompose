@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getAllProductUseCase: GetAllProductUseCase
+        private val getAllProductUseCase: GetAllProductUseCase
 ) : ViewModel() {
 
     private var _uiState: MutableStateFlow<SearchUiState> = MutableStateFlow(SearchUiState())

@@ -68,6 +68,10 @@ fun SearchScreen(
             onSearchClick = {
                 // Handle search button click if needed
             },
+            onSortClick = {
+                searchQuery = ""
+                viewModel.loadAllProducts()
+            },
             modifier = Modifier.focusRequester(focusRequester)
         )
 
