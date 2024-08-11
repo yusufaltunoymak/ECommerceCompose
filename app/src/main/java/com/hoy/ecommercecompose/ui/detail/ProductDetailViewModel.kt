@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
     private val getProductDetailUseCase: GetProductDetailUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
+    private val firebaseAuthRepository: FirebaseAuthRepository
 
-    ) : ViewModel() {
+) : ViewModel() {
     private var _detailUiState: MutableStateFlow<DetailUiState> =
         MutableStateFlow(DetailUiState())
 
@@ -28,21 +30,20 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun getProductDetail(productId: Int) {
+    private fun getProductDetail(productId: Int) {
         viewModelScope.launch {
-            getProductDetailUseCase(productId).collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        _detailUiState.value = DetailUiState(isLoading = true)
-                    }
+            when (val resource =
+                getProductDetailUseCase(firebaseAuthRepository.getUserId(), productId)) {
+                is Resource.Loading -> {
+                    _detailUiState.value = DetailUiState(isLoading = true)
+                }
 
-                    is Resource.Success -> {
-                        _detailUiState.value = DetailUiState(productDetail = resource.data)
-                    }
+                is Resource.Success -> {
+                    _detailUiState.value = DetailUiState(productDetail = resource.data)
+                }
 
-                    is Resource.Error -> {
-                        _detailUiState.value = DetailUiState(error = resource.message)
-                    }
+                is Resource.Error -> {
+                    _detailUiState.value = DetailUiState(error = resource.message)
                 }
             }
         }

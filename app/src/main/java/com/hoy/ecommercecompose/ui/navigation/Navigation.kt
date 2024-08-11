@@ -93,7 +93,7 @@ fun SetupNavGraph(
                 onBackClick = { navController.popBackStack() },
                 uiState = sendMailUiState,
                 onAction = sendMailViewModel::onAction,
-                navController = navController
+                onNavigateToLogin = { navController.navigate("login") }
             )
         }
 

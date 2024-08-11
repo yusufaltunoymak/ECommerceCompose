@@ -67,4 +67,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             Resource.Error("No user is currently logged in")
         }
     }
+
+    override suspend fun getUserId(): String {
+        return firebaseAuth.currentUser?.uid.orEmpty()
+    }
 }

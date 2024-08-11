@@ -98,4 +98,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation (libs.ui)
     implementation (libs.androidx.material)
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android)
+
 }

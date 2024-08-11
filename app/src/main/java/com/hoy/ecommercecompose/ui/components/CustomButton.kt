@@ -22,7 +22,6 @@ fun CustomButton(
     onClick: () -> Unit,
     colors: Color = LocalColors.current.primary,
     enabled: Boolean = true
-
 ) {
     Button(
         onClick = onClick,

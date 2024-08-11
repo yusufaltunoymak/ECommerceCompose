@@ -1,6 +1,6 @@
 package com.hoy.ecommercecompose.ui.detail
 
-import com.hoy.ecommercecompose.domain.model.ProductDetail
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 
 data class DetailUiState(
     val isLoading: Boolean = false,

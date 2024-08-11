@@ -5,7 +5,7 @@ import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.domain.model.FavoriteResponse
-import com.hoy.ecommercecompose.domain.model.ProductDetail
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
 fun ProductDto.mapToProductUi() : ProductUi {
@@ -26,14 +26,14 @@ fun ProductDto.mapToProductUi() : ProductUi {
     )
 }
 
-fun ProductDto.mapToProductDetail(): ProductDetail {
+fun ProductDto.mapToProductDetail(isFavorite : Boolean): ProductDetail {
     return ProductDetail(
         description = this.description.orEmpty(),
         id = this.id.orEmpty(),
         imageOne = this.imageOne.orEmpty(),
         price = this.price.orEmpty(),
         title = this.title.orEmpty(),
-        isFavorite = false.orEmpty(),
+        isFavorite = isFavorite,
         rate = this.rate.orEmpty(),
         salePrice = this.salePrice.orEmpty(),
         saleState = this.saleState.orEmpty(),

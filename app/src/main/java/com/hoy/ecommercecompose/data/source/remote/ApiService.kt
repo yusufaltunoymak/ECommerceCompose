@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.data.source.remote
 
 import com.hoy.ecommercecompose.common.Constants.USER
+import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
@@ -31,6 +32,13 @@ interface ApiService {
         @Header("store") store: String = USER,
         @Query("id") id: Int
     ): GetProductDetailResponse
+
+    @GET("check_favorite")
+    suspend fun checkIsFavorite(
+        @Header("store") store: String = USER,
+        @Query("userId") userId: String,
+        @Query("productId") productId: Int
+    ): CheckFavoriteResponse
 
     @GET("get_cart_products")
     suspend fun getCartProducts(

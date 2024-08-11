@@ -36,7 +36,7 @@ fun SendMailScreen(
     onBackClick: () -> Unit,
     uiState: SendMailContract.SendMailUiState,
     onAction: (SendMailContract.SendMailUiAction) -> Unit,
-    navController: NavController
+    onNavigateToLogin : () -> Unit,
 ) {
     val isEmailFieldEmpty = uiState.email.isEmpty()
 
@@ -105,7 +105,7 @@ fun SendMailScreen(
                 onAction(
                     SendMailContract.SendMailUiAction.SendMail,
                 )
-                navController.navigate("login")
+                onNavigateToLogin()
             },
             enabled = !isEmailFieldEmpty
         )
@@ -122,7 +122,7 @@ fun SendMailScreen(
                 fontSize = 18.sp,
                 color = LocalColors.current.primary,
                 modifier = Modifier.clickable {
-                    navController.navigate("login")
+                    onNavigateToLogin()
                 }
             )
         }
