@@ -4,6 +4,7 @@ import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.source.local.ProductDao
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.ApiService
+import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
@@ -30,6 +31,10 @@ class ProductRepositoryImpl @Inject constructor(
 
     override suspend fun getProductDetail(id: Int): GetProductDetailResponse {
         return apiService.getProductDetail(id = id)
+    }
+
+    override suspend fun checkProductIsFavorite(userId: String,productId :Int): CheckFavoriteResponse {
+        return apiService.checkIsFavorite(userId = userId, productId = productId)
     }
 
     override suspend fun getCartProducts(id: String): Resource<GetCartProductResponse> {

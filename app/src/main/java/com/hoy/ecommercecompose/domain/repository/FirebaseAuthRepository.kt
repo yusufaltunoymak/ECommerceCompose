@@ -17,4 +17,6 @@ interface FirebaseAuthRepository  {
 
     suspend fun getUserInformation(): Resource<User>
 
+    suspend fun getUserId(): String
+
 }

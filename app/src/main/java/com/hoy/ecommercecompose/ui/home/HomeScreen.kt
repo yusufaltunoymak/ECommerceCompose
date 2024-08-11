@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -123,10 +124,10 @@ fun SearchNavigationView(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .clickable {
-                onNavigateToSearch() // Navigate to SearchScreen
+                onNavigateToSearch()
             }
-            .background(containerColor) // Set background color
-            .border(1.dp, indicatorColor, RoundedCornerShape(8.dp)) // Add border
+            .background(containerColor)
+            .border(1.dp, indicatorColor, RoundedCornerShape(8.dp))
             .padding(16.dp)
     ) {
         Row(
@@ -157,26 +158,12 @@ fun SearchNavigationView(
 }
 
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun Preview() {
-//    HomeScreen(
-//        uiState = HomeUiState(
-//            currentUser = User("John Doe"),
-//            productList = listOf(
-//                ProductUi(
-//                    category = "Electronics",
-//                    count = 10,
-//                    description = "Description",
-//                    id = 1,
-//                    imageOne = "https://via.placeholder.com/150",
-//             ,       price = 100.0,
-//                    title = "Product1",
-//                    isFavorite = false,
-//                    rate = 4.5
-//                )
-//                )
-//        ),
-//        navController = rememberNavController()
-//    )
-//}
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun Preview() {
+    HomeScreen(
+        onNavigateToDetail = {},
+        onNavigateToSearch = {},
+        onCategoryListClick = {}
+    )
+}

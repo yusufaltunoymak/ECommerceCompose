@@ -8,17 +8,20 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-abstract class UseCaseModule {
+abstract class RepositoryModule {
 
     @Binds
+    @ViewModelScoped
     abstract fun bindProductRepository(
         productRepositoryImpl: ProductRepositoryImpl
     ): ProductRepository
 
     @Binds
+    @ViewModelScoped
     abstract fun bindFirebaseRepository(
         firebaseAuthRepositoryImpl: FirebaseAuthRepositoryImpl
     ): FirebaseAuthRepository

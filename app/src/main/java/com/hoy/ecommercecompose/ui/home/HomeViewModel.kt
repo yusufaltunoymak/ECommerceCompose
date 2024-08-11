@@ -1,13 +1,12 @@
 package com.hoy.ecommercecompose.ui.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.model.ProductUi
+import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.auth.GetUserInformationUseCase
 import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
@@ -27,6 +26,7 @@ class HomeViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
+    private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<HomeUiState> =
         MutableStateFlow(HomeUiState())
@@ -117,11 +117,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-     fun getProducts() {
+    fun getProducts() {
         viewModelScope.launch {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-
-            getProductsUseCase(userId).collect { result ->
+            getProductsUseCase(firebaseAuthRepository.getUserId()).collect { result ->
                 when (result) {
                     is Resource.Success -> {
                         result.data?.let { productList ->
@@ -157,7 +155,6 @@ class HomeViewModel @Inject constructor(
 
     private fun addToFavorites(userId: String, productId: Int) {
         val addToFavoriteBody = AddToFavoriteBody(productId, userId)
-        Log.d("HomeViewModel", "Adding to favorites: userId = $userId, productId = $productId")
         viewModelScope.launch {
             addToFavoriteUseCase(addToFavoriteBody).collect { result ->
                 when (result) {
@@ -166,7 +163,7 @@ class HomeViewModel @Inject constructor(
                             _uiState.update { uiState ->
                                 val updatedProductList = uiState.productList.map { product ->
                                     if (product.id == productId) {
-                                        product.copy(isFavorite = true) // Veya toggle etmek isterseniz: !product.isFavorite
+                                        product.copy(isFavorite = true)
                                     } else {
                                         product
                                     }
@@ -178,7 +175,6 @@ class HomeViewModel @Inject constructor(
                                 )
                             }
                         }
-                        Log.e("HomeViewModel", "addToFavorites: ${result.data}")
                     }
 
                     is Resource.Error -> {
@@ -212,7 +208,6 @@ class HomeViewModel @Inject constructor(
 
     private fun deleteFavorite(userId: String, productId: Int) {
         val deleteFromFavoriteBody = DeleteFromFavoriteBody(userId, productId)
-        Log.d("HomeViewModel", "Deleting from favorites: userId = $userId, productId = $productId")
         viewModelScope.launch {
             deleteFavoriteUseCase(deleteFromFavoriteBody).collect { result ->
                 when (result) {
@@ -233,7 +228,6 @@ class HomeViewModel @Inject constructor(
                                 )
                             }
                         }
-                        Log.e("HomeViewModel", "deleteFavorite: ${result.data}")
                     }
 
                     is Resource.Error -> {

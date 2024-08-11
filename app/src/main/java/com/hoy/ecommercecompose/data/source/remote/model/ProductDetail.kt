@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.domain.model
+package com.hoy.ecommercecompose.data.source.remote.model
 
 data class ProductDetail(
     val description: String?,

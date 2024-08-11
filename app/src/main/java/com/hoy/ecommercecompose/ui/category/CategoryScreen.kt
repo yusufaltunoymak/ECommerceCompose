@@ -142,7 +142,7 @@ fun CategoryScreen(
 
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
             ) {
                 DropdownMenuItem(
                     text = { Text("Price: Low to High") },
@@ -175,31 +175,6 @@ enum class SortOption {
     PRICE_HIGH_TO_LOW,
     RATING
 }
-
-@Composable
-fun SortButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .padding(horizontal = 4.dp, vertical = 2.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White
-        )
-    ) {
-        Icon(
-            imageVector = Icons.Default.Menu,
-            contentDescription = "Sort",
-            tint = LocalColors.current.primary
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text = "Sort", color = Color.Black)
-    }
-}
-
 
 @Composable
 fun ProductCategoryCard(

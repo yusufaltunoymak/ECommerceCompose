@@ -2,27 +2,33 @@ package com.hoy.ecommercecompose.domain.usecase.product
 
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.mapper.mapToProductDetail
-import com.hoy.ecommercecompose.domain.model.ProductDetail
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.domain.repository.ProductRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GetProductDetailUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
-    suspend operator fun invoke(productId: Int): Flow<Resource<ProductDetail>> {
-        return flow {
-            emit(Resource.Loading())
+    suspend operator fun invoke(userId: String, productId: Int): Resource<ProductDetail> {
+        return withContext(Dispatchers.IO) {
             try {
-                val response = productRepository.getProductDetail(productId)
+                val response = async {
+                    productRepository.getProductDetail(productId)
+                }.await()
+                val favResponse = async {
+                    productRepository.checkProductIsFavorite(userId, productId)
+                }.await()
                 if (response.productDto != null) {
-                    emit(Resource.Success(data = response.productDto.mapToProductDetail()))
-                } else {
-                    emit(Resource.Error(message = "Product not found"))
+                    Resource.Success(data = response.productDto.mapToProductDetail(favResponse.isFavorite))
+                }
+                else {
+                    Resource.Error(message = "Product not found")
                 }
             } catch (e: Exception) {
-                emit(Resource.Error(message = e.message ?: "Unknown error"))
+                Resource.Error(message = e.message ?: "An unexpected error occurred")
             }
         }
     }
