@@ -20,7 +20,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         address: String
     ): Resource<Unit> {
         return try {
-            Resource.Loading<Unit>()
+            Resource.Loading
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val createdUser = User(
                 email = email,

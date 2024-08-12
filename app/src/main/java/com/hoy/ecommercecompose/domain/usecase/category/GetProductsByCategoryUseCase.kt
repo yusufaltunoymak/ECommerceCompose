@@ -13,7 +13,7 @@ class GetProductsByCategoryUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(category: String) : Flow<Resource<List<ProductUi>>> {
         return flow {
-            emit(Resource.Loading())
+            emit(Resource.Loading)
             try {
                 val response = productRepository.getByCategory(category)
                 emit(Resource.Success(data = response.productDto.map { it.mapToProductUi() }))

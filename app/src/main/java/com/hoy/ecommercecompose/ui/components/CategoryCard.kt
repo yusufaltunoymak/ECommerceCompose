@@ -61,7 +61,7 @@ fun CategoryCard(category: Category, modifier: Modifier = Modifier, onCategoryLi
 
 @Composable
 fun CategoryList(
-    uiState: HomeContract.HomeUiState,
+    uiState: HomeContract.UiState,
     modifier: Modifier = Modifier,
     onCategoryListClick: (String) -> Unit
 ) {

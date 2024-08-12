@@ -2,6 +2,7 @@ package com.hoy.ecommercecompose.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.copy
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
@@ -12,9 +13,14 @@ import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductsUseCase
+import com.hoy.ecommercecompose.ui.signup.SignUpContract
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,9 +34,13 @@ class HomeViewModel @Inject constructor(
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
-    private var _uiState: MutableStateFlow<HomeContract.HomeUiState> =
-        MutableStateFlow(HomeContract.HomeUiState())
+    private var _uiState: MutableStateFlow<HomeContract.UiState> =
+        MutableStateFlow(HomeContract.UiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiEffect by lazy { Channel<HomeContract.UiEffect>() }
+    val uiEffect: Flow<HomeContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
+
 
     init {
         getUserInformation()
@@ -38,49 +48,28 @@ class HomeViewModel @Inject constructor(
         getProducts()
     }
 
-    fun onAction(action: HomeContract.HomeUiAction) {
+    fun onAction(action: HomeContract.UiAction) {
         when (action) {
-            is HomeContract.HomeUiAction.ToggleFavorite -> toggleFavorite(
+            is HomeContract.UiAction.ToggleFavoriteClick -> toggleFavorite(
                 firebaseAuthRepository.getUserId(),
                 action.product
             )
         }
     }
 
-
     private fun getUserInformation() {
         viewModelScope.launch {
-            _uiState.update { uiState ->
-                uiState.copy(
-                    isLoading = true
-                )
-            }
-
             when (val result = getUserInformationUseCase()) {
                 is Resource.Success -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            currentUser = result.data,
-                            isLoading = false
-                        )
-                    }
+                    updateUiState { copy(currentUser = result.data) }
                 }
 
                 is Resource.Error -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            errorMessage = result.message,
-                            isLoading = false
-                        )
-                    }
+                    updateUiState { copy(errorMessage = result.message) }
                 }
 
                 is Resource.Loading -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            isLoading = true
-                        )
-                    }
+                    updateUiState { copy(isLoading = true) }
                 }
             }
         }
@@ -90,39 +79,18 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getCategoriesUseCase.invoke().collect { result ->
                 when (result) {
-                    is Resource.Success -> {
-                        result.data?.let { categoryList ->
-                            _uiState.update { uiState ->
-                                uiState.copy(
-                                    categoryList = categoryList,
-                                    isLoading = false
-                                )
-                            }
-                        }
-                    }
-
                     is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                errorMessage = result.message,
-                                isLoading = false
-                            )
-                        }
+                        updateUiState { copy(errorMessage = result.message, isLoading = false) }
                     }
 
                     is Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = true
-                            )
-                        }
+                        updateUiState { copy(isLoading = true) }
+                    }
+
+                    is Resource.Success -> {
+                        updateUiState { copy(categoryList = result.data, isLoading = false) }
                     }
                 }
-            }
-            _uiState.update { uiState ->
-                uiState.copy(
-                    isLoading = true
-                )
             }
         }
     }
@@ -132,31 +100,15 @@ class HomeViewModel @Inject constructor(
             getProductsUseCase(firebaseAuthRepository.getUserId()).collect { result ->
                 when (result) {
                     is Resource.Success -> {
-                        result.data?.let { productList ->
-                            _uiState.update { uiState ->
-                                uiState.copy(
-                                    productList = productList,
-                                    isLoading = false
-                                )
-                            }
-                        }
+                        updateUiState { copy(productList = result.data, isLoading = false) }
                     }
 
                     is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                errorMessage = result.message,
-                                isLoading = false
-                            )
-                        }
+                        updateUiState { copy(errorMessage = result.message, isLoading = false) }
                     }
 
                     is Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = true
-                            )
-                        }
+                        updateUiState { copy(isLoading = true) }
                     }
                 }
             }
@@ -169,38 +121,31 @@ class HomeViewModel @Inject constructor(
             addToFavoriteUseCase(addToFavoriteBody).collect { result ->
                 when (result) {
                     is Resource.Success -> {
-                        result.data?.let { favorite ->
-                            _uiState.update { uiState ->
-                                val updatedProductList = uiState.productList.map { product ->
-                                    if (product.id == productId) {
-                                        product.copy(isFavorite = true)
-                                    } else {
-                                        product
-                                    }
+                        updateUiState {
+                            val updatedProductList = productList.map { product ->
+                                if (product.id == productId) {
+                                    product.copy(isFavorite = true)
+                                } else {
+                                    product
                                 }
-                                uiState.copy(
-                                    productList = updatedProductList,
-                                    addToFavorites = favorite,
-                                    isLoading = false
-                                )
                             }
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                errorMessage = result.message,
+                            copy(
+                                productList = updatedProductList,
+                                addToFavorites = result.data,
                                 isLoading = false
                             )
                         }
                     }
 
+                    is Resource.Error -> {
+                        updateUiState {
+                            copy(errorMessage = result.message, isLoading = false)
+                        }
+                    }
+
                     is Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = true
-                            )
+                        updateUiState {
+                            copy(isLoading = true)
                         }
                     }
                 }
@@ -208,7 +153,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavorite(userId: String, product: ProductUi) {
+    private fun toggleFavorite(userId: String, product: ProductUi) {
         if (product.isFavorite) {
             deleteFavorite(userId, product.id)
         } else {
@@ -222,42 +167,44 @@ class HomeViewModel @Inject constructor(
             deleteFavoriteUseCase(deleteFromFavoriteBody).collect { result ->
                 when (result) {
                     is Resource.Success -> {
-                        result.data?.let { favorite ->
-                            _uiState.update { uiState ->
-                                val updatedProductList = uiState.productList.map { product ->
-                                    if (product.id == productId) {
-                                        product.copy(isFavorite = false)
-                                    } else {
-                                        product
-                                    }
+                        updateUiState {
+                            val updatedProductList = productList.map { product ->
+                                if (product.id == productId) {
+                                    product.copy(isFavorite = false)
+                                } else {
+                                    product
                                 }
-                                uiState.copy(
-                                    productList = updatedProductList,
-                                    deleteFromFavorites = favorite,
-                                    isLoading = false
-                                )
                             }
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                errorMessage = result.message,
+                            copy(
+                                productList = updatedProductList,
+                                deleteFromFavorites = result.data,
                                 isLoading = false
                             )
                         }
                     }
 
+                    is Resource.Error -> {
+                        updateUiState {
+                            copy(errorMessage = result.message, isLoading = false)
+                        }
+                    }
+
                     is Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = true
-                            )
+                        updateUiState {
+                            copy(isLoading = true)
                         }
                     }
                 }
             }
         }
     }
+
+    private fun updateUiState(block: HomeContract.UiState.() -> HomeContract.UiState) {
+        _uiState.update(block)
+    }
+
+    private suspend fun emitUiEffect(uiEffect: HomeContract.UiEffect) {
+        _uiEffect.send(uiEffect)
+    }
+
 }

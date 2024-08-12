@@ -31,69 +31,48 @@ class MainActivity : ComponentActivity() {
         setContent {
             ECommerceComposeTheme {
                 val navController = rememberNavController()
-                MainScreen(navController = navController, googleAuthUiClient = googleAuthUiClient)
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ECommerceComposeTheme {
-        val navController = rememberNavController()
-        val context = LocalContext.current
-        val oneTapClient = Identity.getSignInClient(context)
-        val mockGoogleAuthUiClient = GoogleAuthUiClient(
-            context = context,
-            oneTapClient = oneTapClient
-        )
-        MainScreen(navController = navController, googleAuthUiClient = mockGoogleAuthUiClient)
-    }
-}
-
-@Composable
-fun MainScreen(navController: NavHostController, googleAuthUiClient: GoogleAuthUiClient) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
-    val hideBottomNavRoutes =
-        listOf(
-            "welcome",
-            "login",
-            "signup",
-            "search",
-            "product_detail?productId={productId}",
-            "category_screen?category={category}"
-        )
-    val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
-    Scaffold(
-        bottomBar = {
-            if (shouldShowBottomNav) {
-                BottomNavigationBar(
-                    navController = navController,
-                    items = bottomNavItems,
-                    onItemClick = { item ->
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+                val hideBottomNavRoutes =
+                    listOf(
+                        "welcome",
+                        "login",
+                        "signup",
+                        "search",
+                        "product_detail?productId={productId}",
+                        "category_screen?category={category}"
+                    )
+                val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
+                Scaffold(
+                    bottomBar = {
+                        if (shouldShowBottomNav) {
+                            BottomNavigationBar(
+                                navController = navController,
+                                items = bottomNavItems,
+                                onItemClick = { item ->
+                                    navController.navigate(item.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                onFabClick = {
+                                    // FAB tıklama işlemi burada tanımlanabilir
+                                }
+                            )
                         }
-                    },
-                    onFabClick = {
-                        // FAB tıklama işlemi burada tanımlanabilir
                     }
-                )
+                ) { innerPadding ->
+                    SetupNavGraph(
+                        navController = navController,
+                        googleAuthUiClient = googleAuthUiClient,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
-    ) { innerPadding ->
-        SetupNavGraph(
-            navController = navController,
-            googleAuthUiClient = googleAuthUiClient,
-            modifier = Modifier.padding(innerPadding)
-        )
     }
 }
 

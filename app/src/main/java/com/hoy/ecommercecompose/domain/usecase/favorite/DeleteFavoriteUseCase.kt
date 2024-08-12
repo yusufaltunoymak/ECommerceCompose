@@ -15,7 +15,7 @@ class DeleteFavoriteUseCase @Inject constructor(
     suspend operator fun invoke(deleteFromFavoriteBody: DeleteFromFavoriteBody) : Flow<Resource<FavoriteResponse>> {
         return flow {
             try {
-                emit(Resource.Loading())
+                emit(Resource.Loading)
                 val response = productRepository.deleteFavoriteProduct(deleteFromFavoriteBody)
                 emit(Resource.Success(data = response.toFavoriteResponse()))
             } catch (e: Exception) {

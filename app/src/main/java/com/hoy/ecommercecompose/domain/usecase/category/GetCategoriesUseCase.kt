@@ -12,7 +12,7 @@ class GetCategoriesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Flow<Resource<List<Category>>> {
         return flow {
-            emit(Resource.Loading())
+            emit(Resource.Loading)
             try {
                 val response = productRepository.getCategories()
                 val distinctCategories = response.categories.distinctBy { category ->

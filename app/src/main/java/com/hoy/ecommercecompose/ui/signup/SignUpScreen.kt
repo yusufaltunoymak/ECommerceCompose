@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.signup
 
-import SignUpContract
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,45 +23,59 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun SignupScreen(
-    onBackClick: () -> Unit,
     uiState: SignUpContract.UiState,
+    uiEffect: Flow<SignUpContract.UiEffect>,
     onAction: (SignUpContract.UiAction) -> Unit,
-    navController: NavController,
-    viewModel: SignUpViewModel,
+    onBackClick: () -> Unit,
+    onNavigateToHome: () -> Unit,
 ) {
 
-    LaunchedEffect(uiState.isSignUp) {
-        if (uiState.isSignUp) {
-            navController.navigate("home") {
-                popUpTo("signup") { inclusive = true }
+    var alertDialogState by remember { mutableStateOf(false) }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is SignUpContract.UiEffect.ShowAlertDialog -> alertDialogState = true
+                    is SignUpContract.UiEffect.GoToMainScreen -> onNavigateToHome()
+                }
             }
         }
     }
 
-    if (uiState.signUpError != null) {
+    if (alertDialogState) {
         CustomAlertDialog(
             errorMessage = uiState.signUpError,
-            onDismiss = { viewModel.clearError() }
+            onDismiss = {
+                onAction(SignUpContract.UiAction.ClearError)
+                alertDialogState = false
+            }
         )
     }
-    val isFormValid =
-        uiState.name.isNotBlank() && uiState.surname.isNotBlank() && uiState.email.isNotBlank() && uiState.password.isNotBlank()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -101,13 +114,23 @@ fun SignupScreen(
                 value = uiState.name,
                 onValueChange = { onAction(SignUpContract.UiAction.ChangeName(it)) },
                 label = stringResource(id = R.string.name_text),
-                leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null) }
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null
+                    )
+                }
             )
             CustomTextField(
                 value = uiState.surname,
                 onValueChange = { onAction(SignUpContract.UiAction.ChangeSurname(it)) },
                 label = stringResource(id = R.string.surname_text),
-                leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null) }
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null
+                    )
+                }
             )
             CustomTextField(
                 value = uiState.email,
@@ -127,10 +150,7 @@ fun SignupScreen(
 
             CustomButton(
                 text = stringResource(id = R.string.register_text),
-                onClick = {
-                    viewModel.onAction(SignUpContract.UiAction.SignUpClick)
-                },
-                enabled = isFormValid
+                onClick = { onAction(SignUpContract.UiAction.SignUpClick) },
             )
         }
         if (uiState.isLoading) {

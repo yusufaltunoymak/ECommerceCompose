@@ -179,7 +179,7 @@ fun ProductCard(
 
 @Composable
 fun ProductList(
-    uiState: HomeContract.HomeUiState,
+    uiState: HomeContract.UiState,
     onFavoriteClick: (ProductUi) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
 ) {

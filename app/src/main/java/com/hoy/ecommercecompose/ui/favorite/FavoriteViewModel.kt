@@ -30,31 +30,28 @@ class FavoriteViewModel @Inject constructor(
     fun loadFavorites() {
         viewModelScope.launch {
             getFavoriteUseCase(
-                userId = firebaseAuth.currentUser?.uid
-                    ?: ""
+                userId = firebaseAuth.currentUser?.uid.orEmpty()
             ).collect { response ->
-                response.data?.let { favoriteProductList ->
-                    when (response) {
-                        is Resource.Loading -> {
-                            _uiState.update { it.copy(isLoading = true) }
-                        }
+                when (response) {
+                    is Resource.Loading -> {
+                        _uiState.update { it.copy(isLoading = true) }
+                    }
 
-                        is Resource.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    favoriteProducts = favoriteProductList,
-                                    isLoading = false
-                                )
-                            }
+                    is Resource.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                favoriteProducts = response.data,
+                                isLoading = false
+                            )
                         }
+                    }
 
-                        is Resource.Error -> {
-                            _uiState.update {
-                                it.copy(
-                                    errorMessage = response.message,
-                                    isLoading = false
-                                )
-                            }
+                    is Resource.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = response.message,
+                                isLoading = false
+                            )
                         }
                     }
                 }
@@ -62,29 +59,29 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
+
     fun deleteFavorite(product: ProductUi) {
         viewModelScope.launch {
             val deleteFromFavoriteBody = DeleteFromFavoriteBody(
                 userId = firebaseAuth.currentUser?.uid ?: "",
-                id = product.id)
+                id = product.id
+            )
             deleteFavoriteUseCase(deleteFromFavoriteBody).collect { response ->
-                response.data?.let {
-                    when (response) {
-                        is Resource.Loading -> {
-                            _uiState.update { it.copy(isLoading = true) }
-                        }
+                when (response) {
+                    is Resource.Loading -> {
+                        _uiState.update { it.copy(isLoading = true) }
+                    }
 
-                        is Resource.Success -> {
-                            loadFavorites()
-                        }
+                    is Resource.Success -> {
+                        loadFavorites()
+                    }
 
-                        is Resource.Error -> {
-                            _uiState.update {
-                                it.copy(
-                                    errorMessage = response.message,
-                                    isLoading = false
-                                )
-                            }
+                    is Resource.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = response.message,
+                                isLoading = false
+                            )
                         }
                     }
                 }
@@ -92,3 +89,4 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 }
+

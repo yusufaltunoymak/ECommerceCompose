@@ -51,28 +51,38 @@ fun SetupNavGraph(
         }
         composable("signup") {
             val viewModel: SignUpViewModel = hiltViewModel()
-            val signupState by viewModel.signUpUiState.collectAsStateWithLifecycle()
+            val signupState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
 
             SignupScreen(
                 uiState = signupState,
                 onAction = viewModel::onAction,
-                navController = navController,
+                uiEffect = uiEffect,
                 onBackClick = { navController.popBackStack() },
-                viewModel = viewModel
+                onNavigateToHome = {
+                    navController.navigate("home") {
+                        popUpTo("welcome") { inclusive = true }
+                    }
+                }
             )
         }
         composable("login") {
             val loginViewModel: LoginViewModel = hiltViewModel()
-            val loginViewState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
+            val loginViewState by loginViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = loginViewModel.uiEffect
 
             LoginScreen(
-                onBackClick = { navController.popBackStack() },
                 uiState = loginViewState,
+                uiEffect = uiEffect,
                 onAction = loginViewModel::onAction,
-                navController = navController,
                 googleAuthUiClient = googleAuthUiClient,
                 onForgotPasswordClick = { navController.navigate("send_mail") },
-                viewModel = loginViewModel
+                onNavigateToHome = {
+                    navController.navigate("home") {
+                        popUpTo("welcome") { inclusive = true }
+                    }
+                },
+                onBackClick = { navController.navigateUp() },
             )
         }
         composable("reset_password") {
@@ -101,6 +111,8 @@ fun SetupNavGraph(
         composable("home") {
             val homeViewModel: HomeViewModel = hiltViewModel()
             val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = homeViewModel.uiEffect
+            homeViewModel.getProducts()
 
             HomeScreen(
                 onNavigateToDetail = {
@@ -113,7 +125,8 @@ fun SetupNavGraph(
                     navController.navigate("category_screen?category=${it}")
                 },
                 onAction = homeViewModel::onAction,
-                uiState = homeUiState
+                uiState = homeUiState,
+                uiEffect = uiEffect
             )
         }
 

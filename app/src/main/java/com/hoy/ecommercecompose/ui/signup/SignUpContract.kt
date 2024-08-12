@@ -1,3 +1,5 @@
+package com.hoy.ecommercecompose.ui.signup
+
 object SignUpContract {
     data class UiState(
         val isLoading: Boolean = false,
@@ -6,12 +8,12 @@ object SignUpContract {
         val name: String = "",
         val surname: String = "",
         val address: String = "",
-        val isSignUp: Boolean = false,
         val showEmailError: Boolean = false,
         val showPasswordError: Boolean = false,
         val showNameError: Boolean = false,
         val showSurnameError: Boolean = false,
-        val signUpError: String? = null,
+        val signUpError: String = "",
+        val isSubmitButtonEnabled: Boolean = false
     )
 
     sealed class UiAction {
@@ -20,5 +22,26 @@ object SignUpContract {
         data class ChangePassword(val password: String) : UiAction()
         data class ChangeName(val name: String) : UiAction()
         data class ChangeSurname(val surname: String) : UiAction()
+        data object ClearError : UiAction()
+    }
+
+    sealed class UiEffect {
+        data object ShowAlertDialog : UiEffect()
+        data object GoToMainScreen : UiEffect()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// state ekranda gösterilcek datalar
+// effect ekrandaki datalarla alakasız işlemler, popup, snackbar vs. veya yönlendirme işlemleri
+// action butona basıldı vs viewmodel da bildirim gönderm
