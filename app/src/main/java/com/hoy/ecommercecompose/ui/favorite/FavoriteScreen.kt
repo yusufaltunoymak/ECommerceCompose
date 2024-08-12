@@ -2,6 +2,7 @@ package com.hoy.ecommercecompose.ui.favorite
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,8 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,31 +39,44 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteScreen(
-    navController: NavController,
-    viewModel: FavoriteViewModel = hiltViewModel()
+    uiState: FavoriteContract.UiState,
+    onAction: (FavoriteContract.UiAction) -> Unit,
+    uiEffect: Flow<FavoriteContract.UiEffect>,
+    onNavigateToDetail: (Int) -> Unit,
+    onBackClick: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
 
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.loadFavorites()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is FavoriteContract.UiEffect.FavoriteProductDetailClick -> onNavigateToDetail(
+                        effect.productId)
+                    is FavoriteContract.UiEffect.ShowError -> TODO()
+                    is FavoriteContract.UiEffect.BackScreen -> onBackClick()
+                }
+            }
+        }
     }
 
     Scaffold(
@@ -72,7 +84,7 @@ fun FavoriteScreen(
             TopAppBar(
                 title = { Text("Favorite Products") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { onBackClick() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
@@ -87,7 +99,7 @@ fun FavoriteScreen(
 
                 uiState.errorMessage != null -> {
                     Text(
-                        text = uiState.errorMessage!!,
+                        text = uiState.errorMessage,
                         color = Color.Red,
                         modifier = Modifier.align(Alignment.Center)
                     )
@@ -103,9 +115,14 @@ fun FavoriteScreen(
                 else -> {
                     LazyColumn {
                         items(uiState.favoriteProducts) { product ->
-                            FavoriteProductCard(product = product, onFavoriteClick = {
-                                viewModel.deleteFavorite(it)
-                            })
+                            FavoriteProductCard(product = product,
+                                onFavoriteClick = {
+                                    onAction(FavoriteContract.UiAction.DeleteFromFavorites(product.id))
+                                },
+                                onNavigateToDetail = {
+                                    onNavigateToDetail(product.id)
+                                })
+
                         }
                     }
                 }
@@ -118,11 +135,12 @@ fun FavoriteScreen(
 fun FavoriteProductCard(
     product: ProductUi,
     onFavoriteClick: (ProductUi) -> Unit,
-    modifier: Modifier = Modifier
+    onNavigateToDetail: (Int) -> Unit = {},
 ) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
+            .clickable { onNavigateToDetail(product.id) }
             .padding(8.dp)
             .clip(RoundedCornerShape(12.dp))
             .shadow(4.dp, RoundedCornerShape(12.dp)),

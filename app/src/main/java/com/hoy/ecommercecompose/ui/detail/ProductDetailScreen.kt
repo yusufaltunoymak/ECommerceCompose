@@ -32,29 +32,45 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.bodyFontFamily
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ProductDetailScreen(
-    viewModel: ProductDetailViewModel = hiltViewModel(),
+    uiState: ProductDetailContract.UiState,
+    onAction: (ProductDetailContract.UiAction) -> Unit,
+    uiEffect: Flow<ProductDetailContract.UiEffect>,
+    onBackClick: () -> Unit
 ) {
-    val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is ProductDetailContract.UiEffect.BackScreen -> onBackClick()
+                    is ProductDetailContract.UiEffect.ShowError -> TODO()
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -76,7 +92,9 @@ fun ProductDetailScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = {
+                            onBackClick()
+                        }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = null,
@@ -85,18 +103,18 @@ fun ProductDetailScreen(
                         }
 
                         Row {
-                            IconButton(onClick = { }) {
+                            IconButton(onClick = {}) {
                                 Icon(
                                     imageVector = Icons.Default.Share,
                                     contentDescription = null,
                                     tint = LocalColors.current.primary
                                 )
                             }
-                            IconButton(onClick = { viewModel.toggleFavorite() }) {
+                            IconButton(onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }) {
                                 Icon(
-                                    imageVector = if (uiState.productDetail?.isFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                    imageVector = if (uiState.productDetail.isFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                     contentDescription = null,
-                                    tint = if (uiState.productDetail?.isFavorite == true) LocalColors.current.primary else LocalColors.current.primary
+                                    tint = if (uiState.productDetail.isFavorite == true) LocalColors.current.primary else LocalColors.current.primary
                                 )
                             }
                         }
@@ -117,7 +135,7 @@ fun ProductDetailScreen(
                                 RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
                             )
                     ) {
-                        uiState.productDetail?.title?.let {
+                        uiState.productDetail.title?.let {
                             Text(
                                 text = it,
                                 fontWeight = FontWeight.Bold,
@@ -125,7 +143,7 @@ fun ProductDetailScreen(
                             )
                         }
                         Text(
-                            text = "$${uiState.productDetail?.price}",
+                            text = "$${uiState.productDetail.price}",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             fontStyle = FontStyle.Italic
@@ -133,7 +151,7 @@ fun ProductDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        RatingBar(rating = uiState.productDetail?.rate.orEmpty())
+                        RatingBar(rating = uiState.productDetail.rate.orEmpty())
 
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -145,7 +163,7 @@ fun ProductDetailScreen(
                         )
 
                         Text(
-                            text = "${uiState.productDetail?.description}",
+                            text = "${uiState.productDetail.description}",
                             fontSize = 18.sp,
                             color = Color.Black,
                             fontFamily = bodyFontFamily
@@ -265,7 +283,7 @@ fun RatingBar(
 }
 
 @Composable
-fun ImageList(modifier: Modifier = Modifier, uiState: DetailUiState) {
+fun ImageList(modifier: Modifier = Modifier, uiState: ProductDetailContract.UiState) {
     uiState.productDetail?.let { detail ->
         CustomHorizontalPager(
             imageUrls = detail.getImageList().filterNotNull(),

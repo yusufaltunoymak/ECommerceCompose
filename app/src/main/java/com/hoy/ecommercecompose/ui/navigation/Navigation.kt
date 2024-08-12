@@ -16,7 +16,9 @@ import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
 import com.hoy.ecommercecompose.ui.category.CategoryScreen
 import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
+import com.hoy.ecommercecompose.ui.detail.ProductDetailViewModel
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
+import com.hoy.ecommercecompose.ui.favorite.FavoriteViewModel
 import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.home.HomeViewModel
 import com.hoy.ecommercecompose.ui.login.LoginScreen
@@ -139,7 +141,15 @@ fun SetupNavGraph(
                 defaultValue = 423334
             })
         ) {
-            ProductDetailScreen()
+            val viewModel : ProductDetailViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+            ProductDetailScreen(
+                uiState = uiState,
+                uiEffect = uiEffect,
+                onAction = viewModel::onAction,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(
@@ -157,7 +167,21 @@ fun SetupNavGraph(
         }
 
         composable("favorite") {
-            FavoriteScreen(navController)
+            val viewModel: FavoriteViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+            LaunchedEffect(Unit) {
+                viewModel.loadFavorites()
+            }
+            FavoriteScreen(
+                uiState = uiState,
+                uiEffect = uiEffect,
+                onAction = viewModel::onAction,
+                onNavigateToDetail = {
+                    navController.navigate("product_detail?productId=${it}")
+                },
+                onBackClick = { navController.popBackStack() }
+            )
         }
         composable("cart") {
             val cartViewModel: CartViewModel = hiltViewModel()

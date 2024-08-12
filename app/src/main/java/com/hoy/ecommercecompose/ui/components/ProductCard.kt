@@ -2,6 +2,7 @@ package com.hoy.ecommercecompose.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,7 +58,7 @@ fun ProductCard(
     val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
     Card(
         modifier = modifier
-            .size(170.dp, 280.dp)
+            .size(170.dp, 260.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
                 onNavigateToDetail(product.id)
@@ -121,43 +122,45 @@ fun ProductCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = AnnotatedString(
-                    text = "$${product.price}",
-                    spanStyles = listOf(
-                        AnnotatedString.Range(
-                            item = SpanStyle(
-                                color = Color.Red.copy(alpha = 0.6f), // Lighter color
-                                fontWeight = FontWeight.Light,
-                                textDecoration = TextDecoration.LineThrough
-                            ),
-                            start = 0,
-                            end = "$${product.price}".length
+            Row(
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = AnnotatedString(
+                        text = "$${product.price}",
+                        spanStyles = listOf(
+                            AnnotatedString.Range(
+                                item = SpanStyle(
+                                    color = Color.Red.copy(alpha = 0.6f), // Lighter color
+                                    fontWeight = FontWeight.Light,
+                                    textDecoration = TextDecoration.LineThrough
+                                ),
+                                start = 0,
+                                end = "$${product.price}".length
+                            )
                         )
-                    )
-                ),
-                fontFamily = displayFontFamily,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 8.dp)
-            )
+                    ),
+                    fontFamily = displayFontFamily,
+                    style = MaterialTheme.typography.bodyLarge
+                )
 
-            Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.width(8.dp)) // Add space between price and sale price
 
-            Text(
-                text = "$${product.salePrice}",
-                fontFamily = displayFontFamily,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 8.dp)
-            )
+                Text(
+                    text = "$${product.salePrice}",
+                    fontFamily = displayFontFamily,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 8.dp)
-
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
