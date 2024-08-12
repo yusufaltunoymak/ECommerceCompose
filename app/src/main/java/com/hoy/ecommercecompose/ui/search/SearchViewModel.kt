@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-        private val getAllProductUseCase: GetAllProductUseCase
+    private val getAllProductUseCase: GetAllProductUseCase
 ) : ViewModel() {
 
     private var _uiState: MutableStateFlow<SearchUiState> = MutableStateFlow(SearchUiState())
@@ -39,6 +39,7 @@ class SearchViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Error -> {
                         _uiState.update {
                             it.copy(
@@ -47,6 +48,7 @@ class SearchViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Loading -> {
                         _uiState.update { it.copy(isLoading = true) }
                     }

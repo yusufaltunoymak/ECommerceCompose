@@ -12,4 +12,8 @@ data class ProductDetail(
     val rate: Double?,
     val salePrice: Double?,
     val saleState: Boolean?
-)
+) {
+    fun getImageList(): List<String?> {
+        return listOf(imageOne, imageTwo, imageThree)
+    }
+}

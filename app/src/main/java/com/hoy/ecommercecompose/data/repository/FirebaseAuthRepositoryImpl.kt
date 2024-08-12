@@ -68,7 +68,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserId(): String {
+    override fun getUserId(): String {
         return firebaseAuth.currentUser?.uid.orEmpty()
     }
 }

@@ -61,8 +61,7 @@ fun CustomHorizontalPager(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(padding.dp),
-                    contentAlignment = Alignment.Center
+                        .padding(padding.dp)
                 ) {
                     val painter = rememberAsyncImagePainter(model = imageUrls[page])
                     Image(

@@ -6,4 +6,5 @@ data class CategoryUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val categoryList: List<ProductUi> = emptyList(),
+    var searchQuery: String = ""
 )

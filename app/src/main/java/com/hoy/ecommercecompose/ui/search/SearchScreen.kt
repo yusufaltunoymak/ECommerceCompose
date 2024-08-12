@@ -37,6 +37,7 @@ import com.hoy.ecommercecompose.ui.components.CustomSearchView
 fun SearchScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    onClick: (Int) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val searchUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,14 +82,16 @@ fun SearchScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else if (!searchUiState.errorMessage.isNullOrEmpty()) {
             Text(
-                text = searchUiState.errorMessage ?: "",
+                text = searchUiState.errorMessage.orEmpty(),
                 color = Color.Red,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         } else {
             ProductList(
                 productList = searchUiState.productList,
-                navController = navController
+                navController = navController,
+                onClick = onClick
+
             )
         }
     }
@@ -98,16 +101,14 @@ fun SearchScreen(
 @Composable
 fun ProductList(
     productList: List<ProductUi>,
-    navController: NavController
+    navController: NavController,
+    onClick: (Int) -> Unit
 ) {
     LazyColumn {
         items(productList) { product ->
             ProductListItem(
                 product = product,
-                onClick = {
-                    // Navigate to product detail screen
-                    navController.navigate("product_detail/${product.id}")
-                }
+                onClick = onClick
             )
         }
     }
@@ -116,13 +117,13 @@ fun ProductList(
 @Composable
 fun ProductListItem(
     product: ProductUi,
-    onClick: () -> Unit
+    onClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() },
+            .clickable { onClick(product.id) },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),

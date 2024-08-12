@@ -57,6 +57,7 @@ class SignUpViewModel @Inject constructor(
                         )
                     }
                 }
+
                 is Resource.Success -> {
                     _signUpUiState.update { uiState ->
                         uiState.copy(
@@ -65,6 +66,7 @@ class SignUpViewModel @Inject constructor(
                         )
                     }
                 }
+
                 is Resource.Error -> {
                     _signUpUiState.update {
                         it.copy(

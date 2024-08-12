@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,8 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
@@ -42,17 +39,17 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     onNavigateToDetail: (Int) -> Unit,
+    uiState: HomeContract.HomeUiState,
     onNavigateToSearch: () -> Unit,
-    onCategoryListClick: (String) -> Unit
+    onCategoryListClick: (String) -> Unit,
+    onAction: (HomeContract.HomeUiAction) -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getProducts()
     }
 
     val scrollState = rememberScrollState()
-    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
     val imageUrls = listOf(
         R.drawable.sale,
@@ -103,7 +100,7 @@ fun HomeScreen(
         ProductList(
             uiState = uiState,
             onFavoriteClick = { product ->
-                viewModel.toggleFavorite(userId, product)
+                onAction(HomeContract.HomeUiAction.ToggleFavorite(product))
             },
             onNavigateToDetail = onNavigateToDetail
         )
@@ -164,6 +161,8 @@ fun Preview() {
     HomeScreen(
         onNavigateToDetail = {},
         onNavigateToSearch = {},
-        onCategoryListClick = {}
+        onCategoryListClick = {},
+        onAction = {},
+        uiState = HomeContract.HomeUiState()
     )
 }
