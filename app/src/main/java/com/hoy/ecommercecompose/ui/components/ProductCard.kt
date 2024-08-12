@@ -43,7 +43,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
-import com.hoy.ecommercecompose.ui.home.HomeUiState
+import com.hoy.ecommercecompose.ui.home.HomeContract
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
@@ -179,7 +179,7 @@ fun ProductCard(
 
 @Composable
 fun ProductList(
-    uiState: HomeUiState,
+    uiState: HomeContract.HomeUiState,
     onFavoriteClick: (ProductUi) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
 ) {

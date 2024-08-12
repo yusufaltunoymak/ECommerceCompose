@@ -17,6 +17,7 @@ import com.hoy.ecommercecompose.ui.category.CategoryScreen
 import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
 import com.hoy.ecommercecompose.ui.home.HomeScreen
+import com.hoy.ecommercecompose.ui.home.HomeViewModel
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
@@ -98,6 +99,8 @@ fun SetupNavGraph(
         }
 
         composable("home") {
+            val homeViewModel: HomeViewModel = hiltViewModel()
+            val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
             HomeScreen(
                 onNavigateToDetail = {
@@ -108,7 +111,9 @@ fun SetupNavGraph(
                 },
                 onCategoryListClick = {
                     navController.navigate("category_screen?category=${it}")
-                }
+                },
+                onAction = homeViewModel::onAction,
+                uiState = homeUiState
             )
         }
 
@@ -152,7 +157,13 @@ fun SetupNavGraph(
             ProfileScreen(navController)
         }
         composable("search") {
-            SearchScreen(navController = navController)
+
+            SearchScreen(
+                navController = navController,
+                onClick = {
+                    navController.navigate("product_detail?productId=${it}")
+                }
+            )
         }
     }
 }

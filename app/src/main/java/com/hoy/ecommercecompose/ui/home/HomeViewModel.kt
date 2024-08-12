@@ -28,8 +28,8 @@ class HomeViewModel @Inject constructor(
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
-    private var _uiState: MutableStateFlow<HomeUiState> =
-        MutableStateFlow(HomeUiState())
+    private var _uiState: MutableStateFlow<HomeContract.HomeUiState> =
+        MutableStateFlow(HomeContract.HomeUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -37,6 +37,16 @@ class HomeViewModel @Inject constructor(
         getCategories()
         getProducts()
     }
+
+    fun onAction(action: HomeContract.HomeUiAction) {
+        when (action) {
+            is HomeContract.HomeUiAction.ToggleFavorite -> toggleFavorite(
+                firebaseAuthRepository.getUserId(),
+                action.product
+            )
+        }
+    }
+
 
     private fun getUserInformation() {
         viewModelScope.launch {
