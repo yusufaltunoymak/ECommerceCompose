@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +27,7 @@ import com.hoy.ecommercecompose.ui.profile.ProfileScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
 import com.hoy.ecommercecompose.ui.search.SearchScreen
+import com.hoy.ecommercecompose.ui.search.SearchViewModel
 import com.hoy.ecommercecompose.ui.sendmail.SendMailScreen
 import com.hoy.ecommercecompose.ui.sendmail.SendMailViewModel
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
@@ -170,12 +172,20 @@ fun SetupNavGraph(
             ProfileScreen(navController)
         }
         composable("search") {
-
+            val searchViewModel: SearchViewModel = hiltViewModel()
+            val searchUiState by searchViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = searchViewModel.uiEffect
+            LaunchedEffect(Unit) {
+                searchViewModel.loadAllProducts()
+            }
             SearchScreen(
-                navController = navController,
-                onClick = {
+                onDetailClick = {
                     navController.navigate("product_detail?productId=${it}")
-                }
+                },
+                onAction = searchViewModel::onAction,
+                uiState = searchUiState,
+                uiEffect = uiEffect
+
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.search
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,32 +27,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier,
-    navController: NavController,
-    onClick: (Int) -> Unit,
-    viewModel: SearchViewModel = hiltViewModel()
+    uiEffect: Flow<SearchContract.UiEffect>,
+    uiState: SearchContract.UiState,
+    onAction: (SearchContract.UiAction) -> Unit,
+    onDetailClick: (Int) -> Unit
 ) {
-    val searchUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is SearchContract.UiEffect.GoToDetail -> {
+                        onDetailClick(effect.productId)
+                    }
+                }
+            }
+        }
+    }
     var searchQuery by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
-
+    Log.d("SearchScreen", "SearchScreen Composable")
     LaunchedEffect(Unit) {
-        // Load all products initially
-        viewModel.loadAllProducts()
+        Log.d("SearchScreen", "Focus requested")
         focusRequester.requestFocus()
     }
 
+
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
@@ -59,39 +74,37 @@ fun SearchScreen(
             text = searchQuery,
             onTextChange = { query ->
                 searchQuery = query
-                viewModel.searchProducts(query)
+                onAction(SearchContract.UiAction.ChangeQuery(query))
             },
             placeHolder = "Search for products",
             onCloseClicked = {
                 searchQuery = ""
-                viewModel.loadAllProducts()
+                onAction(SearchContract.UiAction.LoadProduct(uiState.productList))
             },
             onSearchClick = {
                 // Handle search button click if needed
             },
             onSortClick = {
                 searchQuery = ""
-                viewModel.loadAllProducts()
+                onAction(SearchContract.UiAction.LoadProduct(uiState.productList))
             },
             modifier = Modifier.focusRequester(focusRequester)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (searchUiState.isLoading) {
+        if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        } else if (!searchUiState.errorMessage.isNullOrEmpty()) {
+        } else if (!uiState.errorMessage.isNullOrEmpty()) {
             Text(
-                text = searchUiState.errorMessage.orEmpty(),
+                text = uiState.errorMessage,
                 color = Color.Red,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         } else {
             ProductList(
-                productList = searchUiState.productList,
-                navController = navController,
-                onClick = onClick
-
+                productList = uiState.productList,
+                onDetailClick = onDetailClick
             )
         }
     }
@@ -101,14 +114,13 @@ fun SearchScreen(
 @Composable
 fun ProductList(
     productList: List<ProductUi>,
-    navController: NavController,
-    onClick: (Int) -> Unit
+    onDetailClick: (Int) -> Unit
 ) {
     LazyColumn {
         items(productList) { product ->
             ProductListItem(
                 product = product,
-                onClick = onClick
+                onDetailClick = onDetailClick
             )
         }
     }
@@ -117,13 +129,13 @@ fun ProductList(
 @Composable
 fun ProductListItem(
     product: ProductUi,
-    onClick: (Int) -> Unit
+    onDetailClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick(product.id) },
+            .clickable { onDetailClick(product.id) },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
