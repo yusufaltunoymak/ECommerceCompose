@@ -24,30 +24,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.ProductList
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
+    uiEffect: Flow<HomeContract.UiEffect>,
+    uiState: HomeContract.UiState,
     onNavigateToDetail: (Int) -> Unit,
-    uiState: HomeContract.HomeUiState,
     onNavigateToSearch: () -> Unit,
     onCategoryListClick: (String) -> Unit,
-    onAction: (HomeContract.HomeUiAction) -> Unit,
+    onAction: (HomeContract.UiAction) -> Unit,
 ) {
 
-    LaunchedEffect(Unit) {
-        viewModel.getProducts()
-    }
 
     val scrollState = rememberScrollState()
 
@@ -57,8 +55,22 @@ fun HomeScreen(
         R.drawable.sale
     )
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is HomeContract.UiEffect.ProductCartClick -> onNavigateToDetail(effect.id)
+                    is HomeContract.UiEffect.SearchClick -> onNavigateToSearch()
+                    is HomeContract.UiEffect.CategoryClick -> onCategoryListClick(effect.category)
+                    is HomeContract.UiEffect.ShowError -> TODO()
+                }
+            }
+        }
+    }
+
     Column(
-        modifier = modifier
+        modifier = Modifier
             .padding(16.dp)
             .fillMaxSize()
             .verticalScroll(scrollState)
@@ -100,7 +112,7 @@ fun HomeScreen(
         ProductList(
             uiState = uiState,
             onFavoriteClick = { product ->
-                onAction(HomeContract.HomeUiAction.ToggleFavorite(product))
+                onAction(HomeContract.UiAction.ToggleFavoriteClick(product))
             },
             onNavigateToDetail = onNavigateToDetail
         )
@@ -155,14 +167,17 @@ fun SearchNavigationView(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun Preview() {
-    HomeScreen(
-        onNavigateToDetail = {},
-        onNavigateToSearch = {},
-        onCategoryListClick = {},
-        onAction = {},
-        uiState = HomeContract.HomeUiState()
-    )
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun Preview() {
+//    HomeScreen(
+//        onNavigateToDetail = {},
+//        onNavigateToSearch = {},
+//        onCategoryListClick = {},
+//        onAction = {},
+//        uiEffect = Flow< HomeContract.UiEffect>,
+//        uiState = HomeContract.UiState(),
+//    )
+//}
+
+

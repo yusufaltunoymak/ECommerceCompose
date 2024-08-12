@@ -7,8 +7,11 @@ import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.usecase.auth.SignInWithEmailAndPasswordUseCase
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,23 +21,27 @@ class LoginViewModel @Inject constructor(
     private val signInWithEmailAndPasswordUseCase: SignInWithEmailAndPasswordUseCase,
     private val googleAuthUiClient: GoogleAuthUiClient
 ) : ViewModel() {
-    private val _loginUiState = MutableStateFlow(LoginContract.LoginUiState())
-    val loginUiState: StateFlow<LoginContract.LoginUiState> = _loginUiState
+    private val _uiState = MutableStateFlow(LoginContract.UiState())
+    val uiState: StateFlow<LoginContract.UiState> = _uiState
 
-    fun onAction(action: LoginContract.LoginUiAction) {
+    private val _uiEffect by lazy { Channel<LoginContract.UiEffect>() }
+    val uiEffect: Flow<LoginContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
+
+    fun onAction(action: LoginContract.UiAction) {
         when (action) {
-            is LoginContract.LoginUiAction.SignInClick -> signInWithEmailAndPassword()
-            is LoginContract.LoginUiAction.ChangeEmail -> changeEmail(action.email)
-            is LoginContract.LoginUiAction.ChangePassword -> changePassword(action.password)
-            is LoginContract.LoginUiAction.GoogleSignInClick -> initiateGoogleSignIn()
-            is LoginContract.LoginUiAction.GoogleSignInResult -> handleGoogleSignInResult(action.intent)
+            is LoginContract.UiAction.SignInClick -> signIn()
+            is LoginContract.UiAction.ChangeEmail -> updateUiState { copy(email = action.email) }
+            is LoginContract.UiAction.ChangePassword -> updateUiState { copy(password = action.password) }
+            is LoginContract.UiAction.GoogleSignInClick -> initiateGoogleSignIn()
+            is LoginContract.UiAction.GoogleSignInResult -> handleGoogleSignInResult(action.intent)
+            LoginContract.UiAction.ClearError -> updateUiState { copy(signInError = "") }
         }
     }
 
     private fun initiateGoogleSignIn() {
         viewModelScope.launch {
             val intentSender = googleAuthUiClient.signIn()
-            _loginUiState.update { it.copy(googleSignInRequest = intentSender) }
+            _uiState.update { it.copy(googleSignInRequest = intentSender) }
         }
     }
 
@@ -42,21 +49,15 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val result = googleAuthUiClient.signInWithIntent(intent)
             if (result.data != null) {
-                _loginUiState.update { it.copy(isSignIn = true) }
+                _uiState.update { it.copy(isSignIn = true) }
             } else {
-                _loginUiState.update { it.copy(signInError = result.errorMessage) }
+                _uiState.update { it.copy(signInError = result.errorMessage.toString()) }
             }
         }
     }
 
-    private fun signInWithEmailAndPassword() {
-        _loginUiState.update { uiState ->
-            uiState.copy(
-                isLoading = true,
-                signInError = null
-            )
-        }
-        val state = loginUiState.value
+    private fun signIn() {
+        val state = uiState.value
         viewModelScope.launch {
             val resource = signInWithEmailAndPasswordUseCase(
                 email = state.email,
@@ -64,57 +65,26 @@ class LoginViewModel @Inject constructor(
             )
             when (resource) {
                 is Resource.Loading -> {
-                    _loginUiState.update { uiState ->
-                        uiState.copy(
-                            isLoading = true,
-                            isSignIn = false
-                        )
-                    }
+                    updateUiState { copy(isLoading = true) }
                 }
 
                 is Resource.Success -> {
-                    _loginUiState.update { uiState ->
-                        uiState.copy(
-                            isLoading = false,
-                            isSignIn = true
-                        )
-                    }
+                    emitUiEffect(LoginContract.UiEffect.GoToHome)
                 }
 
                 is Resource.Error -> {
-                    _loginUiState.update {
-                        it.copy(
-                            isLoading = false,
-                            isSignIn = false,
-                            signInError = resource.message
-                        )
-                    }
+                    updateUiState { copy(isLoading = false, signInError = resource.message) }
+                    emitUiEffect(LoginContract.UiEffect.ShowAlertDialog)
                 }
             }
         }
     }
 
-    fun clearError() {
-        _loginUiState.update { uiState ->
-            uiState.copy(
-                signInError = null
-            )
-        }
+    private fun updateUiState(block: LoginContract.UiState.() -> LoginContract.UiState) {
+        _uiState.update(block)
     }
 
-    private fun changeEmail(email: String) {
-        _loginUiState.update { uiState ->
-            uiState.copy(
-                email = email
-            )
-        }
-    }
-
-    private fun changePassword(password: String) {
-        _loginUiState.update { uiState ->
-            uiState.copy(
-                password = password
-            )
-        }
+    private suspend fun emitUiEffect(uiEffect: LoginContract.UiEffect) {
+        _uiEffect.send(uiEffect)
     }
 }

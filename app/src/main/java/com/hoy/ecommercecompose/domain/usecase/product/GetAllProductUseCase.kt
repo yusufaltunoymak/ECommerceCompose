@@ -13,7 +13,7 @@ class GetAllProductUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(query: String): Flow<Resource<List<ProductUi>>> {
         return flow {
-            emit(Resource.Loading())
+            emit(Resource.Loading)
             try {
                 val response = productRepository.getProducts()
                 val allProducts = response.productDto.map { it.mapToProductUi() }

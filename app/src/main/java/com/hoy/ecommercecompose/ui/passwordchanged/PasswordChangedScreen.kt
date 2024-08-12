@@ -26,8 +26,8 @@ import com.hoy.ecommercecompose.ui.components.CustomButton
 
 @Composable
 fun PasswordChangedScreen(
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginContract.LoginUiAction) -> Unit,
+    uiState: LoginContract.UiState,
+    onAction: (LoginContract.UiAction) -> Unit,
     navController: NavController
 ) {
 
@@ -75,7 +75,7 @@ fun PasswordChangedScreen(
 @Composable
 fun PasswordChangedScreenPrew() {
     PasswordChangedScreen(
-        uiState = LoginContract.LoginUiState(),
+        uiState = LoginContract.UiState(),
         onAction = { },
         navController = rememberNavController()
     )

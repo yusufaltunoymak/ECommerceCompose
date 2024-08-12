@@ -32,39 +32,50 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun LoginScreen(
-    onBackClick: () -> Unit,
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginContract.LoginUiAction) -> Unit,
-    navController: NavController,
+    uiState: LoginContract.UiState,
+    uiEffect: Flow<LoginContract.UiEffect>,
+    onAction: (LoginContract.UiAction) -> Unit,
     googleAuthUiClient: GoogleAuthUiClient,
     onForgotPasswordClick: () -> Unit,
-    viewModel: LoginViewModel,
-) {
+    onBackClick: () -> Unit,
+    onNavigateToHome: () -> Unit,
+
+    ) {
+
+    var alertDialogState by remember { mutableStateOf(false) }
+
     val signInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { intent ->
-                onAction(LoginContract.LoginUiAction.GoogleSignInResult(intent))
+                onAction(LoginContract.UiAction.GoogleSignInResult(intent))
             }
         }
     }
@@ -77,24 +88,31 @@ fun LoginScreen(
         }
     }
 
-    LaunchedEffect(uiState.isSignIn) {
-        if (uiState.isSignIn) {
-            navController.navigate("home") {
-                popUpTo("login") { inclusive = true }
-                popUpTo("signup") { inclusive = true }
-                popUpTo("welcome") { inclusive = true }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is LoginContract.UiEffect.ShowAlertDialog -> alertDialogState = true
+                    is LoginContract.UiEffect.GoToHome -> onNavigateToHome()
+                    is LoginContract.UiEffect.GoToForgotPasswordClick -> onForgotPasswordClick()
+                    is LoginContract.UiEffect.GoToWelcomeScreen -> {
+                        onBackClick()
+                    }
+                }
             }
         }
     }
 
-    if (uiState.signInError != null) {
+    if (alertDialogState) {
         CustomAlertDialog(
             errorMessage = uiState.signInError,
-            onDismiss = { viewModel.clearError() }
+            onDismiss = {
+                onAction(LoginContract.UiAction.ClearError)
+                alertDialogState = false
+            }
         )
     }
-
-    val isFormValid = uiState.email.isNotBlank() && uiState.password.isNotBlank()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -133,7 +151,7 @@ fun LoginScreen(
 
             CustomTextField(
                 value = uiState.email,
-                onValueChange = { onAction(LoginContract.LoginUiAction.ChangeEmail(it)) },
+                onValueChange = { onAction(LoginContract.UiAction.ChangeEmail(it)) },
                 label = stringResource(id = R.string.enter_mail_text),
                 leadingIcon = {
                     Icon(
@@ -147,7 +165,7 @@ fun LoginScreen(
 
             CustomTextField(
                 value = uiState.password,
-                onValueChange = { onAction(LoginContract.LoginUiAction.ChangePassword(it)) },
+                onValueChange = { onAction(LoginContract.UiAction.ChangePassword(it)) },
                 label = stringResource(id = R.string.enter_password_text),
                 isPassword = true,
                 leadingIcon = {
@@ -171,21 +189,19 @@ fun LoginScreen(
                     modifier = Modifier.size(22.dp)
                 )
                 Text(
-                    modifier = Modifier.clickable {
-                        navController.navigate("send_mail")
-                    },
+                    modifier = Modifier.clickable { onForgotPasswordClick() },
                     text = stringResource(id = R.string.forgot_password_text),
                     fontWeight = FontWeight.Light,
                     fontSize = 12.sp,
-                )
+
+                    )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             CustomButton(
                 text = stringResource(id = R.string.login_text),
-                onClick = { onAction(LoginContract.LoginUiAction.SignInClick) },
-                enabled = isFormValid
+                onClick = { onAction(LoginContract.UiAction.SignInClick) },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -193,10 +209,7 @@ fun LoginScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable {
-                        onBackClick
-                    },
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Divider(
@@ -229,7 +242,7 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 IconButton(
-                    onClick = { onAction(LoginContract.LoginUiAction.GoogleSignInClick) },
+                    onClick = { onAction(LoginContract.UiAction.GoogleSignInClick) },
                     modifier = Modifier
                         .size(48.dp)
                         .border(

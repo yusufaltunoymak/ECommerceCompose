@@ -5,9 +5,9 @@ import com.hoy.ecommercecompose.data.source.remote.model.User
 import com.hoy.ecommercecompose.domain.model.FavoriteResponse
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
-object HomeContract {
 
-    data class HomeUiState(
+object HomeContract {
+    data class UiState(
         val isLoading: Boolean? = null,
         val currentUser: User? = null,
         val errorMessage: String? = null,
@@ -17,7 +17,14 @@ object HomeContract {
         val deleteFromFavorites: FavoriteResponse? = null
     )
 
-    sealed interface HomeUiAction {
-        data class ToggleFavorite(val product: ProductUi) : HomeUiAction
+    sealed class UiAction {
+        data class ToggleFavoriteClick(val product: ProductUi) : UiAction()
+    }
+
+    sealed class UiEffect {
+        data class ShowError(val message: String) : UiEffect()
+        data class ProductCartClick(val id: Int) : UiEffect()
+        data object SearchClick : UiEffect()
+        data class CategoryClick(val category: String) : UiEffect()
     }
 }
