@@ -10,9 +10,13 @@ import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductDetailUseCase
+import com.hoy.ecommercecompose.ui.home.HomeContract
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,10 +29,12 @@ class ProductDetailViewModel @Inject constructor(
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
 ) : ViewModel() {
-    private var _detailUiState: MutableStateFlow<DetailUiState> =
-        MutableStateFlow(DetailUiState())
+    private var _uiState: MutableStateFlow<ProductDetailContract.UiState> =
+        MutableStateFlow(ProductDetailContract.UiState())
+    val uiState = _uiState.asStateFlow()
 
-    val detailUiState = _detailUiState.asStateFlow()
+    private val _uiEffect by lazy { Channel<ProductDetailContract.UiEffect>() }
+    val uiEffect: Flow<ProductDetailContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     init {
         savedStateHandle.get<Int>("productId")?.let {
@@ -36,27 +42,26 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
+    fun onAction(action: ProductDetailContract.UiAction) {
+        when (action) {
+            is ProductDetailContract.UiAction.ToggleFavoriteClick -> { toggleFavorite() }
+        }
+    }
+
     private fun getProductDetail(productId: Int) {
         viewModelScope.launch {
             when (val resource =
                 getProductDetailUseCase(firebaseAuthRepository.getUserId(), productId)) {
-                is Resource.Loading -> {
-                    _detailUiState.value = DetailUiState(isLoading = true)
-                }
-
-                is Resource.Success -> {
-                    _detailUiState.value = DetailUiState(productDetail = resource.data)
-                }
-
-                is Resource.Error -> {
-                    _detailUiState.value = DetailUiState(error = resource.message)
-                }
+                is Resource.Loading -> { updateUiState { copy(isLoading = true) } }
+                is Resource.Success -> { updateUiState { copy(productDetail = resource.data) } }
+                is Resource.Error -> { updateUiState { copy(error = resource.message) } }
             }
         }
     }
 
+
     fun toggleFavorite() {
-        val productDetail = _detailUiState.value.productDetail ?: return
+        val productDetail = _uiState.value.productDetail ?: return
         viewModelScope.launch {
             productDetail.id?.let { id ->
                 if (productDetail.isFavorite == true) {
@@ -76,25 +81,17 @@ class ProductDetailViewModel @Inject constructor(
             )
             addToFavoriteUseCase(addToFavoriteBody).collect { response ->
                 when (response) {
-                    is Resource.Loading -> {
-                        _detailUiState.update { it.copy(isLoading = true) }
-                    }
+                    is Resource.Loading -> { updateUiState { copy(isLoading = true) } }
                     is Resource.Success -> {
-                        _detailUiState.update {
-                            it.copy(
-                                productDetail = it.productDetail?.copy(isFavorite = true),
+                        updateUiState {
+                            copy(
+                                productDetail = productDetail?.copy(isFavorite = true),
                                 isLoading = false
                             )
                         }
                     }
                     is Resource.Error -> {
-                        _detailUiState.update {
-                            it.copy(
-                                error = response.message,
-                                isLoading = false
-                            )
-                        }
-                    }
+                        updateUiState { copy( error = response.message, isLoading = false) } }
                 }
             }
         }
@@ -108,27 +105,24 @@ class ProductDetailViewModel @Inject constructor(
             )
             deleteFavoriteUseCase(deleteFromFavoriteBody).collect { response ->
                 when (response) {
-                    is Resource.Loading -> {
-                        _detailUiState.update { it.copy(isLoading = true) }
-                    }
+                    is Resource.Loading -> { updateUiState { copy(isLoading = true) } }
+
                     is Resource.Success -> {
-                        _detailUiState.update {
-                            it.copy(
-                                productDetail = it.productDetail?.copy(isFavorite = false),
+                        updateUiState {
+                            copy(
+                                productDetail = productDetail?.copy(isFavorite = false),
                                 isLoading = false
                             )
                         }
                     }
-                    is Resource.Error -> {
-                        _detailUiState.update {
-                            it.copy(
-                                error = response.message,
-                                isLoading = false
-                            )
-                        }
-                    }
+                    is Resource.Error -> { updateUiState { copy( error = response.message, isLoading = false) } }
                 }
             }
         }
     }
+
+    private fun updateUiState(block: ProductDetailContract.UiState.() -> ProductDetailContract.UiState) {
+        _uiState.update(block)
+    }
+
 }

@@ -100,7 +100,5 @@ dependencies {
     implementation (libs.androidx.material)
     implementation (libs.kotlinx.coroutines.core)
     implementation (libs.kotlinx.coroutines.android)
-    implementation("androidx.compose.material:material-icons-extended:1.5.4")
-
-
+    implementation("androidx.compose.material:material-icons-extended:1.6.8")
 }
