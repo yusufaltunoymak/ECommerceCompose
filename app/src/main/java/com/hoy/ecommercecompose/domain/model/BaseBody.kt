@@ -1,6 +1,6 @@
 package com.hoy.ecommercecompose.domain.model
 
-data class AddToFavoriteBody(
+data class BaseBody(
     val productId: Int,
     val userId: String
 )

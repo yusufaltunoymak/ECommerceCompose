@@ -148,7 +148,8 @@ fun SetupNavGraph(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onNavigateToCartScreen = { navController.navigate("cart") }
             )
         }
 

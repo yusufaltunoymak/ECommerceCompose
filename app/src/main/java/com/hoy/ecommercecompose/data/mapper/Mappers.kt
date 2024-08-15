@@ -42,12 +42,13 @@ fun ProductDto.mapToProductDetail(isFavorite : Boolean): ProductDetail {
     )
 }
 
-fun ProductEntity.mapToProductEntity() : ProductUi {
-    return ProductUi(
+fun ProductUi.mapToProductEntity(): ProductEntity {
+    return ProductEntity(
+        id = "",
+        productId = this.id,
         category = this.category,
         count = this.count,
         description = this.description,
-        id = this.id,
         imageOne = this.imageOne,
         imageThree = this.imageThree,
         imageTwo = this.imageTwo,
@@ -56,9 +57,11 @@ fun ProductEntity.mapToProductEntity() : ProductUi {
         salePrice = this.salePrice,
         saleState = this.saleState,
         title = this.title,
-        isFavorite = this.isFavorite
+        isFavorite = this.isFavorite,
+        quantity = 0
     )
 }
+
 
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(

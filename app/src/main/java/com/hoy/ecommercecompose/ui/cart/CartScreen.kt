@@ -35,13 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
+import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 
 @Composable
@@ -84,9 +82,9 @@ fun CartScreen(
 @Composable
 fun CartItemList(uiState: CartUiState, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier) {
-        items(uiState.cartProductDtoList) { product ->
+        items(uiState.cartProductList) { product ->
             CartItem(
-                productDto = product,
+                product = product,
                 onQuantityChange = { /* Handle quantity change */ },
                 onRemoveItem = { /* Handle item removal */ },
                 modifier = Modifier.fillMaxWidth()
@@ -99,7 +97,7 @@ fun CartItemList(uiState: CartUiState, modifier: Modifier = Modifier) {
 @Composable
 fun CartItem(
     modifier: Modifier = Modifier,
-    productDto: ProductDto,
+    product: ProductEntity,
     onQuantityChange: (Int) -> Unit,
     onRemoveItem: () -> Unit
 ) {
@@ -125,7 +123,7 @@ fun CartItem(
                 // Ürün Resmi
                 Image(
                     painter = rememberAsyncImagePainter(
-                        model = productDto.imageOne ?: R.drawable.loading_img
+                        model = product.imageOne ?: R.drawable.loading_img
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(72.dp)
@@ -142,7 +140,7 @@ fun CartItem(
                 ) {
                     // Ürün Başlığı (Sağ üst)
                     Text(
-                        text = productDto.title ?: "Product Title",
+                        text = product.title ?: "Product Title",
                         color = Color.Gray,
                         modifier = Modifier
                             .align(Alignment.Start) // Başlık resmin üst hizasında
@@ -151,7 +149,7 @@ fun CartItem(
 
                     // Ürün Fiyatı (Sağ alt)
                     Text(
-                        text = "$${productDto.price}",
+                        text = "$${product.price}",
                         color = Color.Gray,
                         modifier = Modifier
                             .align(Alignment.Start) // Fiyat resmin alt hizasında
@@ -193,8 +191,8 @@ fun CartItem(
                         ) {
                             IconButton(
                                 onClick = {
-                                    if ((productDto.count ?: 0) > 1) onQuantityChange(
-                                        (productDto.count ?: 1) - 1
+                                    if ((product.count ?: 0) > 1) onQuantityChange(
+                                        (product.count ?: 1) - 1
                                     )
                                 },
                                 modifier = Modifier.size(24.dp)
@@ -207,13 +205,13 @@ fun CartItem(
                                 )
                             }
                             Text(
-                                text = "${productDto.count ?: 1}",
+                                text = "${product.count ?: 1}",
                                 color = Color.DarkGray,
                                 style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.padding(horizontal = 4.dp)
                             )
                             IconButton(
-                                onClick = { onQuantityChange((productDto.count ?: 1) + 1) },
+                                onClick = { onQuantityChange((product.count ?: 1) + 1) },
                                 modifier = Modifier.size(24.dp)
                             ) {
                                 Icon(
@@ -306,157 +304,3 @@ fun CartFooter(
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun CartScreenPreview() {
-    CartScreen(
-        uiState = CartUiState(
-            cartProductDtoList = listOf(
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "",
-                    imageThree = "",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-            ),
-            totalCartCount = 7,
-            totalCartPrice = 70.00
-        ),
-        navController = rememberNavController()
-    )
-}

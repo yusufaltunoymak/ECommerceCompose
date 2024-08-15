@@ -10,11 +10,11 @@ import androidx.room.Query
 interface ProductDao {
 
     @Query("SELECT * FROM products_table")
-    suspend fun getFavoriteProducts(): List<ProductEntity>
+    suspend fun getCartProducts(): List<ProductEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addFavoriteProduct(product: ProductEntity)
+    suspend fun addToCartProduct(product: ProductEntity)
 
     @Delete
-    suspend fun removeFavoriteProduct(product: ProductEntity)
+    suspend fun deleteFromCartProduct(product: ProductEntity)
 }
