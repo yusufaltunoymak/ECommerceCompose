@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.detail
 
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 
@@ -14,7 +13,7 @@ object ProductDetailContract {
 
     sealed class UiAction {
         data object ToggleFavoriteClick :UiAction()
-        data class AddToCartClick(val productEntity: ProductEntity) : UiAction()
+        data class AddToCartClick(val productDetail: ProductDetail) : UiAction()
     }
 
     sealed class UiEffect {

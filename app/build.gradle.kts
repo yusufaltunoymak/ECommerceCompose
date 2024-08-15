@@ -92,7 +92,7 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.androidx.hilt.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
-    implementation ("io.coil-kt:coil-compose:2.1.0")
+    implementation (libs.coil.compose)
     implementation (libs.androidx.lifecycle.runtime.compose)
     //bottom navigation compose
     implementation(libs.androidx.compose.material3)
@@ -100,5 +100,5 @@ dependencies {
     implementation (libs.androidx.material)
     implementation (libs.kotlinx.coroutines.core)
     implementation (libs.kotlinx.coroutines.android)
-    implementation("androidx.compose.material:material-icons-extended:1.6.8")
+    implementation(libs.androidx.material.icons.extended)
 }

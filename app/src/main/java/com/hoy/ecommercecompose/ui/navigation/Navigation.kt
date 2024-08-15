@@ -148,8 +148,7 @@ fun SetupNavGraph(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() },
-                onNavigateToCartScreen = { navController.navigate("cart") }
+                onBackClick = { navController.popBackStack() }
             )
         }
 
@@ -187,10 +186,12 @@ fun SetupNavGraph(
         composable("cart") {
             val cartViewModel: CartViewModel = hiltViewModel()
             val cartUiState by cartViewModel.uiState.collectAsStateWithLifecycle()
-
+            LaunchedEffect(Unit) {
+                cartViewModel.getCartProducts()
+            }
             CartScreen(
-                navController = navController,
-                uiState = cartUiState
+                uiState = cartUiState,
+                onAction = cartViewModel::onAction
             )
         }
         composable("profile") {

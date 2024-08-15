@@ -10,6 +10,7 @@ import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDeta
 import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
 import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
+import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
 
@@ -19,9 +20,6 @@ interface ProductRepository {
     suspend fun checkProductIsFavorite(userId: String,productId :Int): CheckFavoriteResponse
     suspend fun getCartProducts(id: String): GetCartProductResponse
 
-    suspend fun getCartProductsLocal(userId: String): List<ProductEntity>
-    suspend fun addToCartProduct(product: ProductEntity)
-    suspend fun deleteFromCartProduct(product: ProductEntity)
 
     suspend fun getByCategory(category: String): ProductListDto
 
@@ -29,5 +27,8 @@ interface ProductRepository {
     suspend fun getFavoriteProducts(userId: String): ProductListDto
     suspend fun deleteFavoriteProduct(deleteFromFavoriteBody: DeleteFromFavoriteBody): BaseResponse
 
-    suspend fun addToCard(baseBody: BaseBody) : BaseResponse
+    suspend fun addToCartProduct(product: ProductEntity)
+    suspend fun updateCartProduct(product: ProductEntity)
+    fun getCartProductsLocal(userId: String):Flow<Resource<List<ProductEntity>>>
+    suspend fun deleteFromCartProduct(productId: Int)
 }

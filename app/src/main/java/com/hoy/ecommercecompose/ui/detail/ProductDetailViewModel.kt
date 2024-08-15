@@ -5,11 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.mapper.mapToProductEntity
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
-import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
-import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.AddToCartLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
@@ -54,7 +52,7 @@ class ProductDetailViewModel @Inject constructor(
             }
 
             is ProductDetailContract.UiAction.AddToCartClick -> {
-                addToCart(action.productEntity)
+                addToCart(action.productDetail)
             }
         }
     }
@@ -150,19 +148,32 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    private fun addToCart(productEntity: ProductEntity) {
+    private fun addToCart(product: ProductDetail) {
         viewModelScope.launch {
-            updateUiState { copy(isLoading = true) }
+            val productEntity = product.mapToProductEntity(
+                userId = firebaseAuthRepository.getUserId(),
+                productId = product.id ?: 0,
+                category = "",
+                count = 1,
+                quantity = 1
+            )
+            addToCartLocalUseCase(productEntity).collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        updateUiState { copy(isLoading = true) }
+                    }
 
-            addToCartLocalUseCase(productEntity)
+                    is Resource.Success -> {
+                        updateUiState { copy(isLoading = false) }
+                        _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
+                    }
 
-            updateUiState {
-                copy(
-                    isLoading = false,
-                    addToCart = BaseResponse(/* burada uygun şekilde başarı durumunu belirleyin */)
-                )
+                    is Resource.Error -> {
+                        updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                    }
+                }
             }
-            _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
+           // _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
         }
     }
 
