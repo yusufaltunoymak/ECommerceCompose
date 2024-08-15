@@ -4,9 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
+import com.hoy.ecommercecompose.data.mapper.mapToProductEntity
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
+import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
+import com.hoy.ecommercecompose.domain.usecase.cart.AddToCartLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductDetailUseCase
@@ -27,6 +30,7 @@ class ProductDetailViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
+    private val addToCartLocalUseCase: AddToCartLocalUseCase
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<ProductDetailContract.UiState> =
         MutableStateFlow(ProductDetailContract.UiState())
@@ -43,7 +47,13 @@ class ProductDetailViewModel @Inject constructor(
 
     fun onAction(action: ProductDetailContract.UiAction) {
         when (action) {
-            is ProductDetailContract.UiAction.ToggleFavoriteClick -> { toggleFavorite() }
+            is ProductDetailContract.UiAction.ToggleFavoriteClick -> {
+                toggleFavorite()
+            }
+
+            is ProductDetailContract.UiAction.AddToCartClick -> {
+                addToCart(action.productDetail)
+            }
         }
     }
 
@@ -51,15 +61,23 @@ class ProductDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (val resource =
                 getProductDetailUseCase(firebaseAuthRepository.getUserId(), productId)) {
-                is Resource.Loading -> { updateUiState { copy(isLoading = true) } }
-                is Resource.Success -> { updateUiState { copy(productDetail = resource.data) } }
-                is Resource.Error -> { updateUiState { copy(error = resource.message) } }
+                is Resource.Loading -> {
+                    updateUiState { copy(isLoading = true) }
+                }
+
+                is Resource.Success -> {
+                    updateUiState { copy(productDetail = resource.data) }
+                }
+
+                is Resource.Error -> {
+                    updateUiState { copy(errorMessage = resource.message) }
+                }
             }
         }
     }
 
 
-    fun toggleFavorite() {
+    private fun toggleFavorite() {
         val productDetail = _uiState.value.productDetail ?: return
         viewModelScope.launch {
             productDetail.id?.let { id ->
@@ -74,13 +92,16 @@ class ProductDetailViewModel @Inject constructor(
 
     private fun addFavorite(productId: Int) {
         viewModelScope.launch {
-            val addToFavoriteBody = AddToFavoriteBody(
+            val baseBody = BaseBody(
                 userId = firebaseAuthRepository.getUserId(),
                 productId = productId
             )
-            addToFavoriteUseCase(addToFavoriteBody).collect { response ->
+            addToFavoriteUseCase(baseBody).collect { response ->
                 when (response) {
-                    is Resource.Loading -> { updateUiState { copy(isLoading = true) } }
+                    is Resource.Loading -> {
+                        updateUiState { copy(isLoading = true) }
+                    }
+
                     is Resource.Success -> {
                         updateUiState {
                             copy(
@@ -89,8 +110,10 @@ class ProductDetailViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Error -> {
-                        updateUiState { copy( error = response.message, isLoading = false) } }
+                        updateUiState { copy(errorMessage = response.message, isLoading = false) }
+                    }
                 }
             }
         }
@@ -104,7 +127,9 @@ class ProductDetailViewModel @Inject constructor(
             )
             deleteFavoriteUseCase(deleteFromFavoriteBody).collect { response ->
                 when (response) {
-                    is Resource.Loading -> { updateUiState { copy(isLoading = true) } }
+                    is Resource.Loading -> {
+                        updateUiState { copy(isLoading = true) }
+                    }
 
                     is Resource.Success -> {
                         updateUiState {
@@ -114,11 +139,44 @@ class ProductDetailViewModel @Inject constructor(
                             )
                         }
                     }
-                    is Resource.Error -> { updateUiState { copy( error = response.message, isLoading = false) } }
+
+                    is Resource.Error -> {
+                        updateUiState { copy(errorMessage = response.message, isLoading = false) }
+                    }
                 }
             }
         }
     }
+
+    private fun addToCart(product: ProductDetail) {
+        viewModelScope.launch {
+            val productEntity = product.mapToProductEntity(
+                userId = firebaseAuthRepository.getUserId(),
+                productId = product.id ?: 0,
+                category = "",
+                count = 1,
+                quantity = 1
+            )
+            addToCartLocalUseCase(productEntity).collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        updateUiState { copy(isLoading = true) }
+                    }
+
+                    is Resource.Success -> {
+                        updateUiState { copy(isLoading = false) }
+                        _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
+                    }
+
+                    is Resource.Error -> {
+                        updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                    }
+                }
+            }
+           // _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
+        }
+    }
+
 
     private fun updateUiState(block: ProductDetailContract.UiState.() -> ProductDetailContract.UiState) {
         _uiState.update(block)

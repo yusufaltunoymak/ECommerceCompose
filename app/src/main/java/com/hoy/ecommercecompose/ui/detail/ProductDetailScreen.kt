@@ -57,7 +57,7 @@ fun ProductDetailScreen(
     uiState: ProductDetailContract.UiState,
     onAction: (ProductDetailContract.UiAction) -> Unit,
     uiEffect: Flow<ProductDetailContract.UiEffect>,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -67,6 +67,8 @@ fun ProductDetailScreen(
                 when (effect) {
                     is ProductDetailContract.UiEffect.BackScreen -> onBackClick()
                     is ProductDetailContract.UiEffect.ShowError -> TODO()
+                    is ProductDetailContract.UiEffect.ShowToastMessage -> {
+                    }
                 }
             }
         }
@@ -212,7 +214,11 @@ fun ProductDetailScreen(
                                 }
                                 Spacer(modifier = Modifier.width(30.dp))
                                 Button(
-                                    onClick = { },
+                                    onClick = {
+                                        uiState.productDetail.let { productDetail ->
+                                            onAction(ProductDetailContract.UiAction.AddToCartClick(productDetail))
+                                        }
+                                              },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = LocalColors.current.primary
                                     )

@@ -10,9 +10,12 @@ import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProduct
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDetailResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
-import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
+import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.ProductRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
@@ -37,19 +40,14 @@ class ProductRepositoryImpl @Inject constructor(
         return apiService.checkIsFavorite(userId = userId, productId = productId)
     }
 
-    override suspend fun getCartProducts(id: String): Resource<GetCartProductResponse> {
-        return try {
-            val response = apiService.getCartProducts(id = id)
-            Resource.Success(response)
-        } catch (e: Exception) {
-            Resource.Error("Exception: ${e.message}")
-        }
+    override suspend fun getCartProducts(id: String):GetCartProductResponse {
+        return apiService.getCartProducts(id = id)
     }
 
     override suspend fun addFavoriteProduct(
-        addToFavoriteBody: AddToFavoriteBody
+        baseBody: BaseBody
     ): BaseResponse {
-        return apiService.addToFavorites(addToFavoriteBody = addToFavoriteBody)
+        return apiService.addToFavorites(baseBody = baseBody)
     }
 
     override suspend fun getFavoriteProducts(userId: String): ProductListDto {
@@ -64,17 +62,24 @@ class ProductRepositoryImpl @Inject constructor(
         return apiService.getProductsByCategory(category = category)
     }
 
-
-    override suspend fun addFavoriteProduct(product: ProductEntity) {
-        productDao.addFavoriteProduct(product)
+    override fun getCartProductsLocal(userId: String): Flow<Resource<List<ProductEntity>>> {
+        return productDao.getCartProducts(userId).map {
+            Resource.Success(it)
+        }.catch { e ->
+            Resource.Error(e.message.toString())
+        }
     }
 
-    override suspend fun removeFavoriteProduct(product: ProductEntity) {
-        productDao.removeFavoriteProduct(product)
+    override suspend fun addToCartProduct(product: ProductEntity) {
+       return productDao.addToCartProduct(product)
     }
 
-    override suspend fun getFavoriteProducts(): List<ProductEntity> {
-        return productDao.getFavoriteProducts()
+    override suspend fun deleteFromCartProduct(productId : Int) {
+        return productDao.deleteFromCartProduct(productId)
+    }
+
+    override suspend fun updateCartProduct(product: ProductEntity) {
+        return productDao.updateCartProduct(product)
     }
 
 }

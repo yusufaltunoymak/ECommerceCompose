@@ -2,9 +2,8 @@ package com.hoy.ecommercecompose.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
+import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
@@ -13,11 +12,9 @@ import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductsUseCase
-import com.hoy.ecommercecompose.ui.signup.SignUpContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -116,9 +113,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun addToFavorites(userId: String, productId: Int) {
-        val addToFavoriteBody = AddToFavoriteBody(productId, userId)
+        val baseBody = BaseBody(productId, userId)
         viewModelScope.launch {
-            addToFavoriteUseCase(addToFavoriteBody).collect { result ->
+            addToFavoriteUseCase(baseBody).collect { result ->
                 when (result) {
                     is Resource.Success -> {
                         updateUiState {

@@ -7,7 +7,7 @@ import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProduct
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCategoriesResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetProductDetailResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.ProductListDto
-import com.hoy.ecommercecompose.domain.model.AddToFavoriteBody
+import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -43,13 +43,13 @@ interface ApiService {
     @GET("get_cart_products")
     suspend fun getCartProducts(
         @Header("store") store: String = USER,
-        @Query("user_id") id: String
+        @Query("userId") id: String
     ): GetCartProductResponse
 
     @POST("add_to_favorites")
     suspend fun addToFavorites(
         @Header("store") store: String = USER,
-        @Body addToFavoriteBody: AddToFavoriteBody
+        @Body baseBody: BaseBody
     ): BaseResponse
 
     @GET("get_favorites")
@@ -69,6 +69,12 @@ interface ApiService {
         @Header("store") store: String = USER,
         @Query("category") category: String
     ): ProductListDto
+
+    @POST("add_to_cart")
+    suspend fun addToCart(
+        @Header("store") store: String = USER,
+        @Body addToCartBody: BaseBody
+    ): BaseResponse
 
 
 }

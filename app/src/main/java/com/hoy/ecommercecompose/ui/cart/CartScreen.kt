@@ -35,27 +35,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
+import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 
 @Composable
 fun CartScreen(
-    modifier: Modifier = Modifier,
-    navController: NavController,
-    uiState: CartUiState
+    uiState: CartContract.UiState,
+    onAction: (CartContract.UiAction) -> Unit,
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Title
         Text(
             text = "My Cart",
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
@@ -65,11 +59,13 @@ fun CartScreen(
         )
 
         CartItemList(
-            uiState = uiState,
-            modifier = Modifier.weight(1f)
+            cartProductList = uiState.cartProductList,
+            modifier = Modifier.weight(1f),
+            onDeleteCartClick = {onAction(CartContract.UiAction.DeleteProductFromCart(it))},
+            increaseQuantity = {onAction(CartContract.UiAction.IncreaseQuantity(it))},
+            decreaseQuantity = {onAction(CartContract.UiAction.DecreaseQuantity(it))}
         )
 
-        // Footer at the bottom
         CartFooter(
             discountCode = uiState.discountCode,
             total = uiState.totalCartPrice,
@@ -82,13 +78,20 @@ fun CartScreen(
 }
 
 @Composable
-fun CartItemList(uiState: CartUiState, modifier: Modifier = Modifier) {
+fun CartItemList(
+    cartProductList: List<ProductEntity>,
+    modifier: Modifier = Modifier,
+    onDeleteCartClick: (Int) -> Unit,
+    increaseQuantity: (Int) -> Unit,
+    decreaseQuantity: (Int) -> Unit
+) {
     LazyColumn(modifier = modifier) {
-        items(uiState.cartProductDtoList) { product ->
+        items(cartProductList) { product ->
             CartItem(
-                productDto = product,
-                onQuantityChange = { /* Handle quantity change */ },
-                onRemoveItem = { /* Handle item removal */ },
+                product = product,
+                increaseQuantity = { increaseQuantity(it) },
+                decreaseQuantity = { decreaseQuantity(it) },
+                deleteProductFromCart = { onDeleteCartClick(it) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -99,9 +102,10 @@ fun CartItemList(uiState: CartUiState, modifier: Modifier = Modifier) {
 @Composable
 fun CartItem(
     modifier: Modifier = Modifier,
-    productDto: ProductDto,
-    onQuantityChange: (Int) -> Unit,
-    onRemoveItem: () -> Unit
+    product: ProductEntity,
+    deleteProductFromCart: (Int) -> Unit,
+    increaseQuantity: (Int) -> Unit,
+    decreaseQuantity: (Int) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -119,13 +123,12 @@ fun CartItem(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp), // Genel padding
-                verticalAlignment = Alignment.CenterVertically // Orta hizalama
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Ürün Resmi
                 Image(
                     painter = rememberAsyncImagePainter(
-                        model = productDto.imageOne ?: R.drawable.loading_img
+                        model = product.imageOne
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(72.dp)
@@ -133,45 +136,40 @@ fun CartItem(
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // Ürün Bilgileri: Başlık ve Fiyat
                 Column(
                     modifier = modifier
                         .weight(1f)
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween // İçerikleri dikeyde ayırma
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Ürün Başlığı (Sağ üst)
                     Text(
-                        text = productDto.title ?: "Product Title",
+                        text = product.title,
                         color = Color.Gray,
                         modifier = Modifier
-                            .align(Alignment.Start) // Başlık resmin üst hizasında
+                            .align(Alignment.Start)
                             .padding(bottom = 16.dp)
                     )
 
-                    // Ürün Fiyatı (Sağ alt)
                     Text(
-                        text = "$${productDto.price}",
+                        text = "$${product.price * product.quantity}",
                         color = Color.Gray,
                         modifier = Modifier
-                            .align(Alignment.Start) // Fiyat resmin alt hizasında
+                            .align(Alignment.Start)
                     )
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // Çöp Kutusu ve Miktar Kontrolü
                 Column(
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    // Çöp Kutusu İkonu (Sağ üst)
                     IconButton(
-                        onClick = onRemoveItem,
+                        onClick = { deleteProductFromCart(product.productId) },
                         modifier = Modifier
                             .size(36.dp)
-                            .align(Alignment.End) // İkon sağ üstte
+                            .align(Alignment.End)
                     ) {
                         Icon(
                             Icons.Default.Delete,
@@ -180,23 +178,18 @@ fun CartItem(
                         )
                     }
 
-                    // Miktar Kontrolü (Sağ alt)
                     Box(
                         modifier = Modifier
                             .background(color = Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 8.dp, vertical = 4.dp) // Padding artırıldı
-                            .align(Alignment.End) // Sağ altta
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .align(Alignment.End)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
                             IconButton(
-                                onClick = {
-                                    if ((productDto.count ?: 0) > 1) onQuantityChange(
-                                        (productDto.count ?: 1) - 1
-                                    )
-                                },
+                                onClick = { decreaseQuantity(product.productId) },
                                 modifier = Modifier.size(24.dp)
                             ) {
                                 Icon(
@@ -207,13 +200,13 @@ fun CartItem(
                                 )
                             }
                             Text(
-                                text = "${productDto.count ?: 1}",
+                                text = "${product.quantity}",
                                 color = Color.DarkGray,
                                 style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.padding(horizontal = 4.dp)
                             )
                             IconButton(
-                                onClick = { onQuantityChange((productDto.count ?: 1) + 1) },
+                                onClick = { increaseQuantity(product.productId) },
                                 modifier = Modifier.size(24.dp)
                             ) {
                                 Icon(
@@ -306,157 +299,3 @@ fun CartFooter(
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun CartScreenPreview() {
-    CartScreen(
-        uiState = CartUiState(
-            cartProductDtoList = listOf(
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "",
-                    imageThree = "",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-                ProductDto(
-                    title = "Woman Sweater",
-                    price = 70.00,
-                    count = 1,
-                    imageOne = "https://via.placeholder.com/64",
-                    salePrice = 0.0,
-                    description = "This",
-                    category = "Clothing",
-                    rate = 4.5,
-                    id = 1,
-                    imageTwo = "https://via.placeholder.com/64",
-                    imageThree = "https://via.placeholder.com/64",
-                    saleState = false
-                ),
-            ),
-            totalCartCount = 7,
-            totalCartPrice = 70.00
-        ),
-        navController = rememberNavController()
-    )
-}

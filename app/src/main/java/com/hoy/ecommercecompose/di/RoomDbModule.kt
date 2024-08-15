@@ -19,6 +19,7 @@ object  RoomDbModule {
     fun provideProductDataBase(@ApplicationContext context: Context)  : ProductRoomDB {
         return Room.databaseBuilder(
             context, ProductRoomDB::class.java, "product_database" )
+            .fallbackToDestructiveMigration()
             .build()
     }
 
