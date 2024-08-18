@@ -2,6 +2,8 @@ package com.hoy.ecommercecompose.domain.repository
 
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
@@ -17,7 +19,7 @@ interface ProductRepository {
     suspend fun getProducts(): ProductListDto
     suspend fun getCategories(): GetCategoriesResponse
     suspend fun getProductDetail(id: Int): GetProductDetailResponse
-    suspend fun checkProductIsFavorite(userId: String,productId :Int): CheckFavoriteResponse
+    suspend fun checkProductIsFavorite(userId: String, productId: Int): CheckFavoriteResponse
     suspend fun getCartProducts(id: String): GetCartProductResponse
 
 
@@ -29,6 +31,16 @@ interface ProductRepository {
 
     suspend fun addToCartProduct(product: ProductEntity)
     suspend fun updateCartProduct(product: ProductEntity)
-    fun getCartProductsLocal(userId: String):Flow<Resource<List<ProductEntity>>>
+    fun getCartProductsLocal(userId: String): Flow<Resource<List<ProductEntity>>>
     suspend fun deleteFromCartProduct(productId: Int)
+
+    suspend fun clearCart(userId: String)
+    suspend fun addPaymentDetails(payment: PaymentEntity)
+    suspend fun processOrder(
+        paymentEntity: PaymentEntity,
+        orderedProducts: List<OrderedProductEntity>,
+        userId: String
+    )
+
+    suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>)
 }

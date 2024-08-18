@@ -25,6 +25,8 @@ import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
+import com.hoy.ecommercecompose.ui.payment.PaymentScreen
+import com.hoy.ecommercecompose.ui.payment.PaymentViewModel
 import com.hoy.ecommercecompose.ui.profile.ProfileScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
@@ -141,7 +143,7 @@ fun SetupNavGraph(
                 defaultValue = 423334
             })
         ) {
-            val viewModel : ProductDetailViewModel = hiltViewModel()
+            val viewModel: ProductDetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
             ProductDetailScreen(
@@ -183,17 +185,6 @@ fun SetupNavGraph(
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable("cart") {
-            val cartViewModel: CartViewModel = hiltViewModel()
-            val cartUiState by cartViewModel.uiState.collectAsStateWithLifecycle()
-            LaunchedEffect(Unit) {
-                cartViewModel.getCartProducts()
-            }
-            CartScreen(
-                uiState = cartUiState,
-                onAction = cartViewModel::onAction
-            )
-        }
         composable("profile") {
             ProfileScreen(navController)
         }
@@ -212,6 +203,31 @@ fun SetupNavGraph(
                 uiState = searchUiState,
                 uiEffect = uiEffect
 
+            )
+        }
+        composable("cart") {
+            val cartViewModel: CartViewModel = hiltViewModel()
+            val cartUiState by cartViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = cartViewModel.uiEffect
+            LaunchedEffect(Unit) {
+                cartViewModel.getCartProducts()
+            }
+            CartScreen(
+                uiState = cartUiState,
+                onAction = cartViewModel::onAction,
+                uiEffect = uiEffect,
+                onNavigatePayment = { navController.navigate("payment") }
+            )
+        }
+        composable("payment") {
+            val paymentViewModel: PaymentViewModel = hiltViewModel()
+            val paymentUiState by paymentViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = paymentViewModel.uiEffect
+            PaymentScreen(
+                uiState = paymentUiState,
+                onAction = paymentViewModel::onAction,
+                uiEffect = uiEffect,
+                onBackPress = { navController.popBackStack() }
             )
         }
     }

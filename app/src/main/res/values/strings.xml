@@ -19,4 +19,5 @@
     <string name="forgot_password_text">Forgot Password?</string>
     <string name="login_text">Login</string>
     <string name="or_login_with_text">or login with</string>
+    <string name="order_success_received">Your order has been successfully received!</string>
 </resources>

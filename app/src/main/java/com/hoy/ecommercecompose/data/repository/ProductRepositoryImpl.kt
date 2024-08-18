@@ -1,8 +1,10 @@
 package com.hoy.ecommercecompose.data.repository
 
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
 import com.hoy.ecommercecompose.data.source.local.ProductDao
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
 import com.hoy.ecommercecompose.data.source.remote.ApiService
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
@@ -78,8 +80,23 @@ class ProductRepositoryImpl @Inject constructor(
         return productDao.deleteFromCartProduct(productId)
     }
 
+    override suspend fun clearCart(userId: String) {
+        return productDao.clearCart(userId)
+    }
+
     override suspend fun updateCartProduct(product: ProductEntity) {
         return productDao.updateCartProduct(product)
+    }
+
+    override suspend fun addPaymentDetails(payment: PaymentEntity) {
+        return productDao.addPaymentDetails(payment)
+    }
+
+    override suspend fun processOrder(paymentEntity: PaymentEntity, orderedProducts: List<OrderedProductEntity>, userId: String) {
+        productDao.processOrder(paymentEntity, orderedProducts, userId)
+    }
+    override suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>) {
+        productDao.addOrderedProducts(orderedProducts)
     }
 
 }

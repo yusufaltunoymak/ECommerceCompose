@@ -5,15 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.auth.api.identity.Identity
 import com.hoy.ecommercecompose.ui.components.BottomNavigationBar
 import com.hoy.ecommercecompose.ui.components.bottomNavItems
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
@@ -40,7 +35,8 @@ class MainActivity : ComponentActivity() {
                         "signup",
                         "search",
                         "product_detail?productId={productId}",
-                        "category_screen?category={category}"
+                        "category_screen?category={category}",
+                        "payment"
                     )
                 val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
                 Scaffold(

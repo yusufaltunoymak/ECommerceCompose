@@ -31,20 +31,40 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun CartScreen(
     uiState: CartContract.UiState,
     onAction: (CartContract.UiAction) -> Unit,
+    uiEffect: Flow<CartContract.UiEffect>,
+    onNavigatePayment: () -> Unit,
 ) {
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is CartContract.UiEffect.PaymentClick -> onNavigatePayment()
+                    is CartContract.UiEffect.ShowToast -> TODO()
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +92,7 @@ fun CartScreen(
             count = uiState.totalCartCount,
             onDiscountCodeChange = { /* Handle discount code change */ },
             onApplyDiscount = { /* Handle discount application */ },
-            onCheckout = { /* Handle checkout */ }
+            onPaymentClick = { onNavigatePayment() }
         )
     }
 }
@@ -231,7 +251,7 @@ fun CartFooter(
     count: Int,
     onDiscountCodeChange: (String) -> Unit,
     onApplyDiscount: () -> Unit,
-    onCheckout: () -> Unit,
+    onPaymentClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -294,8 +314,7 @@ fun CartFooter(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomButton(text = "Checkout", onClick = { /*TODO*/ })
-
+        CustomButton(text = "Payment", onClick = { onPaymentClick() },)
     }
 }
 

@@ -2,11 +2,14 @@ package com.hoy.ecommercecompose.data.mapper
 
 import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.domain.model.FavoriteResponse
-import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.domain.model.ProductUi
+import com.hoy.ecommercecompose.ui.payment.PaymentContract
 
 fun ProductDto.mapToProductUi(): ProductUi {
     return ProductUi(
@@ -68,6 +71,29 @@ fun ProductDetail.mapToProductEntity(
         quantity = quantity
     )
 }
+
+fun ProductEntity.toOrderedProduct(orderId: Int): OrderedProductEntity {
+    return OrderedProductEntity(
+        orderId = orderId,
+        productId = this.productId,
+        quantity = this.quantity,
+        price = this.price
+    )
+}
+
+fun PaymentContract.UiState.toPaymentEntity(userId: String): PaymentEntity {
+    return PaymentEntity(
+        userId = userId,
+        cardNumber = this.cardNumber,
+        cardHolderName = this.cardHolderName,
+        expirationDate = this.expiryDate,
+        amount = this.productEntity?.price ?: 0.0,
+        city = this.selectedCity,
+        district = this.selectedDistrict,
+        fullAddress = this.addressText
+    )
+}
+
 
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(
