@@ -19,4 +19,9 @@ object CartContract {
         data class DecreaseQuantity(val id: Int) : UiAction()
 
     }
+
+    sealed class UiEffect {
+        data class ShowToast(val message: String) : UiEffect()
+        data object PaymentClick : UiEffect()
+    }
 }

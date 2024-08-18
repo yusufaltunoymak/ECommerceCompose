@@ -81,7 +81,6 @@ fun ProductDetailScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 Box {
                     ImageList(
                         modifier = Modifier.fillMaxWidth(),

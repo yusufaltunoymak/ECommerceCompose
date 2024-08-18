@@ -9,8 +9,11 @@ import com.hoy.ecommercecompose.domain.usecase.cart.DeleteProductFromCartUseCase
 import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.cart.UpdateCartProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,11 +29,14 @@ class CartViewModel @Inject constructor(
         MutableStateFlow(CartContract.UiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _uiEffect by lazy { Channel<CartContract.UiEffect>() }
+    val uiEffect: Flow<CartContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
+
     fun onAction(action: CartContract.UiAction) {
         when (action) {
             is CartContract.UiAction.GetCartProducts -> getCartProducts()
             is CartContract.UiAction.DeleteProductFromCart -> deleteProductFromCart(action.id)
-            is CartContract.UiAction.IncreaseQuantity ->  increaseQuantity(action.id)
+            is CartContract.UiAction.IncreaseQuantity -> increaseQuantity(action.id)
             is CartContract.UiAction.DecreaseQuantity -> decreaseQuantity(action.id)
         }
     }
