@@ -88,7 +88,7 @@ fun CartScreen(
 
         CartFooter(
             discountCode = uiState.discountCode,
-            total = uiState.totalCartPrice,
+            total = "%.2f".format(uiState.totalCartPrice),
             count = uiState.totalCartCount,
             onDiscountCodeChange = { /* Handle discount code change */ },
             onApplyDiscount = { /* Handle discount application */ },
@@ -171,7 +171,7 @@ fun CartItem(
                     )
 
                     Text(
-                        text = "$${product.price * product.quantity}",
+                        text = "$${"%.2f".format(product.price * product.quantity)}",
                         color = Color.Gray,
                         modifier = Modifier
                             .align(Alignment.Start)
@@ -247,7 +247,7 @@ fun CartItem(
 @Composable
 fun CartFooter(
     discountCode: String,
-    total: Double,
+    total: String,
     count: Int,
     onDiscountCodeChange: (String) -> Unit,
     onApplyDiscount: () -> Unit,
