@@ -54,7 +54,10 @@ class ProductDetailViewModel @Inject constructor(
             is ProductDetailContract.UiAction.AddToCartClick -> {
                 addToCart(action.productDetail)
             }
-        }
+
+            is ProductDetailContract.UiAction.BackButtonClick -> {
+                navigateBack()
+            }}
     }
 
     private fun getProductDetail(productId: Int) {
@@ -177,6 +180,11 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
+    private fun navigateBack() {
+        viewModelScope.launch {
+            _uiEffect.send(ProductDetailContract.UiEffect.NavigateBack)
+        }
+    }
 
     private fun updateUiState(block: ProductDetailContract.UiState.() -> ProductDetailContract.UiState) {
         _uiState.update(block)
