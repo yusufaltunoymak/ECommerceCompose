@@ -41,8 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
+import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -81,19 +83,28 @@ fun CartScreen(
         CartItemList(
             cartProductList = uiState.cartProductList,
             modifier = Modifier.weight(1f),
-            onDeleteCartClick = {onAction(CartContract.UiAction.DeleteProductFromCart(it))},
-            increaseQuantity = {onAction(CartContract.UiAction.IncreaseQuantity(it))},
-            decreaseQuantity = {onAction(CartContract.UiAction.DecreaseQuantity(it))}
+            onDeleteCartClick = { onAction(CartContract.UiAction.DeleteProductFromCart(it)) },
+            increaseQuantity = { onAction(CartContract.UiAction.IncreaseQuantity(it)) },
+            decreaseQuantity = { onAction(CartContract.UiAction.DecreaseQuantity(it)) }
         )
+        if (uiState.cartProductList.isNotEmpty()) {
+            CartFooter(
+                discountCode = uiState.discountCode,
+                total = "%.2f".format(uiState.totalCartPrice),
+                count = uiState.totalCartCount,
+                onDiscountCodeChange = { /* Handle discount code change */ },
+                onApplyDiscount = { /* Handle discount application */ },
+                onPaymentClick = { onNavigatePayment() }
+            )
+        }
+        else {
+            ECEmptyScreen(
+                title = R.string.empty_cart_title,
+                description = R.string.empty_cart_desc ,
+                icon = R.drawable.ic_cart
+            )
+        }
 
-        CartFooter(
-            discountCode = uiState.discountCode,
-            total = "%.2f".format(uiState.totalCartPrice),
-            count = uiState.totalCartCount,
-            onDiscountCodeChange = { /* Handle discount code change */ },
-            onApplyDiscount = { /* Handle discount application */ },
-            onPaymentClick = { onNavigatePayment() }
-        )
     }
 }
 
@@ -314,7 +325,7 @@ fun CartFooter(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomButton(text = "Payment", onClick = { onPaymentClick() },)
+        CustomButton(text = "Payment", onClick = { onPaymentClick() })
     }
 }
 

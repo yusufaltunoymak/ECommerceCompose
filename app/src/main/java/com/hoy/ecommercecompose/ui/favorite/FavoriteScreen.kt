@@ -51,6 +51,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
+import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
@@ -71,7 +72,9 @@ fun FavoriteScreen(
             uiEffect.collect { effect ->
                 when (effect) {
                     is FavoriteContract.UiEffect.FavoriteProductDetailClick -> onNavigateToDetail(
-                        effect.productId)
+                        effect.productId
+                    )
+
                     is FavoriteContract.UiEffect.ShowError -> TODO()
                     is FavoriteContract.UiEffect.BackScreen -> onBackClick()
                 }
@@ -106,9 +109,11 @@ fun FavoriteScreen(
                 }
 
                 uiState.favoriteProducts.isEmpty() -> {
-                    Text(
-                        text = "No favorite products found.",
-                        modifier = Modifier.align(Alignment.Center)
+
+                    ECEmptyScreen(
+                        title = R.string.empty_fav_title,
+                        description = R.string.empty_fav_desc,
+                        icon = R.drawable.ic_heart
                     )
                 }
 
