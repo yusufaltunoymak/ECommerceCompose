@@ -155,44 +155,30 @@ fun PaymentScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
 
-        // Bank Card Component
         BankCard(
-            cardHolder = uiState.cardHolderName,
-            cardNumber = uiState.cardNumber,
-            expiryDate = uiState.expiryDate,
-            cvv = uiState.cvv,
-            cardBrand = "WISA"
+            uiState = uiState
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         CardHolderInput(
-            cardHolder = uiState.cardHolderName,
-            onCardHolderChange = { onAction(PaymentContract.UiAction.ChangeCardHolderName(it)) }
+            uiState = uiState,
+            onAction = onAction
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         CardNumberInput(
-            cardNumber = uiState.cardNumber,
-            onCardNumberChange = { onAction(PaymentContract.UiAction.ChangeCardNumber(it)) }
+            uiState = uiState,
+            onAction = onAction
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         ExpiryDateAndCvvInput(
-            expiryDate = "${uiState.selectedMonth}/${uiState.selectedYear}",
-            onExpiryDateChange = { month, year ->
-                onAction(PaymentContract.UiAction.ChangeExpiryDate(month, year))
-            },
-            cvv = uiState.cvv,
-            onCvvChange = { onAction(PaymentContract.UiAction.ChangeCvv(it)) },
-            isMonthDropdownExpanded = uiState.isMonthDropdownExpanded,
-            isYearDropdownExpanded = uiState.isYearDropdownExpanded,
-            onToggleMonthDropdown = { onAction(PaymentContract.UiAction.ToggleMonthDropdown) },
-            onToggleYearDropdown = { onAction(PaymentContract.UiAction.ToggleYearDropdown) }
+            uiState = uiState,
+            onAction = onAction
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         AddressInput(
@@ -209,11 +195,7 @@ fun PaymentScreen(
 
 @Composable
 fun BankCard(
-    cardHolder: String,
-    cardNumber: String,
-    expiryDate: String,
-    cvv: String,
-    cardBrand: String
+    uiState: PaymentContract.UiState
 ) {
     Box(
         modifier = Modifier
@@ -235,7 +217,7 @@ fun BankCard(
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = cardHolder.uppercase(), // Cardholder name in uppercase
+                text = uiState.cardHolderName.uppercase(),
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -246,14 +228,13 @@ fun BankCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = cardNumber.chunked(4).joinToString(" "),
+                    text = uiState.cardNumber.chunked(4).joinToString(" "),
                     fontSize = 24.sp,
                     color = Color.White,
                     modifier = Modifier.padding(horizontal = 4.dp)
                 )
             }
 
-            // Expiry Date and CVV
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -265,7 +246,7 @@ fun BankCard(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = expiryDate,
+                        text = "${uiState.selectedMonth}/${uiState.selectedYear}",
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -277,15 +258,14 @@ fun BankCard(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = cvv,
+                        text = uiState.cvv,
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
-
             Text(
-                text = cardBrand,
+                text = "VISA",
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.End)
@@ -295,25 +275,31 @@ fun BankCard(
 }
 
 @Composable
-fun CardHolderInput(cardHolder: String, onCardHolderChange: (String) -> Unit) {
+fun CardHolderInput(
+    uiState: PaymentContract.UiState,
+    onAction: (PaymentContract.UiAction) -> Unit
+) {
     OutlinedTextField(
-        value = cardHolder.uppercase(), // Convert input to uppercase
-        onValueChange = { onCardHolderChange(it) },
+        value = uiState.cardHolderName.uppercase(),
+        onValueChange = { onAction(PaymentContract.UiAction.ChangeCardHolderName(it)) },
         label = { Text(text = "Card Holder Name") },
         modifier = Modifier.fillMaxWidth()
     )
 }
 
+
 @Composable
-fun CardNumberInput(cardNumber: String, onCardNumberChange: (String) -> Unit) {
+fun CardNumberInput(
+    uiState: PaymentContract.UiState,
+    onAction: (PaymentContract.UiAction) -> Unit
+) {
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(
-                cardNumber.chunked(4).joinToString(" ")
+                uiState.cardNumber.chunked(4).joinToString(" ")
             )
         )
     }
-
     OutlinedTextField(
         value = textFieldValue,
         onValueChange = { newValue ->
@@ -327,7 +313,7 @@ fun CardNumberInput(cardNumber: String, onCardNumberChange: (String) -> Unit) {
                     text = formattedCardNumber,
                     selection = TextRange(newCursorPosition.coerceAtMost(formattedCardNumber.length))
                 )
-                onCardNumberChange(rawInput)
+                onAction(PaymentContract.UiAction.ChangeCardNumber(rawInput)) // Action ile güncelliyoruz
             }
         },
         label = { Text(text = "Card Number") },
@@ -339,14 +325,8 @@ fun CardNumberInput(cardNumber: String, onCardNumberChange: (String) -> Unit) {
 
 @Composable
 fun ExpiryDateAndCvvInput(
-    expiryDate: String,
-    onExpiryDateChange: (String, String) -> Unit,
-    cvv: String,
-    onCvvChange: (String) -> Unit,
-    isMonthDropdownExpanded: Boolean,
-    isYearDropdownExpanded: Boolean,
-    onToggleMonthDropdown: () -> Unit,
-    onToggleYearDropdown: () -> Unit
+    uiState: PaymentContract.UiState,
+    onAction: (PaymentContract.UiAction) -> Unit
 ) {
     val months = (1..12).map { it.toString().padStart(2, '0') }
     val years = (2024..2030).map { it.toString() }
@@ -355,10 +335,9 @@ fun ExpiryDateAndCvvInput(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Month Selector
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
-                value = expiryDate.split("/")[0],
+                value = uiState.selectedMonth.ifEmpty { "MM" },
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(text = "MM") },
@@ -366,22 +345,27 @@ fun ExpiryDateAndCvvInput(
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = null,
-                        modifier = Modifier.clickable { onToggleMonthDropdown() }
+                        modifier = Modifier.clickable { onAction(PaymentContract.UiAction.ToggleMonthDropdown) }
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
             )
             DropdownMenu(
-                expanded = isMonthDropdownExpanded,
-                onDismissRequest = { onToggleMonthDropdown() },
+                expanded = uiState.isMonthDropdownExpanded,
+                onDismissRequest = { onAction(PaymentContract.UiAction.ToggleMonthDropdown) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 months.forEach { month ->
                     DropdownMenuItem(
                         text = { Text(text = month) },
                         onClick = {
-                            onExpiryDateChange(month, expiryDate.split("/")[1])
-                            onToggleMonthDropdown()
+                            onAction(
+                                PaymentContract.UiAction.ChangeExpiryDate(
+                                    month,
+                                    uiState.selectedYear
+                                )
+                            )
+                            onAction(PaymentContract.UiAction.ToggleMonthDropdown)
                         }
                     )
                 }
@@ -390,10 +374,9 @@ fun ExpiryDateAndCvvInput(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Year Selector
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
-                value = expiryDate.split("/")[1],
+                value = uiState.selectedYear.ifEmpty { "YY" },
                 onValueChange = {},
                 readOnly = true,
                 label = { Text(text = "YY") },
@@ -401,22 +384,27 @@ fun ExpiryDateAndCvvInput(
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = null,
-                        modifier = Modifier.clickable { onToggleYearDropdown() }
+                        modifier = Modifier.clickable { onAction(PaymentContract.UiAction.ToggleYearDropdown) }
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
             )
             DropdownMenu(
-                expanded = isYearDropdownExpanded,
-                onDismissRequest = { onToggleYearDropdown() },
+                expanded = uiState.isYearDropdownExpanded,
+                onDismissRequest = { onAction(PaymentContract.UiAction.ToggleYearDropdown) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 years.forEach { year ->
                     DropdownMenuItem(
                         text = { Text(text = year) },
                         onClick = {
-                            onExpiryDateChange(expiryDate.split("/")[0], year)
-                            onToggleYearDropdown()
+                            onAction(
+                                PaymentContract.UiAction.ChangeExpiryDate(
+                                    uiState.selectedMonth,
+                                    year
+                                )
+                            )
+                            onAction(PaymentContract.UiAction.ToggleYearDropdown)
                         }
                     )
                 }
@@ -427,10 +415,10 @@ fun ExpiryDateAndCvvInput(
 
         // CVV Input
         OutlinedTextField(
-            value = cvv,
+            value = uiState.cvv,
             onValueChange = {
                 if (it.length <= 3 && it.all { char -> char.isDigit() }) {
-                    onCvvChange(it)
+                    onAction(PaymentContract.UiAction.ChangeCvv(it))
                 }
             },
             label = { Text(text = "CVV") },
@@ -446,13 +434,8 @@ fun AddressInput(
     uiState: PaymentContract.UiState,
     onAction: (PaymentContract.UiAction) -> Unit
 ) {
-    val cities = listOf("Ankara", "İstanbul", "İzmir")
-    val districts = when (uiState.selectedCity) {
-        "Ankara" -> listOf("Çankaya", "Keçiören", "Mamak")
-        "İstanbul" -> listOf("Kadıköy", "Beşiktaş", "Şişli")
-        "İzmir" -> listOf("Konak", "Karşıyaka", "Bornova")
-        else -> emptyList()
-    }
+    val cities = uiState.cities.map { it.il }
+    val districts = uiState.cities.find { it.il == uiState.selectedCity }?.ilceleri ?: emptyList()
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -510,7 +493,8 @@ fun AddressInput(
                         modifier = Modifier.clickable { onAction(PaymentContract.UiAction.ToggleDistrictDropdown) }
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = uiState.selectedCity.isNotEmpty()
             )
             DropdownMenu(
                 expanded = uiState.isDistrictDropdownExpanded,
@@ -537,7 +521,8 @@ fun AddressInput(
             label = { Text(text = "Full Address") },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(150.dp),
+            enabled = uiState.selectedCity.isNotEmpty() && uiState.selectedDistrict.isNotEmpty()
         )
     }
 }
