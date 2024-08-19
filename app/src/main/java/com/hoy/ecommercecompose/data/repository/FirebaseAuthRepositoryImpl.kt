@@ -36,7 +36,6 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
-
     override suspend fun signInWithEmailAndPassword(
         email: String,
         password: String

@@ -66,8 +66,7 @@ fun LoginScreen(
     onBackClick: () -> Unit,
     onNavigateToHome: () -> Unit,
 
-    ) {
-
+) {
     var alertDialogState by remember { mutableStateOf(false) }
 
     val signInLauncher = rememberLauncherForActivityResult(
@@ -194,7 +193,7 @@ fun LoginScreen(
                     fontWeight = FontWeight.Light,
                     fontSize = 12.sp,
 
-                    )
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))

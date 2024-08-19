@@ -54,7 +54,6 @@ fun CartScreen(
     uiEffect: Flow<CartContract.UiEffect>,
     onNavigatePayment: () -> Unit,
 ) {
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -96,15 +95,13 @@ fun CartScreen(
                 onApplyDiscount = { /* Handle discount application */ },
                 onPaymentClick = { onNavigatePayment() }
             )
-        }
-        else {
+        } else {
             ECEmptyScreen(
                 title = R.string.empty_cart_title,
-                description = R.string.empty_cart_desc ,
+                description = R.string.empty_cart_desc,
                 icon = R.drawable.ic_cart
             )
         }
-
     }
 }
 
@@ -128,7 +125,6 @@ fun CartItemList(
         }
     }
 }
-
 
 @Composable
 fun CartItem(
@@ -317,7 +313,7 @@ fun CartFooter(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$${total}",
+                text = "$$total",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -328,4 +324,3 @@ fun CartFooter(
         CustomButton(text = "Payment", onClick = { onPaymentClick() })
     }
 }
-

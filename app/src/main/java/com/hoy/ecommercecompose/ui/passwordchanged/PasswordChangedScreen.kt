@@ -23,14 +23,12 @@ import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 
-
 @Composable
 fun PasswordChangedScreen(
     uiState: LoginContract.UiState,
     onAction: (LoginContract.UiAction) -> Unit,
     navController: NavController
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +36,11 @@ fun PasswordChangedScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(painter = painterResource(id = R.drawable.checked), contentDescription = null, modifier = Modifier.size(300.dp))
+        Image(
+            painter = painterResource(id = R.drawable.checked),
+            contentDescription = null,
+            modifier = Modifier.size(300.dp)
+        )
 
         Text(
             text = "Password Changed!",
@@ -48,17 +50,14 @@ fun PasswordChangedScreen(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row (
-
-        ){
+        Row {
             Text(
                 text = "Your password has been changed successfully.",
                 fontWeight = FontWeight.Thin,
                 fontSize = 18.sp,
-                //modifier = Modifier.align(Alignment.CenterHorizontally)
+                // modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
-
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -66,10 +65,10 @@ fun PasswordChangedScreen(
 
         CustomButton(
             text = "Back to Login",
-            onClick = { })
+            onClick = { }
+        )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

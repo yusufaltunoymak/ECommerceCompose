@@ -8,7 +8,6 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
 import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
 import kotlinx.coroutines.flow.Flow
 
 @Dao

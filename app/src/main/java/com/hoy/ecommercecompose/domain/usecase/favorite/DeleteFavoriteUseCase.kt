@@ -12,7 +12,7 @@ import javax.inject.Inject
 class DeleteFavoriteUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
-    suspend operator fun invoke(deleteFromFavoriteBody: DeleteFromFavoriteBody) : Flow<Resource<FavoriteResponse>> {
+    suspend operator fun invoke(deleteFromFavoriteBody: DeleteFromFavoriteBody): Flow<Resource<FavoriteResponse>> {
         return flow {
             try {
                 emit(Resource.Loading)

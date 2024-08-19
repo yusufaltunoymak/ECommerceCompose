@@ -37,7 +37,6 @@ class PaymentViewModel @Inject constructor(
     private val _uiEffect by lazy { Channel<PaymentContract.UiEffect>() }
     val uiEffect: Flow<PaymentContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
-
     fun onAction(action: PaymentContract.UiAction) {
         when (action) {
             is PaymentContract.UiAction.ChangeCardHolderName -> {
@@ -151,5 +150,4 @@ class PaymentViewModel @Inject constructor(
     private fun updateUiState(block: PaymentContract.UiState.() -> PaymentContract.UiState) {
         _uiState.update(block)
     }
-
 }

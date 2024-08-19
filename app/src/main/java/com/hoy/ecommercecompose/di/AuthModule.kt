@@ -19,19 +19,19 @@ import javax.inject.Singleton
 object AuthModule {
     @Provides
     @Singleton
-    fun provideFirebaseAuth() : FirebaseAuth {
+    fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
 
     @Provides
     @Singleton
-    fun provideFirebase() : Firebase {
+    fun provideFirebase(): Firebase {
         return Firebase
     }
 
     @Provides
     @Singleton
-    fun provideFirestore() : FirebaseFirestore {
+    fun provideFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
     }
 

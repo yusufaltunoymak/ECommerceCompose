@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AddToCartLocalUseCase @Inject constructor(private val productRepository: ProductRepository) {
-    suspend operator fun invoke(entity: ProductEntity) : Flow<Resource<Unit>>{
+    suspend operator fun invoke(entity: ProductEntity): Flow<Resource<Unit>> {
         return flow {
             emit(Resource.Loading)
             try {

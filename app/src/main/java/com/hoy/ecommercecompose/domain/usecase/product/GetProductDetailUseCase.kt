@@ -23,8 +23,7 @@ class GetProductDetailUseCase @Inject constructor(
                 }.await()
                 if (response.productDto != null) {
                     Resource.Success(data = response.productDto.mapToProductDetail(favResponse.isFavorite))
-                }
-                else {
+                } else {
                     Resource.Error(message = "Product not found")
                 }
             } catch (e: Exception) {

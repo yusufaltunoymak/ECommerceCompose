@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
     alias(libs.plugins.navigationSafeArgs)
     alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -81,8 +82,8 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.firebase.analytics)
@@ -92,13 +93,24 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.androidx.hilt.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
-    implementation (libs.coil.compose)
-    implementation (libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     //bottom navigation compose
     implementation(libs.androidx.compose.material3)
-    implementation (libs.ui)
-    implementation (libs.androidx.material)
-    implementation (libs.kotlinx.coroutines.core)
-    implementation (libs.kotlinx.coroutines.android)
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.material.icons.extended)
+
+    //detekt
+    detektPlugins(libs.detekt)
+}
+
+detekt {
+    config.setFrom(file("$rootDir/detekt/detektConfig.yml"))
+    source.from(files("src/main/kotlin", "src/test/kotlin"))
+    parallel = true
+    autoCorrect = true
+    buildUponDefaultConfig = true
 }

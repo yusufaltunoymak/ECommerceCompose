@@ -38,7 +38,6 @@ class HomeViewModel @Inject constructor(
     private val _uiEffect by lazy { Channel<HomeContract.UiEffect>() }
     val uiEffect: Flow<HomeContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
-
     init {
         getUserInformation()
         getCategories()
@@ -203,5 +202,4 @@ class HomeViewModel @Inject constructor(
     private suspend fun emitUiEffect(uiEffect: HomeContract.UiEffect) {
         _uiEffect.send(uiEffect)
     }
-
 }

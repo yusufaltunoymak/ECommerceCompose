@@ -7,12 +7,14 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "ordered_products_table",
-    foreignKeys = [ForeignKey(
-        entity = PaymentEntity::class,
-        parentColumns = ["orderId"],
-        childColumns = ["orderId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+    foreignKeys = [
+        ForeignKey(
+            entity = PaymentEntity::class,
+            parentColumns = ["orderId"],
+            childColumns = ["orderId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class OrderedProductEntity(
     @PrimaryKey(autoGenerate = true)
@@ -26,4 +28,3 @@ data class OrderedProductEntity(
     @ColumnInfo("price")
     val price: Double
 )
-

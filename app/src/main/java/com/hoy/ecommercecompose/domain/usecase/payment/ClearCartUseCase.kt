@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class ClearCartUseCase @Inject constructor(
     private val productRepository: ProductRepository
-){
-    suspend operator fun invoke(userId :String) = productRepository.clearCart(userId)
+) {
+    suspend operator fun invoke(userId: String) = productRepository.clearCart(userId)
 }

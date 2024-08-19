@@ -56,7 +56,7 @@ fun WelcomeScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun WelcomeScreenPreview(){
+fun WelcomeScreenPreview() {
     WelcomeScreen(onLoginClick = { /*TODO*/ }) {
     }
 }

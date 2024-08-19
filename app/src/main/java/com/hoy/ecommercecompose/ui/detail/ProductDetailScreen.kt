@@ -60,7 +60,6 @@ fun ProductDetailScreen(
     uiEffect: Flow<ProductDetailContract.UiEffect>,
     onBackClick: () -> Unit,
 ) {
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -225,18 +224,17 @@ fun ProductDetailScreen(
                                         )
                                     ) {
                                         Text(
-                                            text = "Add to Cart", modifier = Modifier.padding(6.dp),
+                                            text = "Add to Cart",
+                                            modifier = Modifier.padding(6.dp),
                                         )
                                     }
-
                                 }
                                 Spacer(modifier = Modifier.height(30.dp))
                             }
-
                         }
                     }
                 }
-                }
+            }
         } else {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -245,7 +243,6 @@ fun ProductDetailScreen(
                 Text(text = "Product not found")
             }
         }
-
     }
 }
 
@@ -256,7 +253,6 @@ fun RatingBar(
     stars: Int = 5,
     starsColor: Color = LocalColors.current.primary
 ) {
-
     var isHalfStar = (rating % 1) != 0.0
 
     Row {

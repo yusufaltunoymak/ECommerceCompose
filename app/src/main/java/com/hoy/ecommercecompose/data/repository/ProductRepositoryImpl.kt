@@ -1,10 +1,10 @@
 package com.hoy.ecommercecompose.data.repository
 
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
 import com.hoy.ecommercecompose.data.source.local.ProductDao
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
 import com.hoy.ecommercecompose.data.source.remote.ApiService
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-
 
 class ProductRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
@@ -38,11 +37,11 @@ class ProductRepositoryImpl @Inject constructor(
         return apiService.getProductDetail(id = id)
     }
 
-    override suspend fun checkProductIsFavorite(userId: String,productId :Int): CheckFavoriteResponse {
+    override suspend fun checkProductIsFavorite(userId: String, productId: Int): CheckFavoriteResponse {
         return apiService.checkIsFavorite(userId = userId, productId = productId)
     }
 
-    override suspend fun getCartProducts(id: String):GetCartProductResponse {
+    override suspend fun getCartProducts(id: String): GetCartProductResponse {
         return apiService.getCartProducts(id = id)
     }
 
@@ -73,10 +72,10 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addToCartProduct(product: ProductEntity) {
-       return productDao.addToCartProduct(product)
+        return productDao.addToCartProduct(product)
     }
 
-    override suspend fun deleteFromCartProduct(productId : Int) {
+    override suspend fun deleteFromCartProduct(productId: Int) {
         return productDao.deleteFromCartProduct(productId)
     }
 
@@ -98,5 +97,4 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>) {
         productDao.addOrderedProducts(orderedProducts)
     }
-
 }

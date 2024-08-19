@@ -23,7 +23,6 @@ object LoginContract {
         data class GoogleSignInResult(val intent: Intent) : UiAction()
         data object GoogleSignInClick : UiAction()
         data object ClearError : UiAction()
-
     }
 
     sealed class UiEffect {

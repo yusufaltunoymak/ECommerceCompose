@@ -57,13 +57,16 @@ class ProductDetailViewModel @Inject constructor(
 
             is ProductDetailContract.UiAction.BackButtonClick -> {
                 navigateBack()
-            }}
+            }
+        }
     }
 
     private fun getProductDetail(productId: Int) {
         viewModelScope.launch {
-            when (val resource =
-                getProductDetailUseCase(firebaseAuthRepository.getUserId(), productId)) {
+            when (
+                val resource =
+                    getProductDetailUseCase(firebaseAuthRepository.getUserId(), productId)
+            ) {
                 is Resource.Loading -> {
                     updateUiState { copy(isLoading = true) }
                 }
@@ -78,7 +81,6 @@ class ProductDetailViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun toggleFavorite() {
         val productDetail = _uiState.value.productDetail ?: return
@@ -176,7 +178,7 @@ class ProductDetailViewModel @Inject constructor(
                     }
                 }
             }
-           // _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
+            // _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
         }
     }
 
@@ -189,5 +191,4 @@ class ProductDetailViewModel @Inject constructor(
     private fun updateUiState(block: ProductDetailContract.UiState.() -> ProductDetailContract.UiState) {
         _uiState.update(block)
     }
-
 }

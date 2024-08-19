@@ -22,4 +22,3 @@ object FavoriteContract {
         data object BackScreen : UiEffect()
     }
 }
-

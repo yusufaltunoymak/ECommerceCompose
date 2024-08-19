@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.components
 
-
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,7 +8,6 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.util.FirebaseError.EMAIL_FORMAT_ERROR
 import com.hoy.ecommercecompose.util.FirebaseError.EMPTY_FIELD_ERROR
 import com.hoy.ecommercecompose.util.FirebaseError.PASSWORD_INVALID_ERROR
-
 
 @Composable
 fun CustomAlertDialog(

@@ -51,7 +51,7 @@ fun CategoryCard(category: Category, modifier: Modifier = Modifier, onCategoryLi
                 contentDescription = "Category Image",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(100.dp,80.dp)
+                    .size(100.dp, 80.dp)
                     .background(Color.White)
                     .clip(RoundedCornerShape(2.dp))
             )

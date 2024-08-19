@@ -12,13 +12,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object  RoomDbModule {
+object RoomDbModule {
 
     @Provides
     @Singleton
-    fun provideProductDataBase(@ApplicationContext context: Context)  : ProductRoomDB {
+    fun provideProductDataBase(@ApplicationContext context: Context): ProductRoomDB {
         return Room.databaseBuilder(
-            context, ProductRoomDB::class.java, "product_database" )
+            context,
+            ProductRoomDB::class.java,
+            "product_database"
+        )
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -26,5 +29,4 @@ object  RoomDbModule {
     @Provides
     @Singleton
     fun provideProductDao(productRoomDB: ProductRoomDB) = productRoomDB.productDao
-
 }
