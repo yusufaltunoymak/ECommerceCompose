@@ -29,7 +29,6 @@ fun ProductDto.mapToProductUi(): ProductUi {
     )
 }
 
-
 fun ProductDto.mapToProductDetail(isFavorite: Boolean): ProductDetail {
     return ProductDetail(
         description = this.description.orEmpty(),
@@ -93,7 +92,6 @@ fun PaymentContract.UiState.toPaymentEntity(userId: String): PaymentEntity {
         fullAddress = this.addressText
     )
 }
-
 
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(

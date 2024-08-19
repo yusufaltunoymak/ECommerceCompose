@@ -122,13 +122,13 @@ fun SetupNavGraph(
 
             HomeScreen(
                 onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=${it}")
+                    navController.navigate("product_detail?productId=$it")
                 },
                 onNavigateToSearch = {
                     navController.navigate("search")
                 },
                 onCategoryListClick = {
-                    navController.navigate("category_screen?category=${it}")
+                    navController.navigate("category_screen?category=$it")
                 },
                 onAction = homeViewModel::onAction,
                 uiState = homeUiState,
@@ -138,10 +138,12 @@ fun SetupNavGraph(
 
         composable(
             route = "product_detail?productId={productId}",
-            arguments = listOf(navArgument(name = "productId") {
-                type = NavType.IntType
-                defaultValue = 423334
-            })
+            arguments = listOf(
+                navArgument(name = "productId") {
+                    type = NavType.IntType
+                    defaultValue = 423334
+                }
+            )
         ) {
             val viewModel: ProductDetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -156,14 +158,16 @@ fun SetupNavGraph(
 
         composable(
             route = "category_screen?category={category}",
-            arguments = listOf(navArgument(name = "category") {
-                type = NavType.StringType
-                defaultValue = "milk"
-            })
+            arguments = listOf(
+                navArgument(name = "category") {
+                    type = NavType.StringType
+                    defaultValue = "milk"
+                }
+            )
         ) {
             CategoryScreen(
                 onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=${it}")
+                    navController.navigate("product_detail?productId=$it")
                 }
             )
         }
@@ -180,7 +184,7 @@ fun SetupNavGraph(
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
                 onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=${it}")
+                    navController.navigate("product_detail?productId=$it")
                 },
                 onBackClick = { navController.popBackStack() }
             )
@@ -197,7 +201,7 @@ fun SetupNavGraph(
             }
             SearchScreen(
                 onDetailClick = {
-                    navController.navigate("product_detail?productId=${it}")
+                    navController.navigate("product_detail?productId=$it")
                 },
                 onAction = searchViewModel::onAction,
                 uiState = searchUiState,

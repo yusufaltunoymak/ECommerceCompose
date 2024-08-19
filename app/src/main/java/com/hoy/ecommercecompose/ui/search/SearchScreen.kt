@@ -42,8 +42,6 @@ fun SearchScreen(
     onAction: (SearchContract.UiAction) -> Unit,
     onDetailClick: (Int) -> Unit
 ) {
-
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -63,7 +61,6 @@ fun SearchScreen(
         Log.d("SearchScreen", "Focus requested")
         focusRequester.requestFocus()
     }
-
 
     Column(
         modifier = Modifier
@@ -110,7 +107,6 @@ fun SearchScreen(
     }
 }
 
-
 @Composable
 fun ProductList(
     productList: List<ProductUi>,
@@ -155,4 +151,3 @@ fun ProductListItem(
         }
     }
 }
-

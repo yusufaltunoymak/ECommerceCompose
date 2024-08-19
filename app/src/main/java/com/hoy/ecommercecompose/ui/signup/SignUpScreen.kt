@@ -52,7 +52,6 @@ fun SignupScreen(
     onBackClick: () -> Unit,
     onNavigateToHome: () -> Unit,
 ) {
-
     var alertDialogState by remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -163,7 +162,6 @@ fun SignupScreen(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -45,8 +45,6 @@ fun HomeScreen(
     onCategoryListClick: (String) -> Unit,
     onAction: (HomeContract.UiAction) -> Unit,
 ) {
-
-
     val scrollState = rememberScrollState()
 
     val imageUrls = listOf(
@@ -116,7 +114,6 @@ fun HomeScreen(
             },
             onNavigateToDetail = onNavigateToDetail
         )
-
     }
 }
 
@@ -166,10 +163,9 @@ fun SearchNavigationView(
     }
 }
 
-
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun Preview() {
+// @Preview(showBackground = true, showSystemUi = true)
+// @Composable
+// fun Preview() {
 //    HomeScreen(
 //        onNavigateToDetail = {},
 //        onNavigateToSearch = {},
@@ -178,6 +174,4 @@ fun SearchNavigationView(
 //        uiEffect = Flow< HomeContract.UiEffect>,
 //        uiState = HomeContract.UiState(),
 //    )
-//}
-
-
+// }

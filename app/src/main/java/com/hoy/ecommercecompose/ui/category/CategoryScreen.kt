@@ -62,7 +62,6 @@ fun CategoryScreen(
     val uiState by viewModel.uiState.collectAsState()
     var expanded by remember { mutableStateOf(false) }
 
-
     LaunchedEffect(uiState.searchQuery) {
         if (uiState.searchQuery.isEmpty()) {
             val category = viewModel.getCategory()
@@ -71,7 +70,6 @@ fun CategoryScreen(
             viewModel.searchProducts(uiState.searchQuery)
         }
     }
-
 
     Scaffold(
         topBar = {

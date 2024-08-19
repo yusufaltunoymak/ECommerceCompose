@@ -17,7 +17,8 @@ fun ProfileScreen(
             onClick = {
                 FirebaseAuth.getInstance().signOut()
                 navController.navigate("login")
-            }) {
+            }
+        ) {
             Text(text = "log out")
         }
     }

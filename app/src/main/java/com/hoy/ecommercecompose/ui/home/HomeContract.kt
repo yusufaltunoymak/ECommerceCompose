@@ -5,7 +5,6 @@ import com.hoy.ecommercecompose.data.source.remote.model.User
 import com.hoy.ecommercecompose.domain.model.FavoriteResponse
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
-
 object HomeContract {
     data class UiState(
         val isLoading: Boolean? = null,

@@ -17,7 +17,6 @@ object CartContract {
         data class GetCartProducts(val userId: String) : UiAction()
         data class IncreaseQuantity(val id: Int) : UiAction()
         data class DecreaseQuantity(val id: Int) : UiAction()
-
     }
 
     sealed class UiEffect {

@@ -63,7 +63,6 @@ class CategoryViewModel @Inject constructor(
         _uiState.update { it.copy(searchQuery = query) }
     }
 
-
     fun searchProducts(query: String) {
         val filteredList = if (query.isEmpty()) {
             categoryList
@@ -76,5 +75,4 @@ class CategoryViewModel @Inject constructor(
             )
         }
     }
-
 }

@@ -25,7 +25,4 @@ abstract class RepositoryModule {
     abstract fun bindFirebaseRepository(
         firebaseAuthRepositoryImpl: FirebaseAuthRepositoryImpl
     ): FirebaseAuthRepository
-
-
 }
-

@@ -75,6 +75,4 @@ interface ApiService {
         @Header("store") store: String = USER,
         @Body addToCartBody: BaseBody
     ): BaseResponse
-
-
 }

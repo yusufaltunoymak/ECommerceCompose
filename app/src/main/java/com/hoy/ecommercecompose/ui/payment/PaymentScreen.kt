@@ -50,8 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.hoy.ecommercecompose.data.source.local.payment.City
-import com.hoy.ecommercecompose.data.source.local.payment.getCitiesAndDistricts
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import kotlinx.coroutines.flow.Flow
@@ -69,7 +67,6 @@ fun PaymentScreen(
     var confirmationMessage by remember { mutableStateOf("") }
     var alertDialogState by remember { mutableStateOf(false) }
     var alertDialogMessage by remember { mutableStateOf("") }
-
 
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
@@ -205,10 +202,10 @@ fun PaymentScreen(
 
         CustomButton(
             text = " Order Now ",
-            onClick = { onAction(PaymentContract.UiAction.OrderClick) })
+            onClick = { onAction(PaymentContract.UiAction.OrderClick) }
+        )
     }
 }
-
 
 @Composable
 fun BankCard(
@@ -444,7 +441,6 @@ fun ExpiryDateAndCvvInput(
     }
 }
 
-
 @Composable
 fun AddressInput(
     uiState: PaymentContract.UiState,
@@ -457,7 +453,6 @@ fun AddressInput(
         "İzmir" -> listOf("Konak", "Karşıyaka", "Bornova")
         else -> emptyList()
     }
-
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -547,7 +542,6 @@ fun AddressInput(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewPaymentScreen() {
@@ -565,4 +559,3 @@ fun PreviewPaymentScreen() {
 
     PaymentScreen(uiState = uiState, onAction = {}, onBackPress = {}, uiEffect = flow {})
 }
-

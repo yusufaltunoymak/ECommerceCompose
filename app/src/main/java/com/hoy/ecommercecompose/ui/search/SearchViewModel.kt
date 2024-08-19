@@ -76,6 +76,3 @@ class SearchViewModel @Inject constructor(
         _uiState.update(block)
     }
 }
-
-
-

@@ -65,7 +65,6 @@ fun FavoriteScreen(
     onNavigateToDetail: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -109,7 +108,6 @@ fun FavoriteScreen(
                 }
 
                 uiState.favoriteProducts.isEmpty() -> {
-
                     ECEmptyScreen(
                         title = R.string.empty_fav_title,
                         description = R.string.empty_fav_desc,
@@ -120,14 +118,15 @@ fun FavoriteScreen(
                 else -> {
                     LazyColumn {
                         items(uiState.favoriteProducts) { product ->
-                            FavoriteProductCard(product = product,
+                            FavoriteProductCard(
+                                product = product,
                                 onFavoriteClick = {
                                     onAction(FavoriteContract.UiAction.DeleteFromFavorites(product.id))
                                 },
                                 onNavigateToDetail = {
                                     onNavigateToDetail(product.id)
-                                })
-
+                                }
+                            )
                         }
                     }
                 }

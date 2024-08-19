@@ -22,7 +22,6 @@ interface ProductRepository {
     suspend fun checkProductIsFavorite(userId: String, productId: Int): CheckFavoriteResponse
     suspend fun getCartProducts(id: String): GetCartProductResponse
 
-
     suspend fun getByCategory(category: String): ProductListDto
 
     suspend fun addFavoriteProduct(baseBody: BaseBody): BaseResponse

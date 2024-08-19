@@ -29,5 +29,4 @@ class ProfileViewModel : ViewModel() {
             _uiEffect.send(ProfileContract.UiEffect.NavigateBack)
         }
     }
-
 }

@@ -2,9 +2,7 @@ package com.hoy.ecommercecompose.data.source.local.payment
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
 
 @Entity(tableName = "payment_table")
 data class PaymentEntity(
@@ -27,5 +25,3 @@ data class PaymentEntity(
     @ColumnInfo("fullAddress")
     val fullAddress: String
 )
-
-

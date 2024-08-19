@@ -5,4 +5,5 @@ plugins {
     id("com.google.gms.google-services") version "4.4.2" apply false
     alias(libs.plugins.navigationSafeArgs) apply false
     alias(libs.plugins.com.google.dagger.hilt.android) version "2.51" apply false
+    alias(libs.plugins.detekt) apply false
 }

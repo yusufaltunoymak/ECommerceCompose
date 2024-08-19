@@ -11,7 +11,7 @@ import javax.inject.Inject
 class GetProductsByCategoryUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) {
-    suspend operator fun invoke(category: String) : Flow<Resource<List<ProductUi>>> {
+    suspend operator fun invoke(category: String): Flow<Resource<List<ProductUi>>> {
         return flow {
             emit(Resource.Loading)
             try {

@@ -9,7 +9,6 @@ kotlin = "1.9.0"
 coreKtx = "1.13.1"
 converterGson = "2.9.0"
 kotlinxCoroutinesAndroid = "1.8.0"
-kotlinxCoroutinesAndroidVersion = "1.1.1"
 kotlinxCoroutinesCore = "1.8.0"
 lifecycleRuntimeCompose = "2.8.4"
 lifecycleRuntimeKtx = "2.8.4"
@@ -27,8 +26,8 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 uiTooling = "1.6.8"
 lifecycleRuntimeComposeAndroid = "2.8.4"
-uiToolingPreview = "1.6.8"
 engageCore = "1.5.3"
+detekt = "1.23.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,10 +70,13 @@ androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", nam
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
+detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 navigationSafeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
-com-google-dagger-hilt-android={ id = "com.google.dagger.hilt.android", version.ref = "hiltAndroidCompiler" }
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroidCompiler" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 

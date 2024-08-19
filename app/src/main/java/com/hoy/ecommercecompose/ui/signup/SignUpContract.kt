@@ -31,17 +31,6 @@ object SignUpContract {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // state ekranda gösterilcek datalar
 // effect ekrandaki datalarla alakasız işlemler, popup, snackbar vs. veya yönlendirme işlemleri
 // action butona basıldı vs viewmodel da bildirim gönderm

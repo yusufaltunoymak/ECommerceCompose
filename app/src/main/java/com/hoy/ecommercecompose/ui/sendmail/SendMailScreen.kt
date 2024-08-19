@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
@@ -36,7 +35,7 @@ fun SendMailScreen(
     onBackClick: () -> Unit,
     uiState: SendMailContract.SendMailUiState,
     onAction: (SendMailContract.SendMailUiAction) -> Unit,
-    onNavigateToLogin : () -> Unit,
+    onNavigateToLogin: () -> Unit,
 ) {
     val isEmailFieldEmpty = uiState.email.isEmpty()
 

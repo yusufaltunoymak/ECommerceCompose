@@ -10,7 +10,7 @@ fun lightColors(
     primary: Color = Color(0xFFFF5722),
     primaryContainer: Color = Color(0xFF2D3142),
     secondary: Color = Color(0xFF2196F3),
-    secondaryContainer : Color = Color(0xFF009688)
+    secondaryContainer: Color = Color(0xFF009688)
 ): SampleProjectColor = SampleProjectColor(
     primary = primary,
     primaryContainer = primaryContainer,
@@ -22,14 +22,13 @@ fun darkColors(
     primary: Color = Color(0xFFFF5722),
     primaryContainer: Color = Color(0xFF2D3142),
     secondary: Color = Color(0xFF2196F3),
-    secondaryContainer : Color = Color(0xFF009688)
+    secondaryContainer: Color = Color(0xFF009688)
 ): SampleProjectColor = SampleProjectColor(
     primary = primary,
     primaryContainer = primaryContainer,
     secondary = secondary,
     secondaryContainer = secondaryContainer
 )
-
 
 class SampleProjectColor(
     primary: Color,
@@ -53,6 +52,5 @@ class SampleProjectColor(
         val primary_FF000000_FFFFFFFF = Unit
         val primaryContainer_FFFFFFFF_FF000000 = Unit
     }
-
 }
 internal val LocalColors = staticCompositionLocalOf { lightColors() }

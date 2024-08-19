@@ -31,14 +31,16 @@ class FavoriteViewModel @Inject constructor(
     private val _uiEffect by lazy { Channel<FavoriteContract.UiEffect>() }
     val uiEffect: Flow<FavoriteContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
-
     fun onAction(action: FavoriteContract.UiAction) {
         when (action) {
             is FavoriteContract.UiAction.DeleteFromFavorites -> deleteFavorite(action.productId)
-            is FavoriteContract.UiAction.LoadFavorites -> updateUiState { copy(favoriteProducts = action.favoriteProducts) }
+            is FavoriteContract.UiAction.LoadFavorites -> updateUiState {
+                copy(
+                    favoriteProducts = action.favoriteProducts
+                )
+            }
         }
     }
-
 
     fun loadFavorites() {
         viewModelScope.launch {
@@ -47,12 +49,13 @@ class FavoriteViewModel @Inject constructor(
             ).collect { response ->
                 when (response) {
                     is Resource.Loading -> {
-                        updateUiState { copy( isLoading = true) }
+                        updateUiState { copy(isLoading = true) }
                     }
 
                     is Resource.Success -> {
                         updateUiState {
-                            copy(favoriteProducts = response.data, isLoading = false) }
+                            copy(favoriteProducts = response.data, isLoading = false)
+                        }
                     }
 
                     is Resource.Error -> {
@@ -62,7 +65,6 @@ class FavoriteViewModel @Inject constructor(
             }
         }
     }
-
 
     fun deleteFavorite(productId: Int) {
         viewModelScope.launch {
@@ -95,6 +97,3 @@ class FavoriteViewModel @Inject constructor(
         _uiEffect.send(uiEffect)
     }
 }
-
-
-
