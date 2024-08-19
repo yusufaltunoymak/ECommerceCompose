@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.ui.payment
 
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.City
 
 object PaymentContract {
     data class UiState(
@@ -24,7 +25,8 @@ object PaymentContract {
         val isDistrictDropdownExpanded: Boolean = false,
         val productEntity: ProductEntity? = null,
         val validationErrors: List<String> = emptyList(),
-        val cartProducts: List<ProductEntity> = emptyList()
+        val cartProducts: List<ProductEntity> = emptyList(),
+        val cities: List<City> = emptyList()
     )
 
     sealed class UiAction {
@@ -41,6 +43,7 @@ object PaymentContract {
         data object ToggleDistrictDropdown : UiAction()
         data object ClearError : UiAction()
         data object OrderClick : UiAction()
+
     }
 
     sealed class UiEffect {

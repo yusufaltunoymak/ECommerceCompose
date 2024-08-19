@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.data.datasources.CityRepository
 import com.hoy.ecommercecompose.data.mapper.toOrderedProduct
 import com.hoy.ecommercecompose.data.mapper.toPaymentEntity
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
-import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
-import com.hoy.ecommercecompose.domain.usecase.payment.AddOrderedProductsUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.AddPaymentUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.ValidateOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,8 +26,7 @@ class PaymentViewModel @Inject constructor(
     private val addPaymentUseCase: AddPaymentUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val validateOrderUseCase: ValidateOrderUseCase,
-    private val getCartProductsLocalUseCase: GetCartProductsLocalUseCase,
-    private val addOrderedProductsUseCase: AddOrderedProductsUseCase
+    private val cityRepository: CityRepository
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<PaymentContract.UiState> =
         MutableStateFlow(PaymentContract.UiState())
@@ -37,6 +35,15 @@ class PaymentViewModel @Inject constructor(
     private val _uiEffect by lazy { Channel<PaymentContract.UiEffect>() }
     val uiEffect: Flow<PaymentContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
+    init {
+        loadCities()
+    }
+
+    private fun loadCities() {
+        val cities = cityRepository.getCities()
+        updateUiState { copy(cities = cities) }
+    }
+    
     fun onAction(action: PaymentContract.UiAction) {
         when (action) {
             is PaymentContract.UiAction.ChangeCardHolderName -> {
