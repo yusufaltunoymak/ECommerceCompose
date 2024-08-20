@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.ui.components
+package com.hoy.ecommercecompose.ui.components.bottomnavigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,10 +10,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,20 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.ui.theme.LocalColors
-
-sealed class BottomNavItem(val name: String, val icon: ImageVector, val route: String) {
-    data object Home : BottomNavItem("home", Icons.Default.Home, "Home")
-    data object Favorite : BottomNavItem("favorite", Icons.Default.Favorite, "favorite")
-    data object Cart : BottomNavItem("cart", Icons.Default.ShoppingCart, "cart")
-    data object Profile : BottomNavItem("profile", Icons.Default.Person, "profile")
-}
 
 @Composable
 fun BottomNavigationBar(

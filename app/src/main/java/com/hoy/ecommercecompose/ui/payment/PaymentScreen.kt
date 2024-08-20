@@ -202,7 +202,7 @@ fun BankCard(
             .fillMaxWidth()
             .padding(4.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF1E88E5))
+            .background(LocalColors.current.primary)
             .height(220.dp)
     ) {
         Column(
@@ -286,7 +286,6 @@ fun CardHolderInput(
         modifier = Modifier.fillMaxWidth()
     )
 }
-
 
 @Composable
 fun CardNumberInput(

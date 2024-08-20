@@ -5,4 +5,3 @@ data class City(
     val plaka: Int,
     val ilceleri: List<String>
 )
-

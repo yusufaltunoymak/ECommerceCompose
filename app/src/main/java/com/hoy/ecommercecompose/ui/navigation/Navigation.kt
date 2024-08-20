@@ -141,7 +141,6 @@ fun SetupNavGraph(
             arguments = listOf(
                 navArgument(name = "productId") {
                     type = NavType.IntType
-                    defaultValue = 423334
                 }
             )
         ) {

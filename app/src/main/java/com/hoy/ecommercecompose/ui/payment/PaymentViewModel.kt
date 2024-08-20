@@ -43,7 +43,7 @@ class PaymentViewModel @Inject constructor(
         val cities = cityRepository.getCities()
         updateUiState { copy(cities = cities) }
     }
-    
+
     fun onAction(action: PaymentContract.UiAction) {
         when (action) {
             is PaymentContract.UiAction.ChangeCardHolderName -> {

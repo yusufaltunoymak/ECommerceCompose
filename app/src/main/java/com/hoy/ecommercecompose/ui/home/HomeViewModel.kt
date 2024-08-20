@@ -198,8 +198,4 @@ class HomeViewModel @Inject constructor(
     private fun updateUiState(block: HomeContract.UiState.() -> HomeContract.UiState) {
         _uiState.update(block)
     }
-
-    private suspend fun emitUiEffect(uiEffect: HomeContract.UiEffect) {
-        _uiEffect.send(uiEffect)
-    }
 }

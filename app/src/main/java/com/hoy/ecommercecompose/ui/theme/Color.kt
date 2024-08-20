@@ -10,31 +10,36 @@ fun lightColors(
     primary: Color = Color(0xFFFF5722),
     primaryContainer: Color = Color(0xFF2D3142),
     secondary: Color = Color(0xFF2196F3),
-    secondaryContainer: Color = Color(0xFF009688)
+    secondaryContainer: Color = Color(0xFF009688),
+    customButtonColor: Color = Color(0xFFFFE5E5)
 ): SampleProjectColor = SampleProjectColor(
     primary = primary,
     primaryContainer = primaryContainer,
     secondary = secondary,
-    secondaryContainer = secondaryContainer
+    secondaryContainer = secondaryContainer,
+    customButtonColor = customButtonColor
 )
 
 fun darkColors(
     primary: Color = Color(0xFFFF5722),
     primaryContainer: Color = Color(0xFF2D3142),
     secondary: Color = Color(0xFF2196F3),
-    secondaryContainer: Color = Color(0xFF009688)
+    secondaryContainer: Color = Color(0xFF009688),
+    customButtonColor: Color = Color(0xFFFFE5E5)
 ): SampleProjectColor = SampleProjectColor(
     primary = primary,
     primaryContainer = primaryContainer,
     secondary = secondary,
-    secondaryContainer = secondaryContainer
+    secondaryContainer = secondaryContainer,
+    customButtonColor = customButtonColor
 )
 
 class SampleProjectColor(
     primary: Color,
     primaryContainer: Color,
     secondary: Color,
-    secondaryContainer: Color
+    secondaryContainer: Color,
+    customButtonColor: Color
 ) {
     private var _primary: Color by mutableStateOf(primary)
     val primary: Color = _primary
@@ -48,9 +53,8 @@ class SampleProjectColor(
     private var _secondaryContainer: Color by mutableStateOf(secondaryContainer)
     val secondaryContainer: Color = _secondaryContainer
 
-    private class KelpColorPreview {
-        val primary_FF000000_FFFFFFFF = Unit
-        val primaryContainer_FFFFFFFF_FF000000 = Unit
-    }
+    private var _customButtonColor: Color by mutableStateOf(customButtonColor)
+    val customButtonColor: Color = _customButtonColor
 }
+
 internal val LocalColors = staticCompositionLocalOf { lightColors() }
