@@ -43,7 +43,6 @@ object PaymentContract {
         data object ToggleDistrictDropdown : UiAction()
         data object ClearError : UiAction()
         data object OrderClick : UiAction()
-
     }
 
     sealed class UiEffect {

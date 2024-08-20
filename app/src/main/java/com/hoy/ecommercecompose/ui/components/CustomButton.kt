@@ -40,5 +40,5 @@ fun CustomButton(
 @Preview(showBackground = true)
 @Composable
 fun CustomButtonPreview() {
-    CustomButton(text = "asdas", onClick = { /*TODO*/ })
+    CustomButton(text = "Button", onClick = { /*TODO*/ })
 }

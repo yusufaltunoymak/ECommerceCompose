@@ -9,8 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.hoy.ecommercecompose.ui.components.BottomNavigationBar
-import com.hoy.ecommercecompose.ui.components.bottomNavItems
+import com.hoy.ecommercecompose.ui.components.bottomnavigation.BottomNavigationBar
+import com.hoy.ecommercecompose.ui.components.bottomnavigation.bottomNavItems
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.navigation.SetupNavGraph
 import com.hoy.ecommercecompose.ui.theme.ECommerceComposeTheme

@@ -52,7 +52,6 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
-import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import kotlinx.coroutines.flow.Flow
 
@@ -61,12 +60,11 @@ fun LoginScreen(
     uiState: LoginContract.UiState,
     uiEffect: Flow<LoginContract.UiEffect>,
     onAction: (LoginContract.UiAction) -> Unit,
-    googleAuthUiClient: GoogleAuthUiClient,
     onForgotPasswordClick: () -> Unit,
     onBackClick: () -> Unit,
     onNavigateToHome: () -> Unit,
 
-) {
+    ) {
     var alertDialogState by remember { mutableStateOf(false) }
 
     val signInLauncher = rememberLauncherForActivityResult(
@@ -193,7 +191,7 @@ fun LoginScreen(
                     fontWeight = FontWeight.Light,
                     fontSize = 12.sp,
 
-                )
+                    )
             }
 
             Spacer(modifier = Modifier.height(24.dp))

@@ -29,7 +29,7 @@ fun CustomTextField(
     isError: Boolean = false,
     errorMessage: String? = null
 ) {
-    val containerColor = if (isError) Color(0xFFFFE5E5) else Color.White
+    val containerColor = if (isError) LocalColors.current.customButtonColor else Color.White
     val indicatorColor = if (isError) Color.Red else LocalColors.current.primary.copy(alpha = 0.3f)
 
     Column(modifier = Modifier.fillMaxWidth()) {

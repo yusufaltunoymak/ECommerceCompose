@@ -11,12 +11,12 @@ object SearchContract {
         val searchQuery: String = ""
     )
 
-    sealed class UiAction() {
+    sealed class UiAction {
         data class ChangeQuery(val query: String) : UiAction()
         data class LoadProduct(val productList: List<ProductUi>) : UiAction()
     }
 
-    sealed class UiEffect() {
+    sealed class UiEffect {
         data class GoToDetail(val productId: Int) : UiEffect()
     }
 }

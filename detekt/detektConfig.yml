@@ -7,10 +7,34 @@ style:
     active: false
   MagicNumber:
     active: true
-    excludes: [ '**/theme/**' ]
+    excludes:
+      - '/theme/'
+      - '**/ui/theme/Color.kt'
 
 naming:
   FunctionNaming:
     active: true
     ignoreAnnotated: [ 'Composable' ]
+
+complexity:
+  LongParameterList:
+    active: true
+    threshold: 6
+    ignoreAnnotated: [ 'Composable' ]
+  LongMethod:
+    active: true
+    threshold: 60
+    ignoreAnnotated: [ 'Composable' ]
+  TooManyFunctions:
+    active: true
+    excludes:
+      - '**/repository/ProductRepositoryImpl.kt'
+      - '**/repository/ProductRepository.kt'
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+
+
+
 

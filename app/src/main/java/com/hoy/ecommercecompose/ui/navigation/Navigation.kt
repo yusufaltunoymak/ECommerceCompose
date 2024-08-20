@@ -81,7 +81,6 @@ fun SetupNavGraph(
                 uiState = loginViewState,
                 uiEffect = uiEffect,
                 onAction = loginViewModel::onAction,
-                googleAuthUiClient = googleAuthUiClient,
                 onForgotPasswordClick = { navController.navigate("send_mail") },
                 onNavigateToHome = {
                     navController.navigate("home") {
@@ -141,7 +140,6 @@ fun SetupNavGraph(
             arguments = listOf(
                 navArgument(name = "productId") {
                     type = NavType.IntType
-                    defaultValue = 423334
                 }
             )
         ) {
