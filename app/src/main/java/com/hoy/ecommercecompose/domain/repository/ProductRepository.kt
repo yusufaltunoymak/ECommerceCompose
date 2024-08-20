@@ -4,6 +4,7 @@ import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
 import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
@@ -42,4 +43,5 @@ interface ProductRepository {
     )
 
     suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>)
+    fun getOrdersWithProducts(userId: String): Flow<List<PaymentWithProducts>>
 }

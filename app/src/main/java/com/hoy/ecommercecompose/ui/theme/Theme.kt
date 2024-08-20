@@ -6,7 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 
 object ECommerceComposeTheme {
-    val colors: SampleProjectColor
+    val colors: ECProjectColor
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
