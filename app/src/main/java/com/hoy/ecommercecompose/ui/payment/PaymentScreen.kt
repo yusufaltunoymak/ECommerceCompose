@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextRange
@@ -46,12 +45,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomButton
+import com.hoy.ecommercecompose.ui.theme.ECommerceComposeTheme
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -123,7 +123,7 @@ fun PaymentScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(LocalDimensions.current.sixteen)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -131,7 +131,7 @@ fun PaymentScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 4.dp),
+                .padding(bottom = LocalDimensions.current.four),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -141,10 +141,10 @@ fun PaymentScreen(
                 tint = LocalColors.current.primary,
                 modifier = Modifier
                     .clickable { onBackPress() }
-                    .size(24.dp)
+                    .size(LocalDimensions.current.twentyFour)
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
 
             Text(
                 text = "Payment",
@@ -159,27 +159,27 @@ fun PaymentScreen(
             uiState = uiState
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
         CardHolderInput(
             uiState = uiState,
             onAction = onAction
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
         CardNumberInput(
             uiState = uiState,
             onAction = onAction
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
         ExpiryDateAndCvvInput(
             uiState = uiState,
             onAction = onAction
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
         AddressInput(
             uiState = uiState,
@@ -200,27 +200,27 @@ fun BankCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .padding(LocalDimensions.current.four)
+            .clip(RoundedCornerShape(LocalDimensions.current.sixteen))
             .background(LocalColors.current.primary)
-            .height(220.dp)
+            .height(LocalDimensions.current.twoHundredTwenty)
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(LocalDimensions.current.sixteen)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "CARD HOLDER",
-                color = Color.White.copy(alpha = 0.7f),
+                color = ECommerceComposeTheme.colors.semiTransparentWhite,
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 text = uiState.cardHolderName.uppercase(),
-                color = Color.White,
+                color = ECommerceComposeTheme.colors.white,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = LocalDimensions.current.sixteen)
             )
 
             Row(
@@ -229,9 +229,9 @@ fun BankCard(
             ) {
                 Text(
                     text = uiState.cardNumber.chunked(4).joinToString(" "),
-                    fontSize = 24.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    fontSize = LocalFontSizes.current.extraLarge,
+                    color = ECommerceComposeTheme.colors.white,
+                    modifier = Modifier.padding(horizontal = LocalDimensions.current.four)
                 )
             }
 
@@ -242,31 +242,31 @@ fun BankCard(
                 Column {
                     Text(
                         text = "EXPIRES",
-                        color = Color.White.copy(alpha = 0.7f),
+                        color = ECommerceComposeTheme.colors.semiTransparentWhite,
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = "${uiState.selectedMonth}/${uiState.selectedYear}",
-                        color = Color.White,
+                        color = ECommerceComposeTheme.colors.white,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
                 Column {
                     Text(
                         text = "CVV",
-                        color = Color.White.copy(alpha = 0.7f),
+                        color = LocalColors.current.semiTransparentWhite,
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = uiState.cvv,
-                        color = Color.White,
+                        color = ECommerceComposeTheme.colors.white,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
             Text(
                 text = "VISA",
-                color = Color.White,
+                color = ECommerceComposeTheme.colors.white,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.End)
             )
@@ -312,7 +312,7 @@ fun CardNumberInput(
                     text = formattedCardNumber,
                     selection = TextRange(newCursorPosition.coerceAtMost(formattedCardNumber.length))
                 )
-                onAction(PaymentContract.UiAction.ChangeCardNumber(rawInput)) // Action ile güncelliyoruz
+                onAction(PaymentContract.UiAction.ChangeCardNumber(rawInput))
             }
         },
         label = { Text(text = "Card Number") },
@@ -371,7 +371,7 @@ fun ExpiryDateAndCvvInput(
             }
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
 
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
@@ -410,9 +410,8 @@ fun ExpiryDateAndCvvInput(
             }
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
 
-        // CVV Input
         OutlinedTextField(
             value = uiState.cvv,
             onValueChange = {
@@ -440,7 +439,7 @@ fun AddressInput(
         Text(
             text = "Address",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = LocalDimensions.current.sixteen)
         )
 
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -476,9 +475,8 @@ fun AddressInput(
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
-        // District Selector
         Box(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = uiState.selectedDistrict,
@@ -512,7 +510,7 @@ fun AddressInput(
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
         OutlinedTextField(
             value = uiState.addressText,
@@ -520,7 +518,7 @@ fun AddressInput(
             label = { Text(text = "Full Address") },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp),
+                .height(LocalDimensions.current.oneHundredFifty),
             enabled = uiState.selectedCity.isNotEmpty() && uiState.selectedDistrict.isNotEmpty()
         )
     }
@@ -529,17 +527,18 @@ fun AddressInput(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPaymentScreen() {
-    val uiState = PaymentContract.UiState(
-        cardHolderName = "JOHN DOE",
-        cardNumber = "1234567812345678",
-        expiryDate = "12/2025",
-        cvv = "123",
-        selectedMonth = "12",
-        selectedYear = "2025",
-        selectedCity = "Ankara",
-        selectedDistrict = "Çankaya",
-        addressText = "1234 Elm Street"
-    )
-
-    PaymentScreen(uiState = uiState, onAction = {}, onBackPress = {}, uiEffect = flow {})
+    ECommerceComposeTheme {
+        val uiState = PaymentContract.UiState(
+            cardHolderName = "JOHN DOE",
+            cardNumber = "1234567812345678",
+            expiryDate = "12/2025",
+            cvv = "123",
+            selectedMonth = "12",
+            selectedYear = "2025",
+            selectedCity = "Ankara",
+            selectedDistrict = "Çankaya",
+            addressText = "1234 Elm Street"
+        )
+        PaymentScreen(uiState = uiState, onAction = {}, onBackPress = {}, uiEffect = flow {})
+    }
 }

@@ -5,6 +5,11 @@ import javax.inject.Inject
 
 class ValidateOrderUseCase @Inject constructor() {
 
+    companion object {
+        const val CARD_NUMBER_LENGTH = 16
+        const val CVV_LENGTH = 3
+    }
+
     fun validate(order: PaymentContract.UiState): List<String> {
         val errors = mutableListOf<String>()
 
@@ -12,11 +17,11 @@ class ValidateOrderUseCase @Inject constructor() {
             errors.add("Card holder name is required.")
         }
 
-        if (order.cardNumber.replace(" ", "").length != 16) {
+        if (order.cardNumber.replace(" ", "").length != CARD_NUMBER_LENGTH) {
             errors.add("Card number must be 16 digits.")
         }
 
-        if (order.cvv.length != 3) {
+        if (order.cvv.length != CVV_LENGTH) {
             errors.add("CVV must be 3 digits.")
         }
 
