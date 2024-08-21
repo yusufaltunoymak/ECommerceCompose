@@ -12,9 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
+import com.hoy.ecommercecompose.ui.account.AccountScreen
+import com.hoy.ecommercecompose.ui.account.AccountViewModel
 import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
 import com.hoy.ecommercecompose.ui.category.CategoryScreen
+import com.hoy.ecommercecompose.ui.category.CategoryViewModel
 import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
 import com.hoy.ecommercecompose.ui.detail.ProductDetailViewModel
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
@@ -27,7 +30,6 @@ import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.payment.PaymentScreen
 import com.hoy.ecommercecompose.ui.payment.PaymentViewModel
-import com.hoy.ecommercecompose.ui.profile.ProfileScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
 import com.hoy.ecommercecompose.ui.search.SearchScreen
@@ -163,7 +165,15 @@ fun SetupNavGraph(
                 }
             )
         ) {
+            val viewModel: CategoryViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
             CategoryScreen(
+                uiEffect = uiEffect,
+                uiState = uiState,
+                viewModel = viewModel,
+                onAction = viewModel::onAction,
+                onBackClick = {navController.popBackStack()},
                 onNavigateToDetail = {
                     navController.navigate("product_detail?productId=$it")
                 }
@@ -188,7 +198,15 @@ fun SetupNavGraph(
             )
         }
         composable("profile") {
-            ProfileScreen(navController)
+            val viewModel: AccountViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+            AccountScreen(
+                uiEffect = uiEffect,
+                uiState =uiState,
+                onAction = viewModel::onAction,
+                onBackClick = { navController.popBackStack() }
+            )
         }
         composable("search") {
             val searchViewModel: SearchViewModel = hiltViewModel()
@@ -203,7 +221,8 @@ fun SetupNavGraph(
                 },
                 onAction = searchViewModel::onAction,
                 uiState = searchUiState,
-                uiEffect = uiEffect
+                uiEffect = uiEffect,
+                onBackClick = { navController.popBackStack() }
 
             )
         }
