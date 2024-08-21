@@ -24,8 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -34,13 +35,13 @@ fun CustomHorizontalPager(
     imageUrls: List<Any>,
     pageCount: Int = imageUrls.size,
     contentDescription: (Int) -> String = { "Image $it" },
-    activeIndicatorColor: Color = Color.DarkGray,
-    inactiveIndicatorColor: Color = Color.White,
+    activeIndicatorColor: Color = LocalColors.current.darkGray,
+    inactiveIndicatorColor: Color = LocalColors.current.white,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp),
+            .height(LocalDimensions.current.twoHundred),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -49,7 +50,7 @@ fun CustomHorizontalPager(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(LocalDimensions.current.twoHundred)
         ) {
             androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
@@ -58,7 +59,7 @@ fun CustomHorizontalPager(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(8.dp)
+                        .padding(LocalDimensions.current.eight)
                 ) {
                     val painter = rememberAsyncImagePainter(model = imageUrls[page])
                     Image(
@@ -67,7 +68,7 @@ fun CustomHorizontalPager(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp))
+                            .clip(RoundedCornerShape(LocalDimensions.current.sixteen))
                     )
                 }
             }
@@ -83,7 +84,7 @@ fun CustomHorizontalPager(
                 inactiveColor = inactiveIndicatorColor,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp)
+                    .padding(bottom = LocalDimensions.current.twelve)
             )
         }
     }
@@ -94,20 +95,20 @@ fun DotIndicator(
     pageCount: Int,
     currentPage: Int,
     modifier: Modifier = Modifier,
-    activeColor: Color = Color.DarkGray,
-    inactiveColor: Color = Color.White
+    activeColor: Color = LocalColors.current.darkGray,
+    inactiveColor: Color = LocalColors.current.white
 ) {
     Row(
-        modifier = modifier.padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+        modifier = modifier.padding(LocalDimensions.current.eight),
+        horizontalArrangement = Arrangement.spacedBy(LocalDimensions.current.eight, Alignment.CenterHorizontally)
     ) {
         repeat(pageCount) { index ->
             val color = if (index == currentPage) activeColor else inactiveColor
             Box(
                 modifier = Modifier
-                    .size(8.dp)
+                    .size(LocalDimensions.current.eight)
                     .background(color, shape = CircleShape)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = LocalDimensions.current.sixteen)
             )
         }
     }

@@ -15,28 +15,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.ui.home.HomeContract
+import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
 @Composable
-fun CategoryCard(category: Category, modifier: Modifier = Modifier, onCategoryListClick: (String) -> Unit) {
+fun CategoryCard(
+    category: Category,
+    modifier: Modifier = Modifier,
+    onCategoryListClick: (String) -> Unit
+) {
     Card(
         modifier = modifier
             .clickable { onCategoryListClick(category.name) }
-            .size(100.dp, 120.dp),
+            .size(LocalDimensions.current.oneHundred, LocalDimensions.current.oneHundredTwenty),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = LocalColors.current.white
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = LocalDimensions.current.two)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,19 +53,19 @@ fun CategoryCard(category: Category, modifier: Modifier = Modifier, onCategoryLi
                     .build(),
                 error = painterResource(id = R.drawable.ic_broken_image),
                 placeholder = painterResource(id = R.drawable.loading_img),
-                contentDescription = "Category Image",
+                contentDescription = stringResource(id = R.string.category_image),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(100.dp, 80.dp)
-                    .background(Color.White)
-                    .clip(RoundedCornerShape(2.dp))
+                    .size(LocalDimensions.current.oneHundred, LocalDimensions.current.sixty)
+                    .background(LocalColors.current.white)
+                    .clip(RoundedCornerShape(LocalDimensions.current.four))
             )
             Text(
                 text = category.name,
-                color = Color.Black,
+                color = LocalColors.current.black,
                 fontFamily = displayFontFamily,
                 modifier = Modifier
-                    .padding(top = 4.dp)
+                    .padding(top = LocalDimensions.current.four)
                     .align(Alignment.CenterHorizontally)
             )
         }
@@ -78,7 +83,7 @@ fun CategoryList(
             CategoryCard(
                 onCategoryListClick = onCategoryListClick,
                 category = category,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(LocalDimensions.current.eight)
             )
         }
     }

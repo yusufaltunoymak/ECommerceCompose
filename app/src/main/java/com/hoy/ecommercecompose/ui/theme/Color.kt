@@ -14,7 +14,11 @@ fun lightColors(
     customButtonColor: Color = Color(0xFFFFE5E5),
     white: Color = Color(0xFFFFFFFF),
     black: Color = Color(0xFF000000),
-    semiTransparentWhite: Color = Color(0xB2FFFFFF)
+    semiTransparentWhite: Color = Color(0xB2FFFFFF),
+    gray: Color = Color(0xFF888888),
+    lightGray: Color = Color(0xFFCCCCCC),
+    red: Color = Color(0xFFFF0000),
+    darkGray: Color = Color(0xFF444444)
 ): ECProjectColor = ECProjectColor(
     primary = primary,
     primaryContainer = primaryContainer,
@@ -23,7 +27,11 @@ fun lightColors(
     customButtonColor = customButtonColor,
     white = white,
     black = black,
-    semiTransparentWhite = semiTransparentWhite
+    semiTransparentWhite = semiTransparentWhite,
+    gray = gray,
+    lightGray = lightGray,
+    red = red,
+    darkGray = darkGray
 )
 
 fun darkColors(
@@ -34,7 +42,11 @@ fun darkColors(
     customButtonColor: Color = Color(0xFFFFE5E5),
     white: Color = Color(0xFFFFFFFF),
     black: Color = Color(0xFF000000),
-    semiTransparentWhite: Color = Color(0xB2FFFFFF)
+    semiTransparentWhite: Color = Color(0xB2FFFFFF),
+    gray: Color = Color(0xFF888888),
+    lightGray: Color = Color(0xFFCCCCCC),
+    red: Color = Color(0xFFFF0000),
+    darkGray: Color = Color(0xFF444444)
 ): ECProjectColor = ECProjectColor(
     primary = primary,
     primaryContainer = primaryContainer,
@@ -43,7 +55,11 @@ fun darkColors(
     customButtonColor = customButtonColor,
     white = white,
     black = black,
-    semiTransparentWhite = semiTransparentWhite
+    semiTransparentWhite = semiTransparentWhite,
+    gray = gray,
+    lightGray = lightGray,
+    red = red,
+    darkGray = darkGray
 )
 
 class ECProjectColor(
@@ -54,7 +70,11 @@ class ECProjectColor(
     customButtonColor: Color,
     white: Color,
     black: Color,
-    semiTransparentWhite: Color
+    semiTransparentWhite: Color,
+    gray: Color,
+    lightGray: Color,
+    red: Color,
+    darkGray: Color
 ) {
     private var _primary: Color by mutableStateOf(primary)
     val primary: Color = _primary
@@ -80,6 +100,18 @@ class ECProjectColor(
     private var _semiTransparentWhite: Color by mutableStateOf(semiTransparentWhite)
     val semiTransparentWhite: Color = _semiTransparentWhite
 
+    private var _gray: Color by mutableStateOf(gray)
+    val gray: Color = _gray
+
+    private var _lightGray: Color by mutableStateOf(lightGray)
+    val lightGray: Color = _lightGray
+
+    private var _red: Color by mutableStateOf(red)
+    val red: Color = _red
+
+    private var _darkGray: Color by mutableStateOf(darkGray)
+    val darkGray: Color = _darkGray
+
     @Suppress("VariableNaming")
     private class KelpColorPreview {
         val primary_FFFF5722_FFFF5722: Color = Color(0xFFFF5722)
@@ -90,6 +122,10 @@ class ECProjectColor(
         val white_FFFFFFFF_FFFFFFFF: Color = Color(0xFFFFFFFF)
         val black_FF000000_FF000000: Color = Color(0xFF000000)
         val semiTransparentWhite_FFB2FFFFFF_FFB2FFFFFF: Color = Color(0xB2FFFFFF)
+        val gray_FF888888_FF888888: Color = Color(0xFF888888)
+        val lightGray_FFCCCCCC_FFCCCCCC: Color = Color(0xFFCCCCCC)
+        val red_FFFF0000_FFFF0000: Color = Color(0xFFFF0000)
+        val darkGray_FF444444_FF444444: Color = Color(0xFF444444)
     }
 }
 

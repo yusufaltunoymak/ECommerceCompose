@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -33,6 +33,7 @@ import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.ProductList
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
 
@@ -69,14 +70,14 @@ fun HomeScreen(
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(LocalDimensions.current.sixteen)
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
         with(uiState) {
             if (currentUser != null) {
                 Text(
-                    text = "Welcome ${currentUser.name}!",
+                    text = stringResource(id = R.string.welcome_user, currentUser.name!!),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.DarkGray,
                     fontFamily = displayFontFamily
@@ -91,7 +92,7 @@ fun HomeScreen(
         CustomHorizontalPager(imageUrls = imageUrls)
 
         Text(
-            text = "Categories",
+            text = stringResource(id = R.string.categories),
             style = MaterialTheme.typography.titleLarge,
             color = Color.DarkGray,
             fontFamily = displayFontFamily
@@ -102,7 +103,7 @@ fun HomeScreen(
         )
 
         Text(
-            text = "Top Rated Products",
+            text = stringResource(id = R.string.top_rated_products),
             style = MaterialTheme.typography.titleLarge,
             color = Color.DarkGray,
             fontFamily = displayFontFamily
@@ -122,19 +123,23 @@ fun SearchNavigationView(
     modifier: Modifier = Modifier,
     onNavigateToSearch: () -> Unit
 ) {
-    val containerColor = Color.White
+    val containerColor = LocalColors.current.white
     val indicatorColor = LocalColors.current.primary.copy(alpha = 0.3f)
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(LocalDimensions.current.eight))
             .clickable {
                 onNavigateToSearch()
             }
             .background(containerColor)
-            .border(1.dp, indicatorColor, RoundedCornerShape(8.dp))
-            .padding(16.dp)
+            .border(
+                LocalDimensions.current.one,
+                indicatorColor,
+                RoundedCornerShape(LocalDimensions.current.eight)
+            )
+            .padding(LocalDimensions.current.sixteen)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -142,12 +147,15 @@ fun SearchNavigationView(
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = "Search Icon",
+                contentDescription = stringResource(id = R.string.search_icon),
                 modifier = Modifier
-                    .padding(start = 4.dp, end = 8.dp)
+                    .padding(
+                        start = LocalDimensions.current.four,
+                        end = LocalDimensions.current.eight
+                    )
             )
             Text(
-                text = "Search for products",
+                text = stringResource(id = R.string.search_for_products),
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.weight(1f)
@@ -155,23 +163,10 @@ fun SearchNavigationView(
 
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.List,
-                contentDescription = "List Icon",
+                contentDescription = stringResource(id = R.string.list_icon),
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .padding(end = LocalDimensions.current.eight)
             )
         }
     }
 }
-
-// @Preview(showBackground = true, showSystemUi = true)
-// @Composable
-// fun Preview() {
-//    HomeScreen(
-//        onNavigateToDetail = {},
-//        onNavigateToSearch = {},
-//        onCategoryListClick = {},
-//        onAction = {},
-//        uiEffect = Flow< HomeContract.UiEffect>,
-//        uiState = HomeContract.UiState(),
-//    )
-// }
