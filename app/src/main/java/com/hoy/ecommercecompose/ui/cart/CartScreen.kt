@@ -330,7 +330,6 @@ fun CartFooter(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun CartScreenPreview() {

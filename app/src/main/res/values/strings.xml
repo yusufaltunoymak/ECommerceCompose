@@ -35,6 +35,11 @@
     <string name="desc_product">Product Image</string>"
     <string name="fav_rating">Rating</string>"
     <string name="favorite">Favorite</string>"
-
+    <!--Welcome Screen-->
+    <string name="desc_welcome">welcome image</string>
+    <string name="app_name_hoy">hoy</string>
+    <string name="ecommerce_title">E-Commerce</string>
+    <string name="login_but">Login</string>
+    <string name="register_but">Register</string>
 
 </resources>

@@ -253,7 +253,7 @@ fun FavoriteProductCard(
 
 @Preview(showBackground = true)
 @Composable
-fun FavoriteProductCardPreview(){
+fun FavoriteProductCardPreview() {
     FavoriteScreen(
         uiState = FavoriteContract.UiState(),
         onAction = {},
@@ -262,3 +262,4 @@ fun FavoriteProductCardPreview(){
         onBackClick = {}
     )
 }
+
