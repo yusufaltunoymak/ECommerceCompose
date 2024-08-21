@@ -5,6 +5,7 @@ import com.hoy.ecommercecompose.data.source.local.ProductDao
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
 import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
 import com.hoy.ecommercecompose.data.source.remote.ApiService
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
