@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 
 @Composable
 fun CustomSearchView(
@@ -39,15 +41,15 @@ fun CustomSearchView(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(LocalDimensions.current.eight))
             .clickable {
-                onSearchClick() // Trigger page navigation on click
+                onSearchClick()
             }
     ) {
         OutlinedTextField(
             value = text,
             onValueChange = { newText ->
-                onTextChange(newText) // Update text as the user types
+                onTextChange(newText)
             },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = containerColor,
@@ -63,14 +65,14 @@ fun CustomSearchView(
                     fontWeight = FontWeight.Normal,
                 )
             },
-            leadingIcon = { // Use leadingIcon to place the search icon at the start
+            leadingIcon = {
                 IconButton(onClick = {
-                    onSearchClick() // Search icon click behavior
+                    onSearchClick()
                 }) {
                     Icon(
-                        imageVector = Icons.Default.Search, // Use Search icon
-                        contentDescription = "Search",
-                        modifier = Modifier.size(22.dp)
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(R.string.search),
+                        modifier = Modifier.size(LocalDimensions.current.twentyFour)
                     )
                 }
             },
@@ -84,14 +86,16 @@ fun CustomSearchView(
                 }) {
                     Icon(
                         imageVector = if (text.isNotBlank()) Icons.Default.Clear else Icons.AutoMirrored.Filled.List,
-                        contentDescription = if (text.isNotBlank()) "Clear" else "Sort",
-                        modifier = Modifier.size(22.dp)
+                        contentDescription =
+                        if (text.isNotBlank()) stringResource(R.string.clear)
+                        else stringResource(R.string.sort),
+                        modifier = Modifier.size(LocalDimensions.current.twentyFour)
                     )
                 }
             },
-            modifier = Modifier.fillMaxWidth(), // Make the OutlinedTextField fill the width
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true // Keep it single line
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(LocalDimensions.current.eight),
+            singleLine = true
         )
     }
 }

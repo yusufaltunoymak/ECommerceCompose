@@ -41,5 +41,9 @@
     <string name="ecommerce_title">E-Commerce</string>
     <string name="login_but">Login</string>
     <string name="register_but">Register</string>
+    <!--Custom Search -->
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
+    <string name="sort">Sort</string>
 
 </resources>
