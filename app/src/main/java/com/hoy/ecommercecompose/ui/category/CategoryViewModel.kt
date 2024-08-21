@@ -6,10 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.domain.usecase.category.GetProductsByCategoryUseCase
+import com.hoy.ecommercecompose.ui.detail.ProductDetailContract
+import com.hoy.ecommercecompose.ui.home.HomeContract
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,8 +24,12 @@ class CategoryViewModel @Inject constructor(
     private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var _uiState = MutableStateFlow(CategoryUiState())
-    val uiState: StateFlow<CategoryUiState> = _uiState.asStateFlow()
+    private var _uiState: MutableStateFlow<CategoryContract.UiState> =
+        MutableStateFlow(CategoryContract.UiState())
+    val uiState = _uiState.asStateFlow()
+
+    private val _uiEffect by lazy { Channel<CategoryContract.UiEffect>() }
+    val uiEffect: Flow<CategoryContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     private val categoryList = mutableListOf<ProductUi>()
 
@@ -29,6 +38,14 @@ class CategoryViewModel @Inject constructor(
             getProductsByCategory(it)
         }
     }
+
+    fun onAction(action: CategoryContract.UiAction) {
+        when (action) {
+
+            else -> {}
+        }
+    }
+
 
     fun getCategory(): String {
         return savedStateHandle.get<String>("category").orEmpty()
@@ -39,17 +56,16 @@ class CategoryViewModel @Inject constructor(
             getProductsByCategoryUseCase(category).collect { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _uiState.value = CategoryUiState(isLoading = true)
+                        _uiState.update { it.copy(isLoading = true) }
                     }
-
                     is Resource.Success -> {
                         categoryList.clear()
                         categoryList.addAll(result.data ?: emptyList())
-                        _uiState.value = CategoryUiState(categoryList = categoryList)
+                        _uiState.update { it.copy(isLoading = false, categoryList = categoryList) }
                     }
-
                     is Resource.Error -> {
-                        _uiState.value = CategoryUiState(errorMessage = result.message)
+                        _uiState.update { it.copy(isLoading = false) }
+                        _uiEffect.send(CategoryContract.UiEffect.ShowError(result.message.orEmpty()))
                     }
                 }
             }

@@ -2,16 +2,10 @@ package com.hoy.ecommercecompose.ui.resetpassword
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,15 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 
 @Composable
 fun ResetPasswordScreen(
@@ -39,73 +35,73 @@ fun ResetPasswordScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(LocalDimensions.current.sixteen),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
-                .size(48.dp)
+                .size(LocalDimensions.current.fortyEight)
                 .border(
-                    BorderStroke(1.dp, LocalColors.current.primary),
-                    shape = RoundedCornerShape(12.dp)
+                    BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
+                    shape = RoundedCornerShape(LocalDimensions.current.twelve)
                 )
         ) {
             Icon(
-                modifier = Modifier.size(38.dp),
-                imageVector = Icons.Default.KeyboardArrowLeft,
+                modifier = Modifier.size(LocalDimensions.current.thirtyEight),
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 contentDescription = null
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twelve))
 
         Text(
-            text = "Create new password",
+            text = stringResource(R.string.create_new_password),
             fontWeight = FontWeight.Bold,
-            fontSize = 30.sp,
+            fontSize = LocalFontSizes.current.sizeTitle,
             modifier = Modifier.align(Alignment.Start)
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
         Text(
-            text = "Your new password must be unique from those previously used.",
+            text = stringResource(R.string.new_password_instruction),
             fontWeight = FontWeight.Thin,
-            fontSize = 18.sp,
+            fontSize = LocalFontSizes.current.body,
             modifier = Modifier.align(Alignment.Start)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
         CustomTextField(
             value = uiState.email,
             onValueChange = { onAction(ResetPasswordContract.ResetPasswordUiAction.ChangeEmail(it)) },
-            label = "New Password",
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
+            label = stringResource(R.string.new_password),
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
             isError = uiState.showEmailError,
             isPassword = true,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
         CustomTextField(
             value = uiState.password,
             onValueChange = { onAction(ResetPasswordContract.ResetPasswordUiAction.ChangePassword(it)) },
-            label = "Confirm Password",
+            label = stringResource(R.string.confirm_password),
             isPassword = true,
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
-                    contentDescription = "Password"
+                    contentDescription = null
                 )
             },
             isError = uiState.showPasswordError
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
         CustomButton(
-            text = "Reset Password",
+            text = stringResource(R.string.reset_password),
             onClick = { onAction(ResetPasswordContract.ResetPasswordUiAction.ResetPassword) }
         )
     }

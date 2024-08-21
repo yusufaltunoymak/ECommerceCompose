@@ -23,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
@@ -79,7 +78,7 @@ fun HomeScreen(
                 Text(
                     text = stringResource(id = R.string.welcome_user, currentUser.name!!),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.DarkGray,
+                    color = LocalColors.current.darkGray,
                     fontFamily = displayFontFamily
                 )
             }
@@ -94,7 +93,7 @@ fun HomeScreen(
         Text(
             text = stringResource(id = R.string.categories),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.DarkGray,
+            color = LocalColors.current.darkGray,
             fontFamily = displayFontFamily
         )
         CategoryList(
@@ -105,7 +104,7 @@ fun HomeScreen(
         Text(
             text = stringResource(id = R.string.top_rated_products),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.DarkGray,
+            color = LocalColors.current.darkGray,
             fontFamily = displayFontFamily
         )
         ProductList(

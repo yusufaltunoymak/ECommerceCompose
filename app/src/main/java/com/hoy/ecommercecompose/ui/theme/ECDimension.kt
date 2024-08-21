@@ -18,6 +18,9 @@ class ECDimension {
     val four: Dp
         @Composable
         get() = 4.dp
+    val six: Dp
+        @Composable
+        get() = 6.dp
     val eight: Dp
         @Composable
         get() = 8.dp
@@ -51,6 +54,9 @@ class ECDimension {
     val thirtySix: Dp
         @Composable
         get() = 36.dp
+    val thirtyEight: Dp
+        @Composable
+        get() = 38.dp
     val forty: Dp
         @Composable
         get() = 40.dp
