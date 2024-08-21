@@ -36,9 +36,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.rememberAsyncImagePainter
@@ -73,13 +73,13 @@ fun CartScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(LocalDimensions.current.sixteen)
     ) {
         Text(
-            text = "My Cart",
+            text = stringResource(id = R.string.my_cart),
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier
-                .padding(bottom = 16.dp)
+                .padding(bottom = LocalDimensions.current.sixteen)
                 .align(Alignment.CenterHorizontally)
         )
 
@@ -144,20 +144,20 @@ fun CartItem(
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(LocalDimensions.current.eight),
-            elevation = CardDefaults.cardElevation(4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            elevation = CardDefaults.cardElevation(LocalDimensions.current.four),
+            colors = CardDefaults.cardColors(containerColor = LocalColors.current.white)
         ) {
             uiState.product?.let { product ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(LocalDimensions.current.eight),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
                         painter = rememberAsyncImagePainter(model = uiState.product.imageOne),
                         contentDescription = null,
-                        modifier = Modifier.size(72.dp)
+                        modifier = Modifier.size(LocalDimensions.current.seventyTwo)
                     )
 
                     Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
@@ -170,8 +170,8 @@ fun CartItem(
                     ) {
                         Text(
                             text = uiState.product.title,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(bottom = 8.dp)
+                            color = LocalColors.current.gray,
+                            modifier = Modifier.padding(bottom = LocalDimensions.current.eight)
                         )
 
                         Text(
@@ -180,7 +180,7 @@ fun CartItem(
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
 
                     Column(
                         horizontalAlignment = Alignment.End,
@@ -189,22 +189,25 @@ fun CartItem(
                     ) {
                         IconButton(
                             onClick = { deleteProductFromCart(product.productId) },
-                            modifier = Modifier.size(36.dp)
+                            modifier = Modifier.size(LocalDimensions.current.thirtyTwo)
                         ) {
                             Icon(
                                 Icons.Default.Delete,
-                                contentDescription = "Remove Item",
-                                tint = Color.Red
+                                contentDescription = stringResource(id = R.string.remove_item),
+                                tint = LocalColors.current.red
                             )
                         }
 
                         Box(
                             modifier = Modifier
                                 .background(
-                                    color = Color(0xFFE0E0E0),
-                                    shape = RoundedCornerShape(8.dp)
+                                    color = LocalColors.current.white,
+                                    shape = RoundedCornerShape(LocalDimensions.current.eight)
                                 )
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .padding(
+                                    horizontal = LocalDimensions.current.eight,
+                                    vertical = LocalDimensions.current.four
+                                )
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -212,29 +215,29 @@ fun CartItem(
                             ) {
                                 IconButton(
                                     onClick = { decreaseQuantity(product.productId) },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(LocalDimensions.current.twentyFour)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowDown,
-                                        contentDescription = "Decrease Quantity",
+                                        contentDescription = stringResource(id = R.string.decrease_quantity),
                                         tint = Color.DarkGray,
-                                        modifier = Modifier.size(16.dp)
+                                        modifier = Modifier.size(LocalDimensions.current.sixteen)
                                     )
                                 }
                                 Text(
                                     text = "${product.quantity}",
-                                    color = Color.DarkGray,
-                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                    color = LocalColors.current.darkGray,
+                                    modifier = Modifier.padding(horizontal = LocalDimensions.current.four)
                                 )
                                 IconButton(
                                     onClick = { increaseQuantity(product.productId) },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(LocalDimensions.current.twentyFour)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowUp,
-                                        contentDescription = "Increase Quantity",
-                                        tint = Color.DarkGray,
-                                        modifier = Modifier.size(16.dp)
+                                        contentDescription = stringResource(id = R.string.increase_quantity),
+                                        tint = LocalColors.current.darkGray,
+                                        modifier = Modifier.size(LocalDimensions.current.sixteen)
                                     )
                                 }
                             }
@@ -278,24 +281,24 @@ fun CartFooter(
                     onClick = onApplyDiscount,
                     enabled = uiState.discountCode.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (uiState.discountCode.isNotEmpty()) LocalColors.current.primary else Color.Gray
+                        containerColor = if (uiState.discountCode.isNotEmpty()) LocalColors.current.primary else LocalColors.current.gray
                     ),
-                    shape = RoundedCornerShape(16)
+                    shape = RoundedCornerShape(LocalDimensions.current.sixteen)
                 ) {
-                    Text("Apply")
+                    Text(stringResource(id = R.string.apply))
                 }
             },
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Total Count:",
+                text = stringResource(id = R.string.total_count),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -313,7 +316,7 @@ fun CartFooter(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Total Price:",
+                text = stringResource(id = R.string.total_price),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -326,7 +329,7 @@ fun CartFooter(
 
         Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
-        CustomButton(text = "Payment", onClick = { onPaymentClick() })
+        CustomButton(text = stringResource(id = R.string.payment), onClick = { onPaymentClick() })
     }
 }
 
