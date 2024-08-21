@@ -24,4 +24,17 @@
     <string name="empty_cart_title">Your Cart is Empty!</string>
     <string name="empty_fav_desc">You don\'t have any saved items.\n Go to home and add some.</string>
     <string name="empty_cart_desc">When you add products, they will appear here.</string>
+    <!--Send Mail Screen-->
+    <string name="send_mail_screen_title">Ups! \nForgot password?</string>
+    <string name="send_mail_screen_description">Don\'t worry! It occurs. \nPlease enter the email address linked with your account.</string>
+    <string name="send_mail_button_text">Send Mail</string>
+    <string name="send_mail_email_label">Enter your email</string>
+    <string name="click_to_login_text">Click to login</string>
+    <!--Favorite Screen-->
+    <string name="fav_product">Favorite Products</string>"
+    <string name="desc_product">Product Image</string>"
+    <string name="fav_rating">Rating</string>"
+    <string name="favorite">Favorite</string>"
+
+
 </resources>

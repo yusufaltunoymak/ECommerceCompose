@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 
 @Composable
 fun CustomButton(
@@ -26,14 +28,14 @@ fun CustomButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-            .padding(vertical = 8.dp)
-            .height(56.dp)
+            .padding(vertical = LocalDimensions.current.eight)
+            .height(LocalDimensions.current.fiftySix)
             .fillMaxWidth(),
-        shape = RoundedCornerShape(16),
+        shape = RoundedCornerShape(LocalDimensions.current.sixteen),
         colors = ButtonDefaults.buttonColors(containerColor = colors),
         enabled = enabled
     ) {
-        Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Text(text = text, fontSize = LocalFontSizes.current.medium, fontWeight = FontWeight.Bold)
     }
 }
 
