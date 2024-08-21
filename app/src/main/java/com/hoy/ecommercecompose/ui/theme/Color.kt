@@ -80,6 +80,7 @@ class ECProjectColor(
     private var _semiTransparentWhite: Color by mutableStateOf(semiTransparentWhite)
     val semiTransparentWhite: Color = _semiTransparentWhite
 
+    @Suppress("VariableNaming")
     private class KelpColorPreview {
         val primary_FFFF5722_FFFF5722: Color = Color(0xFFFF5722)
         val primaryContainer_FF2D3142_FF2D3142: Color = Color(0xFF2D3142)

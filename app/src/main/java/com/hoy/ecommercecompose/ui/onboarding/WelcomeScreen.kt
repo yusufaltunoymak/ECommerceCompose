@@ -42,7 +42,12 @@ fun WelcomeScreen(
                 .height(400.dp)
                 .fillMaxWidth()
         )
-        Text(text = "hoy", fontSize = 32.sp, fontWeight = FontWeight.Thin, fontStyle = FontStyle.Italic)
+        Text(
+            text = "hoy",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Thin,
+            fontStyle = FontStyle.Italic
+        )
         Text(text = "E-Commerce", fontSize = 32.sp, fontWeight = FontWeight.Bold)
 
         Spacer(modifier = Modifier.height(48.dp))

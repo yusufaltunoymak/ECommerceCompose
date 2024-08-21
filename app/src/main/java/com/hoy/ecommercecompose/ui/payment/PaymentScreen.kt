@@ -55,6 +55,15 @@ import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+private const val ONE = 1
+private const val THREE = 3
+private const val FOUR = 4
+private const val TWELVE = 12
+private const val SIXTEEN = 16
+private const val START_YEAR = 2024
+private const val END_YEAR = 2030
+
+
 @Composable
 fun PaymentScreen(
     uiState: PaymentContract.UiState,
@@ -295,7 +304,7 @@ fun CardNumberInput(
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(
-                uiState.cardNumber.chunked(4).joinToString(" ")
+                uiState.cardNumber.chunked(FOUR).joinToString(" ")
             )
         )
     }
@@ -303,8 +312,8 @@ fun CardNumberInput(
         value = textFieldValue,
         onValueChange = { newValue ->
             val rawInput = newValue.text.replace(" ", "")
-            if (rawInput.length <= 16 && rawInput.all { it.isDigit() }) {
-                val formattedCardNumber = rawInput.chunked(4).joinToString(" ")
+            if (rawInput.length <= SIXTEEN && rawInput.all { it.isDigit() }) {
+                val formattedCardNumber = rawInput.chunked(FOUR).joinToString(" ")
                 val spaceDifference = formattedCardNumber.length - rawInput.length
                 val newCursorPosition = newValue.selection.end + spaceDifference
 
@@ -327,8 +336,8 @@ fun ExpiryDateAndCvvInput(
     uiState: PaymentContract.UiState,
     onAction: (PaymentContract.UiAction) -> Unit
 ) {
-    val months = (1..12).map { it.toString().padStart(2, '0') }
-    val years = (2024..2030).map { it.toString() }
+    val months = (ONE..TWELVE).map { it.toString().padStart(2, '0') }
+    val years = (START_YEAR..END_YEAR).map { it.toString() }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -415,7 +424,7 @@ fun ExpiryDateAndCvvInput(
         OutlinedTextField(
             value = uiState.cvv,
             onValueChange = {
-                if (it.length <= 3 && it.all { char -> char.isDigit() }) {
+                if (it.length <= THREE && it.all { char -> char.isDigit() }) {
                     onAction(PaymentContract.UiAction.ChangeCvv(it))
                 }
             },
