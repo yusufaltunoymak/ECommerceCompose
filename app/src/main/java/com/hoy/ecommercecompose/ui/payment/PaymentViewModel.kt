@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.datasources.CityRepository
-import com.hoy.ecommercecompose.data.mapper.toOrderedProduct
+import com.hoy.ecommercecompose.data.mapper.mapToOrderedProductEntity
 import com.hoy.ecommercecompose.data.mapper.toPaymentEntity
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
+import com.hoy.ecommercecompose.domain.usecase.payment.AddOrderedProductsUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.AddPaymentUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.ValidateOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +27,7 @@ class PaymentViewModel @Inject constructor(
     private val addPaymentUseCase: AddPaymentUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val validateOrderUseCase: ValidateOrderUseCase,
+    private val addOrderedProductsUseCase: AddOrderedProductsUseCase,
     private val cityRepository: CityRepository
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<PaymentContract.UiState> =
@@ -122,8 +124,11 @@ class PaymentViewModel @Inject constructor(
             }
             val userId = firebaseAuthRepository.getUserId()
             val payment = uiState.value.toPaymentEntity(userId)
-            val orderedProducts =
-                uiState.value.cartProducts.map { it.toOrderedProduct(payment.orderId) }
+            val orderedProducts = uiState.value.cartProducts.map { product ->
+                mapToOrderedProductEntity(product, payment.orderId)
+            }
+            addOrderedProductsUseCase(orderedProducts)
+
             addPaymentUseCase(payment, orderedProducts, userId).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {

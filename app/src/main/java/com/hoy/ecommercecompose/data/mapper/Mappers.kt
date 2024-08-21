@@ -93,6 +93,15 @@ fun PaymentContract.UiState.toPaymentEntity(userId: String): PaymentEntity {
     )
 }
 
+fun mapToOrderedProductEntity(product: ProductEntity, orderId: Int): OrderedProductEntity {
+    return OrderedProductEntity(
+        orderId = orderId,
+        productId = product.productId,
+        quantity = product.quantity,
+        price = product.price
+    )
+}
+
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(
         message = message.orEmpty(),

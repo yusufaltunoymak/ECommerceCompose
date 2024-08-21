@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
@@ -46,7 +47,9 @@ import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun CartScreen(
@@ -90,8 +93,8 @@ fun CartScreen(
         if (uiState.cartProductList.isNotEmpty()) {
             CartFooter(
                 uiState = uiState,
-                onDiscountCodeChange = { onAction(CartContract.UiAction.OnDiscountCodeChange(it)) },
-                onApplyDiscount = { onAction(CartContract.UiAction.ApplyDiscount) },
+                onDiscountCodeChange = { /* Handle discount code change */ },
+                onApplyDiscount = { /* Handle discount application */ },
                 onPaymentClick = { onNavigatePayment() }
             )
         } else {
@@ -136,11 +139,11 @@ fun CartItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = LocalDimensions.current.eight)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(LocalDimensions.current.eight),
             elevation = CardDefaults.cardElevation(4.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
@@ -157,7 +160,7 @@ fun CartItem(
                         modifier = Modifier.size(72.dp)
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
 
                     Column(
                         modifier = Modifier
@@ -253,7 +256,7 @@ fun CartFooter(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = LocalDimensions.current.eight)
     ) {
         OutlinedTextField(
             value = uiState.discountCode,
@@ -271,7 +274,7 @@ fun CartFooter(
             },
             trailingIcon = {
                 Button(
-                    modifier = Modifier.padding(end = 8.dp),
+                    modifier = Modifier.padding(end = LocalDimensions.current.eight),
                     onClick = onApplyDiscount,
                     enabled = uiState.discountCode.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(
@@ -303,7 +306,7 @@ fun CartFooter(
             )
         }
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.four))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -321,18 +324,20 @@ fun CartFooter(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-//        if (uiState.discountMessage.isNotEmpty()) {
-//            Text(
-//                text = uiState.discountMessage,
-//                color = uiState.discountMessageColor,
-//                style = MaterialTheme.typography.bodyMedium,
-//                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-//                textAlign = TextAlign.Center
-//            )
-//        }
+        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
         CustomButton(text = "Payment", onClick = { onPaymentClick() })
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun CartScreenPreview() {
+    CartScreen(
+        uiState = CartContract.UiState(),
+        onAction = {},
+        uiEffect = flow { },
+        onNavigatePayment = {}
+    )
 }

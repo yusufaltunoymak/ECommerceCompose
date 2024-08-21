@@ -72,7 +72,7 @@ class ProductDetailViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    updateUiState { copy(productDetail = resource.data) }
+                    updateUiState { copy(productDetail = resource.data, isLoading = false) }
                 }
 
                 is Resource.Error -> {
