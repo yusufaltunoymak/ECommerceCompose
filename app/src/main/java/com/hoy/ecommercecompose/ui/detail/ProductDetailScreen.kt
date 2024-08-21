@@ -42,7 +42,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -114,9 +113,17 @@ fun ProductDetailScreen(
                                 }
                                 IconButton(onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }) {
                                     Icon(
-                                        imageVector = if (uiState.productDetail.isFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        imageVector = if (uiState.productDetail.isFavorite == true) {
+                                            Icons.Default.Favorite
+                                        } else {
+                                            Icons.Default.FavoriteBorder
+                                        },
                                         contentDescription = null,
-                                        tint = if (uiState.productDetail.isFavorite == true) LocalColors.current.primary else LocalColors.current.primary
+                                        tint = if (uiState.productDetail.isFavorite == true) {
+                                            LocalColors.current.primary
+                                        } else {
+                                            LocalColors.current.primary
+                                        }
                                     )
                                 }
                             }
@@ -296,9 +303,4 @@ fun ImageList(modifier: Modifier = Modifier, uiState: ProductDetailContract.UiSt
                 .height(300.dp)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
 }

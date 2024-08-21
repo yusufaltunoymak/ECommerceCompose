@@ -30,20 +30,17 @@ import coil.compose.rememberAsyncImagePainter
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomHorizontalPager(
+    modifier: Modifier = Modifier,
     imageUrls: List<Any>,
     pageCount: Int = imageUrls.size,
     contentDescription: (Int) -> String = { "Image $it" },
-    modifier: Modifier = Modifier,
     activeIndicatorColor: Color = Color.DarkGray,
     inactiveIndicatorColor: Color = Color.White,
-    height: Int = 200,
-    clip: Int = 16,
-    padding: Int = 8
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(height.dp),
+            .height(200.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -52,7 +49,7 @@ fun CustomHorizontalPager(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(height.dp)
+                .height(200.dp)
         ) {
             androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
@@ -61,7 +58,7 @@ fun CustomHorizontalPager(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(padding.dp)
+                        .padding(8.dp)
                 ) {
                     val painter = rememberAsyncImagePainter(model = imageUrls[page])
                     Image(
@@ -70,7 +67,7 @@ fun CustomHorizontalPager(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(clip.dp))
+                            .clip(RoundedCornerShape(16.dp))
                     )
                 }
             }

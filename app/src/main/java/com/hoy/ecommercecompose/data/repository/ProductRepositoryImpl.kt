@@ -91,7 +91,9 @@ class ProductRepositoryImpl @Inject constructor(
         return productDao.updateCartProduct(product)
     }
 
-    override suspend fun addPaymentDetails(payment: PaymentEntity) {
+    override suspend fun addPaymentDetails(
+        payment: PaymentEntity
+    ) {
         return productDao.addPaymentDetails(payment)
     }
 

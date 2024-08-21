@@ -4,7 +4,9 @@ import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import javax.inject.Inject
 
-class CreateUserWithEmailAndPasswordUseCase @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRepository) {
+class CreateUserWithEmailAndPasswordUseCase @Inject constructor(
+    private val firebaseAuthRepository: FirebaseAuthRepository
+) {
     suspend operator fun invoke(
         name: String,
         surname: String,

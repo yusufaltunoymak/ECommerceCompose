@@ -45,6 +45,7 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
+import com.hoy.ecommercecompose.ui.theme.LocalColors
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -88,11 +89,9 @@ fun CartScreen(
         )
         if (uiState.cartProductList.isNotEmpty()) {
             CartFooter(
-                discountCode = uiState.discountCode,
-                total = "%.2f".format(uiState.totalCartPrice),
-                count = uiState.totalCartCount,
-                onDiscountCodeChange = { /* Handle discount code change */ },
-                onApplyDiscount = { /* Handle discount application */ },
+                uiState = uiState,
+                onDiscountCodeChange = { onAction(CartContract.UiAction.OnDiscountCodeChange(it)) },
+                onApplyDiscount = { onAction(CartContract.UiAction.ApplyDiscount) },
                 onPaymentClick = { onNavigatePayment() }
             )
         } else {
@@ -116,11 +115,11 @@ fun CartItemList(
     LazyColumn(modifier = modifier) {
         items(cartProductList) { product ->
             CartItem(
-                product = product,
+                modifier = Modifier.fillMaxWidth(),
+                uiState = CartContract.UiState(product = product),
                 increaseQuantity = { increaseQuantity(it) },
                 decreaseQuantity = { decreaseQuantity(it) },
                 deleteProductFromCart = { onDeleteCartClick(it) },
-                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -129,7 +128,7 @@ fun CartItemList(
 @Composable
 fun CartItem(
     modifier: Modifier = Modifier,
-    product: ProductEntity,
+    uiState: CartContract.UiState,
     deleteProductFromCart: (Int) -> Unit,
     increaseQuantity: (Int) -> Unit,
     decreaseQuantity: (Int) -> Unit
@@ -143,105 +142,98 @@ fun CartItem(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(4.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            )
+            colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = product.imageOne
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(72.dp)
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column(
-                    modifier = modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween
+            uiState.product?.let { product ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = product.title,
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                            .padding(bottom = 16.dp)
+                    Image(
+                        painter = rememberAsyncImagePainter(model = uiState.product.imageOne),
+                        contentDescription = null,
+                        modifier = Modifier.size(72.dp)
                     )
 
-                    Text(
-                        text = "$${"%.2f".format(product.price * product.quantity)}",
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                    )
-                }
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxHeight()
-                ) {
-                    IconButton(
-                        onClick = { deleteProductFromCart(product.productId) },
+                    Column(
                         modifier = Modifier
-                            .size(36.dp)
-                            .align(Alignment.End)
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Remove Item",
-                            tint = Color.Red
+                        Text(
+                            text = uiState.product.title,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+
+                        Text(
+                            text = "$${"%.2f".format(product.price * product.quantity)}",
+                            color = Color.Gray
                         )
                     }
 
-                    Box(
-                        modifier = Modifier
-                            .background(color = Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                            .align(Alignment.End)
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxHeight()
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                        IconButton(
+                            onClick = { deleteProductFromCart(product.productId) },
+                            modifier = Modifier.size(36.dp)
                         ) {
-                            IconButton(
-                                onClick = { decreaseQuantity(product.productId) },
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Decrease Quantity",
-                                    tint = Color.DarkGray,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                            Text(
-                                text = "${product.quantity}",
-                                color = Color.DarkGray,
-                                style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.padding(horizontal = 4.dp)
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Remove Item",
+                                tint = Color.Red
                             )
-                            IconButton(
-                                onClick = { increaseQuantity(product.productId) },
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.KeyboardArrowUp,
-                                    contentDescription = "Increase Quantity",
-                                    tint = Color.DarkGray,
-                                    modifier = Modifier.size(16.dp)
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = Color(0xFFE0E0E0),
+                                    shape = RoundedCornerShape(8.dp)
                                 )
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                IconButton(
+                                    onClick = { decreaseQuantity(product.productId) },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.KeyboardArrowDown,
+                                        contentDescription = "Decrease Quantity",
+                                        tint = Color.DarkGray,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                                Text(
+                                    text = "${product.quantity}",
+                                    color = Color.DarkGray,
+                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                )
+                                IconButton(
+                                    onClick = { increaseQuantity(product.productId) },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.KeyboardArrowUp,
+                                        contentDescription = "Increase Quantity",
+                                        tint = Color.DarkGray,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -253,28 +245,38 @@ fun CartItem(
 
 @Composable
 fun CartFooter(
-    discountCode: String,
-    total: String,
-    count: Int,
+    uiState: CartContract.UiState,
     onDiscountCodeChange: (String) -> Unit,
     onApplyDiscount: () -> Unit,
-    onPaymentClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onPaymentClick: () -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
         OutlinedTextField(
-            value = discountCode,
+            value = uiState.discountCode,
             onValueChange = onDiscountCodeChange,
-            label = { Text("Enter Discount Code") },
+            label = {
+                if (uiState.discountMessage.isNotEmpty()) {
+                    Text(
+                        text = uiState.discountMessage,
+                        color = uiState.discountMessageColor,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else {
+                    Text("Enter Discount Code")
+                }
+            },
             trailingIcon = {
                 Button(
                     modifier = Modifier.padding(end = 8.dp),
                     onClick = onApplyDiscount,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                    enabled = uiState.discountCode.isNotEmpty(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (uiState.discountCode.isNotEmpty()) LocalColors.current.primary else Color.Gray
+                    ),
                     shape = RoundedCornerShape(16)
                 ) {
                     Text("Apply")
@@ -295,7 +297,7 @@ fun CartFooter(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$count",
+                text = "${uiState.totalCartCount}",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -313,13 +315,23 @@ fun CartFooter(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$$total",
+                text = "%.2f".format(uiState.totalCartPrice),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+//        if (uiState.discountMessage.isNotEmpty()) {
+//            Text(
+//                text = uiState.discountMessage,
+//                color = uiState.discountMessageColor,
+//                style = MaterialTheme.typography.bodyMedium,
+//                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+//                textAlign = TextAlign.Center
+//            )
+//        }
 
         CustomButton(text = "Payment", onClick = { onPaymentClick() })
     }

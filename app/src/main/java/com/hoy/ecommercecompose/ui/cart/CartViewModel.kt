@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.cart
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
@@ -38,6 +39,8 @@ class CartViewModel @Inject constructor(
             is CartContract.UiAction.DeleteProductFromCart -> deleteProductFromCart(action.id)
             is CartContract.UiAction.IncreaseQuantity -> increaseQuantity(action.id)
             is CartContract.UiAction.DecreaseQuantity -> decreaseQuantity(action.id)
+            is CartContract.UiAction.OnDiscountCodeChange -> onDiscountCodeChange(action.newCode)
+            is CartContract.UiAction.ApplyDiscount -> applyDiscount()
         }
     }
 
@@ -101,8 +104,9 @@ class CartViewModel @Inject constructor(
 
     private fun updateTotalPrice() {
         val totalPrice = uiState.value.cartProductList.sumOf { it.price * it.quantity }
+        val discount = uiState.value.discountPrice
         _uiState.update { uiState ->
-            uiState.copy(totalCartPrice = totalPrice)
+            uiState.copy(totalCartPrice = totalPrice - discount)
         }
         updateTotalCount()
     }
@@ -117,6 +121,47 @@ class CartViewModel @Inject constructor(
     private fun updateCartProduct(productEntity: ProductEntity) {
         viewModelScope.launch {
             updateCartProductUseCase(productEntity)
+        }
+    }
+
+    private fun onDiscountCodeChange(newCode: String) {
+        _uiState.update { it.copy(discountCode = newCode) }
+    }
+
+    companion object {
+        private const val DISCOUNT_CODE_50 = "SEPETTE50"
+        private const val DISCOUNT_CODE_100 = "SEPETTE100"
+        private const val DISCOUNT_AMOUNT_50 = 50.0
+        private const val DISCOUNT_AMOUNT_100 = 100.0
+        private const val DEFAULT_AMOUNT = 0.0
+    }
+
+
+    private fun applyDiscount() {
+        val discount = when (uiState.value.discountCode.uppercase()) {
+            DISCOUNT_CODE_50 -> DISCOUNT_AMOUNT_50
+            DISCOUNT_CODE_100 -> DISCOUNT_AMOUNT_100
+            else -> DEFAULT_AMOUNT
+        }
+        val discountMessage = if (discount > 0) {
+            "Discount applied: ${discount.toInt()}"
+        } else {
+            "Invalid discount code."
+        }
+        val discountColor = if (discount > 0) {
+            Color.Green
+        } else {
+            Color.Red
+        }
+
+        _uiState.update {
+            val totalPrice = it.cartProductList.sumOf { product -> product.price * product.quantity }
+            it.copy(
+                totalCartPrice = totalPrice - discount,
+                discountPrice = discount,
+                discountMessage = discountMessage,
+                discountMessageColor = discountColor
+            )
         }
     }
 }
