@@ -219,7 +219,7 @@ fun FavoriteProductCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = stringResource(id = R.string.fav_rating),
+                        contentDescription = stringResource(id = R.string.rating),
                         tint = LocalColors.current.primary,
                         modifier = Modifier.size(LocalDimensions.current.sixteen)
                     )
