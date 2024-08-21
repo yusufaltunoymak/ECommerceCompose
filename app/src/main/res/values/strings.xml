@@ -34,7 +34,6 @@
     <string name="fav_product">Favorite Products</string>"
     <string name="desc_product">Product Image</string>"
     <string name="fav_rating">Rating</string>"
-    <string name="favorite">Favorite</string>"
     <!--Welcome Screen-->
     <string name="desc_welcome">welcome image</string>
     <string name="app_name_hoy">hoy</string>
@@ -45,5 +44,9 @@
     <string name="search">Search</string>
     <string name="clear">Clear</string>
     <string name="sort">Sort</string>
-
+    <!--Bottom Navigation Bar -->
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
 </resources>

@@ -33,6 +33,9 @@ class ECDimension {
     val twentyEight: Dp
         @Composable
         get() = 28.dp
+    val negativeTwentyEight: Dp
+        @Composable
+        get() = (-28).dp
     val thirtyTwo: Dp
         @Composable
         get() = 32.dp
