@@ -38,4 +38,12 @@
     <string name="back_icon">Back Icon</string>
     <string name="one_text">1</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="my_cart">My Cart</string>
+    <string name="remove_item">Remove Item</string>
+    <string name="decrease_quantity">Decrease Quantity</string>
+    <string name="increase_quantity">Increase Quantity</string>
+    <string name="apply">Apply</string>
+    <string name="total_count">Total Count:</string>
+    <string name="total_price">Total Price:</string>
+    <string name="payment">Payment</string>
 </resources>
