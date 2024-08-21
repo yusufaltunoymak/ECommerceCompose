@@ -43,8 +43,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -52,7 +51,10 @@ import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun LoginScreen(
@@ -114,36 +116,36 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(LocalDimensions.current.sixteen),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
             IconButton(
                 onClick = onBackClick,
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(LocalDimensions.current.fortyEight)
                     .border(
-                        BorderStroke(1.dp, LocalColors.current.primary),
-                        shape = RoundedCornerShape(12.dp)
+                        BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
+                        shape = RoundedCornerShape(LocalDimensions.current.twelve)
                     )
             ) {
                 Icon(
-                    modifier = Modifier.size(38.dp),
+                    modifier = Modifier.size(LocalDimensions.current.thirtySix),
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.twelve))
 
             Text(
                 text = stringResource(id = R.string.welcome_login_text),
                 fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
+                fontSize = LocalFontSizes.current.sizeTitle,
                 modifier = Modifier.align(Alignment.Start)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
             CustomTextField(
                 value = uiState.email,
@@ -157,7 +159,7 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
             CustomTextField(
                 value = uiState.password,
@@ -172,7 +174,7 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -182,51 +184,51 @@ fun LoginScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_forgot_password),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(LocalDimensions.current.twenty)
                 )
                 Text(
                     modifier = Modifier.clickable { onForgotPasswordClick() },
                     text = stringResource(id = R.string.forgot_password_text),
                     fontWeight = FontWeight.Light,
-                    fontSize = 12.sp,
+                    fontSize = LocalFontSizes.current.small,
 
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
             CustomButton(
                 text = stringResource(id = R.string.login_text),
                 onClick = { onAction(LoginContract.UiAction.SignInClick) },
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(LocalDimensions.current.sixteen),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Divider(
                     color = LocalColors.current.primary,
-                    thickness = 1.dp,
+                    thickness = LocalDimensions.current.one,
                     modifier = Modifier.weight(1f)
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
 
                 Text(
                     text = stringResource(id = R.string.or_login_with_text),
-                    fontSize = 16.sp,
+                    fontSize = LocalFontSizes.current.medium,
                     color = Color.Black
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
 
                 Divider(
                     color = LocalColors.current.primary,
-                    thickness = 1.dp,
+                    thickness = LocalDimensions.current.one,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -234,16 +236,16 @@ fun LoginScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
+                    .padding(top = LocalDimensions.current.sixteen),
                 horizontalArrangement = Arrangement.Center
             ) {
                 IconButton(
                     onClick = { onAction(LoginContract.UiAction.GoogleSignInClick) },
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(LocalDimensions.current.fortyEight)
                         .border(
-                            BorderStroke(1.dp, LocalColors.current.primary),
-                            shape = RoundedCornerShape(12.dp)
+                            BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
+                            shape = RoundedCornerShape(LocalDimensions.current.twelve)
                         )
                 ) {
                     Image(
@@ -262,4 +264,17 @@ fun LoginScreen(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(
+        uiState = LoginContract.UiState(),
+        uiEffect = flowOf(),
+        onAction = {},
+        onForgotPasswordClick = {},
+        onBackClick = {},
+        onNavigateToHome = {}
+    )
 }

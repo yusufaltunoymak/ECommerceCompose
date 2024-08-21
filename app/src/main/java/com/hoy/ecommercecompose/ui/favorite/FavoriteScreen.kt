@@ -36,15 +36,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
@@ -53,8 +53,10 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +86,7 @@ fun FavoriteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Favorite Products") },
+                title = { Text(stringResource(id = R.string.fav_product)) },
                 navigationIcon = {
                     IconButton(onClick = { onBackClick() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -102,7 +104,7 @@ fun FavoriteScreen(
                 uiState.errorMessage != null -> {
                     Text(
                         text = uiState.errorMessage,
-                        color = Color.Red,
+                        color = LocalColors.current.red,
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -145,17 +147,20 @@ fun FavoriteProductCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onNavigateToDetail(product.id) }
-            .padding(8.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .shadow(4.dp, RoundedCornerShape(12.dp)),
-        border = BorderStroke(1.dp, Color.Gray),
+            .padding(LocalDimensions.current.eight)
+            .clip(RoundedCornerShape(LocalDimensions.current.twelve))
+            .shadow(
+                LocalDimensions.current.four,
+                RoundedCornerShape(LocalDimensions.current.twelve)
+            ),
+        border = BorderStroke(LocalDimensions.current.one, LocalColors.current.gray),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = LocalColors.current.white
         )
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(LocalDimensions.current.twelve)
                 .fillMaxWidth()
         ) {
             AsyncImage(
@@ -163,67 +168,67 @@ fun FavoriteProductCard(
                     .data(product.imageOne)
                     .crossfade(true)
                     .build(),
-                contentDescription = "Product Image",
+                contentDescription = stringResource(id = R.string.desc_product),
                 error = painterResource(id = R.drawable.ic_broken_image),
                 placeholder = painterResource(id = R.drawable.loading_img),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(LocalDimensions.current.oneHundred)
+                    .clip(RoundedCornerShape(LocalDimensions.current.eight))
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(LocalDimensions.current.twelve))
 
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = LocalDimensions.current.eight)
             ) {
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.DarkGray,
+                    color = LocalColors.current.darkGray,
                     fontFamily = displayFontFamily,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
                 Row {
                     Text(
                         text = "$${product.price}",
                         fontFamily = displayFontFamily,
                         style = MaterialTheme.typography.bodyLarge.copy(textDecoration = TextDecoration.LineThrough),
-                        color = Color.Gray
+                        color = LocalColors.current.gray
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
                     Text(
                         text = "$${product.salePrice}",
                         fontFamily = displayFontFamily,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Red,
+                        color = LocalColors.current.red,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = "Rating",
+                        contentDescription = stringResource(id = R.string.rating),
                         tint = LocalColors.current.primary,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(LocalDimensions.current.sixteen)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(LocalDimensions.current.four))
                     Text(
                         text = product.rate.toString(),
                         fontFamily = displayFontFamily,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = LocalColors.current.gray
                     )
                 }
             }
@@ -231,17 +236,30 @@ fun FavoriteProductCard(
             IconButton(
                 onClick = { onFavoriteClick(product) },
                 modifier = Modifier
-                    .background(color = Color.White, shape = CircleShape)
-                    .padding(6.dp)
-                    .size(40.dp)
+                    .background(color = LocalColors.current.white, shape = CircleShape)
+                    .padding(LocalDimensions.current.four)
+                    .size(LocalDimensions.current.thirtySix)
             ) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favorite",
-                    tint = Color.Red,
-                    modifier = Modifier.size(20.dp)
+                    contentDescription = stringResource(id = R.string.favorite),
+                    tint = LocalColors.current.gray,
+                    modifier = Modifier.size(LocalDimensions.current.twenty)
                 )
             }
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun FavoriteProductCardPreview() {
+    FavoriteScreen(
+        uiState = FavoriteContract.UiState(),
+        onAction = {},
+        uiEffect = flowOf(),
+        onNavigateToDetail = {},
+        onBackClick = {}
+    )
+}
+

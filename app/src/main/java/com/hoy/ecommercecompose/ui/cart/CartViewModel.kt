@@ -136,7 +136,6 @@ class CartViewModel @Inject constructor(
         private const val DEFAULT_AMOUNT = 0.0
     }
 
-
     private fun applyDiscount() {
         val discount = when (uiState.value.discountCode.uppercase()) {
             DISCOUNT_CODE_50 -> DISCOUNT_AMOUNT_50

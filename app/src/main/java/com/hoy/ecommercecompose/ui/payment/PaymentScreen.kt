@@ -63,7 +63,6 @@ private const val SIXTEEN = 16
 private const val START_YEAR = 2024
 private const val END_YEAR = 2030
 
-
 @Composable
 fun PaymentScreen(
     uiState: PaymentContract.UiState,

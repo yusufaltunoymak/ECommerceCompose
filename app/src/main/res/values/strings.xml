@@ -24,9 +24,33 @@
     <string name="empty_cart_title">Your Cart is Empty!</string>
     <string name="empty_fav_desc">You don\'t have any saved items.\n Go to home and add some.</string>
     <string name="empty_cart_desc">When you add products, they will appear here.</string>
+    <!--Send Mail Screen-->
+    <string name="send_mail_screen_title">Ups! \nForgot password?</string>
+    <string name="send_mail_screen_description">Don\'t worry! It occurs. \nPlease enter the email address linked with your account.</string>
+    <string name="send_mail_button_text">Send Mail</string>
+    <string name="send_mail_email_label">Enter your email</string>
+    <string name="click_to_login_text">Click to login</string>
+    <!--Favorite Screen-->
+    <string name="fav_product">Favorite Products</string>"
+    <string name="desc_product">Product Image</string>"
+    <!--Welcome Screen-->
+    <string name="desc_welcome">welcome image</string>
+    <string name="app_name_hoy">hoy</string>
+    <string name="ecommerce_title">E-Commerce</string>
+    <string name="login_but">Login</string>
+    <string name="register_but">Register</string>
+    <!--Custom Search -->
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
+    <string name="sort">Sort</string>
+    <!--Bottom Navigation Bar -->
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+
     <string name="product_image">Product Image</string>
     <string name="category_image">Category Image</string>
-    <string name="favorite">Favorite</string>
     <string name="rating">Rating</string>
     <string name="welcome_user">Welcome %1$s!</string>
     <string name="categories">Categories</string>

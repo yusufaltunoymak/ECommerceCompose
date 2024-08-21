@@ -18,12 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 
 @Composable
 fun BottomNavigationBar(
@@ -42,31 +44,30 @@ fun BottomNavigationBar(
     ) {
         Surface(
             color = Color.White,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(LocalDimensions.current.sixteen),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .height(56.dp)
-                .clip(RoundedCornerShape(16.dp)),
-            elevation = 8.dp
+                .height(LocalDimensions.current.fiftySix)
+                .clip(RoundedCornerShape(LocalDimensions.current.sixteen)),
+            elevation = LocalDimensions.current.eight
         ) {
             BottomNavigation(
-                backgroundColor = Color.White,
-                contentColor = Color.White
+                backgroundColor = LocalColors.current.white,
+                contentColor = LocalColors.current.white
             ) {
                 items.forEach { item ->
                     BottomNavigationItem(
                         icon = {
                             Icon(
                                 item.icon,
-                                contentDescription = item.name,
+                                contentDescription = getNavItemName(navItem = item),
                                 tint = LocalColors.current.primary
                             )
                         },
-                        label = null,
                         selected = currentRoute == item.route,
                         onClick = { onItemClick(item) },
-                        alwaysShowLabel = false // Ensures only icons are shown
+                        alwaysShowLabel = false
                     )
                 }
             }
@@ -78,9 +79,9 @@ fun BottomNavigationBar(
             contentColor = Color.White,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = -28.dp) // Adjust the FAB position
+                .offset(y = LocalDimensions.current.negativeTwentyEight)
         ) {
-            Icon(Icons.Default.Home, contentDescription = "Home") // Center FAB Icon
+            Icon(Icons.Default.Home, contentDescription = stringResource(id = R.string.home))
         }
     }
 }
@@ -100,7 +101,7 @@ fun BottomNavigationBarPreview() {
     BottomNavigationBar(
         navController = navController,
         items = bottomNavItems,
-        onItemClick = { /* Preview Click Handling */ },
-        onFabClick = { /* FAB Click Handling */ }
+        onItemClick = {},
+        onFabClick = {}
     )
 }

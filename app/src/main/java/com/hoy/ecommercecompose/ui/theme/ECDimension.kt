@@ -36,6 +36,9 @@ class ECDimension {
     val twentyEight: Dp
         @Composable
         get() = 28.dp
+    val negativeTwentyEight: Dp
+        @Composable
+        get() = (-28).dp
     val thirty: Dp
         @Composable
         get() = 30.dp
@@ -51,6 +54,12 @@ class ECDimension {
     val forty: Dp
         @Composable
         get() = 40.dp
+    val fortyEight: Dp
+        @Composable
+        get() = 48.dp
+    val fiftySix: Dp
+        @Composable
+        get() = 56.dp
     val seventyTwo: Dp
         @Composable
         get() = 72.dp
@@ -69,12 +78,12 @@ class ECDimension {
     val oneHundredSeventy: Dp
         @Composable
         get() = 170.dp
-    val twoHundredTwenty: Dp
-        @Composable
-        get() = 220.dp
     val twoHundred: Dp
         @Composable
         get() = 200.dp
+    val twoHundredTwenty: Dp
+        @Composable
+        get() = 220.dp
     val twoHundredSixty: Dp
         @Composable
         get() = 260.dp

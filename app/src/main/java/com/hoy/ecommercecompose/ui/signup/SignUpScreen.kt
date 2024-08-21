@@ -32,8 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -41,6 +39,8 @@ import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -79,32 +79,32 @@ fun SignupScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(LocalDimensions.current.eight),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
             IconButton(
                 onClick = onBackClick,
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(LocalDimensions.current.fortyEight)
                     .border(
-                        BorderStroke(1.dp, LocalColors.current.primary),
-                        shape = RoundedCornerShape(12.dp)
+                        BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
+                        shape = RoundedCornerShape(LocalDimensions.current.twelve)
                     )
             ) {
                 Icon(
-                    modifier = Modifier.size(38.dp),
+                    modifier = Modifier.size(LocalDimensions.current.thirtySix),
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.twelve))
 
             Text(
                 text = stringResource(id = R.string.hello_register_text),
                 fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
+                fontSize = LocalFontSizes.current.sizeTitle,
                 modifier = Modifier.align(Alignment.Start)
             )
 
@@ -144,7 +144,7 @@ fun SignupScreen(
                 leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) }
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
             CustomButton(
                 text = stringResource(id = R.string.register_text),

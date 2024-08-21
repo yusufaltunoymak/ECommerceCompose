@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,20 +13,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 
 @Composable
 fun SendMailScreen(
@@ -41,64 +44,64 @@ fun SendMailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(LocalDimensions.current.sixteen),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
-                .size(48.dp)
+                .size(LocalDimensions.current.fortyEight)
                 .border(
-                    BorderStroke(1.dp, LocalColors.current.primary),
-                    shape = RoundedCornerShape(12.dp)
+                    BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
+                    shape = RoundedCornerShape(LocalDimensions.current.twelve)
                 )
         ) {
             Icon(
-                modifier = Modifier.size(38.dp),
-                imageVector = Icons.Default.KeyboardArrowLeft,
+                modifier = Modifier.size(LocalDimensions.current.thirtySix),
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 contentDescription = null
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twelve))
 
         Text(
-            text = "Ups! \nForgot password?",
+            text = stringResource(id = R.string.send_mail_screen_title),
             fontWeight = FontWeight.Bold,
-            fontSize = 30.sp,
+            fontSize = LocalFontSizes.current.sizeTitle,
             modifier = Modifier.align(Alignment.Start)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
         Text(
-            text = "Don't worry! It occurs. \nPlease enter the email address linked with your account.",
+            text = stringResource(id = R.string.send_mail_screen_description),
             fontWeight = FontWeight.Thin,
-            fontSize = 18.sp,
+            fontSize = LocalFontSizes.current.medium,
             modifier = Modifier.align(Alignment.Start)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
         CustomTextField(
             value = uiState.email,
             onValueChange = { onAction(SendMailContract.SendMailUiAction.SendEmailAction(it)) },
-            label = "Enter your email",
+            label = stringResource(id = R.string.send_mail_email_label),
             isPassword = false,
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Default.Send,
+                    imageVector = Icons.AutoMirrored.Filled.Send,
                     contentDescription = null
                 )
             },
             isError = uiState.showEmailError
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
         CustomButton(
-            text = "Send Mail",
+            text = stringResource(id = R.string.send_mail_button_text),
             onClick = {
                 onAction(
                     SendMailContract.SendMailUiAction.SendMail,
@@ -108,21 +111,30 @@ fun SendMailScreen(
             enabled = !isEmailFieldEmpty
         )
 
-        Spacer(modifier = Modifier.height(400.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Click to login",
-                fontWeight = FontWeight.Thin,
-                fontSize = 18.sp,
-                color = LocalColors.current.primary,
-                modifier = Modifier.clickable {
+        Text(
+            text = stringResource(id = R.string.click_to_login_text),
+            fontWeight = FontWeight.Bold,
+            fontSize = LocalFontSizes.current.medium,
+            color = LocalColors.current.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
                     onNavigateToLogin()
-                }
-            )
-        }
+                },
+            textAlign = TextAlign.Center
+        )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SendMailScreenPreview() {
+    SendMailScreen(
+        onBackClick = {},
+        uiState = SendMailContract.SendMailUiState(),
+        onAction = {},
+        onNavigateToLogin = {}
+    )
 }

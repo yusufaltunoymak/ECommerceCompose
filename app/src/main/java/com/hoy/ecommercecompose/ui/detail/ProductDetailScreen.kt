@@ -120,7 +120,9 @@ fun ProductDetailScreen(
                                             tint = LocalColors.current.primary
                                         )
                                     }
-                                    IconButton(onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }) {
+                                    IconButton(
+                                        onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }
+                                    ) {
                                         Icon(
                                             imageVector = if (uiState.productDetail.isFavorite == true) {
                                                 Icons.Default.Favorite

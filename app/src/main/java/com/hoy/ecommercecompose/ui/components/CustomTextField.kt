@@ -12,12 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 
 @Composable
 fun CustomTextField(
@@ -29,8 +28,10 @@ fun CustomTextField(
     isError: Boolean = false,
     errorMessage: String? = null
 ) {
-    val containerColor = if (isError) LocalColors.current.customButtonColor else Color.White
-    val indicatorColor = if (isError) Color.Red else LocalColors.current.primary.copy(alpha = 0.3f)
+    val containerColor =
+        if (isError) LocalColors.current.customButtonColor else LocalColors.current.white
+    val indicatorColor =
+        if (isError) LocalColors.current.red else LocalColors.current.primary.copy(alpha = 0.3f)
 
     Column(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
@@ -40,7 +41,7 @@ fun CustomTextField(
             label = { Text(label) },
             visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(LocalDimensions.current.eight),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = containerColor,
                 unfocusedContainerColor = containerColor,
@@ -52,9 +53,12 @@ fun CustomTextField(
         if (isError && errorMessage != null) {
             Text(
                 text = errorMessage,
-                color = Color.Red,
+                color = LocalColors.current.red,
                 style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                modifier = Modifier.padding(
+                    start = LocalDimensions.current.sixteen,
+                    top = LocalDimensions.current.four
+                )
             )
         }
     }
