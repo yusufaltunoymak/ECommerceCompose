@@ -24,4 +24,14 @@
     <string name="empty_cart_title">Your Cart is Empty!</string>
     <string name="empty_fav_desc">You don\'t have any saved items.\n Go to home and add some.</string>
     <string name="empty_cart_desc">When you add products, they will appear here.</string>
+    <string name="product_image">Product Image</string>
+    <string name="category_image">Category Image</string>
+    <string name="favorite">Favorite</string>
+    <string name="rating">Rating</string>
+    <string name="welcome_user">Welcome %1$s!</string>
+    <string name="categories">Categories</string>
+    <string name="top_rated_products">Top Rated Products</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="search_for_products">Search for products</string>
+    <string name="list_icon">List Icon</string>
 </resources>

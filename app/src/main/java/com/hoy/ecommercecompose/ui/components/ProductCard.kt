@@ -34,18 +34,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.home.HomeContract
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
 @Composable
@@ -55,18 +56,22 @@ fun ProductCard(
     onFavoriteClick: (ProductUi) -> Unit,
     onNavigateToDetail: (Int) -> Unit
 ) {
-    val iconColor = if (product.isFavorite) LocalColors.current.primary else Color.Gray
+    val iconColor =
+        if (product.isFavorite) LocalColors.current.primary else LocalColors.current.gray
     Card(
         modifier = modifier
-            .size(170.dp, 260.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .size(
+                LocalDimensions.current.oneHundredSeventy,
+                LocalDimensions.current.twoHundredSixty
+            )
+            .clip(RoundedCornerShape(LocalDimensions.current.twelve))
             .clickable {
                 onNavigateToDetail(product.id)
             },
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = LocalColors.current.white
         ),
-        elevation = CardDefaults.cardElevation(8.dp) // Use elevation for shadow
+        elevation = CardDefaults.cardElevation(LocalDimensions.current.eight)
     ) {
         Column(
             modifier = Modifier
@@ -75,39 +80,42 @@ fun ProductCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(LocalDimensions.current.oneHundredFifty)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
                         .data(product.imageOne)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Product Image",
+                    contentDescription = stringResource(id = R.string.product_image),
                     error = painterResource(id = R.drawable.ic_broken_image),
                     placeholder = painterResource(id = R.drawable.loading_img),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(LocalDimensions.current.twelve))
                 )
 
                 IconButton(
                     onClick = { onFavoriteClick(product) },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(top = 8.dp, end = 8.dp) // Add padding to top and end
-                        .background(color = Color.LightGray, shape = CircleShape)
-                        .size(36.dp)
+                        .padding(
+                            top = LocalDimensions.current.eight,
+                            end = LocalDimensions.current.eight
+                        )
+                        .background(color = LocalColors.current.lightGray, shape = CircleShape)
+                        .size(LocalDimensions.current.thirtySix)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favorite",
+                        contentDescription = stringResource(id = R.string.favorite),
                         tint = iconColor,
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
             Text(
                 text = product.title,
@@ -117,13 +125,16 @@ fun ProductCard(
                 fontFamily = displayFontFamily,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = LocalDimensions.current.eight)
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.four))
 
             Row(
-                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                modifier = Modifier.padding(
+                    start = LocalDimensions.current.eight,
+                    end = LocalDimensions.current.eight
+                ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -132,7 +143,7 @@ fun ProductCard(
                         spanStyles = listOf(
                             AnnotatedString.Range(
                                 item = SpanStyle(
-                                    color = Color.Red.copy(alpha = 0.6f), // Lighter color
+                                    color = LocalColors.current.red.copy(alpha = 0.6f),
                                     fontWeight = FontWeight.Light,
                                     textDecoration = TextDecoration.LineThrough
                                 ),
@@ -145,35 +156,35 @@ fun ProductCard(
                     style = MaterialTheme.typography.bodyLarge
                 )
 
-                Spacer(modifier = Modifier.width(8.dp)) // Add space between price and sale price
+                Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
 
                 Text(
                     text = "$${product.salePrice}",
                     fontFamily = displayFontFamily,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Black,
+                    color = LocalColors.current.black,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(LocalDimensions.current.four))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = LocalDimensions.current.eight)
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
-                    contentDescription = "Rating",
+                    contentDescription = stringResource(id = R.string.rating),
                     tint = LocalColors.current.primary,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(LocalDimensions.current.sixteen)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(LocalDimensions.current.four))
                 Text(
                     text = product.rate.toString(),
                     fontFamily = displayFontFamily,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = LocalColors.current.gray
                 )
             }
         }
@@ -191,7 +202,7 @@ fun ProductList(
             ProductCard(
                 product = product,
                 onFavoriteClick = onFavoriteClick,
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(LocalDimensions.current.eight),
                 onNavigateToDetail = onNavigateToDetail
             )
         }
