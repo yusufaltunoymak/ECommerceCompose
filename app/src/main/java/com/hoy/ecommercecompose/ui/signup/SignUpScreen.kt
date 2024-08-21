@@ -38,9 +38,7 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
-import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -79,32 +77,32 @@ fun SignupScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(LocalDimensions.current.eight),
+                .padding(ECTheme.dimensions.eight),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
             IconButton(
                 onClick = onBackClick,
                 modifier = Modifier
-                    .size(LocalDimensions.current.fortyEight)
+                    .size(ECTheme.dimensions.fortyEight)
                     .border(
-                        BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
-                        shape = RoundedCornerShape(LocalDimensions.current.twelve)
+                        BorderStroke(ECTheme.dimensions.one, ECTheme.colors.primary),
+                        shape = RoundedCornerShape(ECTheme.dimensions.twelve)
                     )
             ) {
                 Icon(
-                    modifier = Modifier.size(LocalDimensions.current.thirtySix),
+                    modifier = Modifier.size(ECTheme.dimensions.thirtySix),
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null
                 )
             }
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.twelve))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.twelve))
 
             Text(
                 text = stringResource(id = R.string.hello_register_text),
                 fontWeight = FontWeight.Bold,
-                fontSize = LocalFontSizes.current.sizeTitle,
+                fontSize = ECTheme.typography.sizeTitle,
                 modifier = Modifier.align(Alignment.Start)
             )
 
@@ -144,7 +142,7 @@ fun SignupScreen(
                 leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) }
             )
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
             CustomButton(
                 text = stringResource(id = R.string.register_text),
@@ -156,7 +154,7 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),
-                color = LocalColors.current.primary
+                color = ECTheme.colors.primary
             )
         }
     }

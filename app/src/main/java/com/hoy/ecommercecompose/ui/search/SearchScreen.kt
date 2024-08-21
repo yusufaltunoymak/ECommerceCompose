@@ -38,7 +38,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
-import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 
@@ -58,6 +58,7 @@ fun SearchScreen(
                     is SearchContract.UiEffect.GoToDetail -> {
                         onDetailClick(effect.productId)
                     }
+
                     is SearchContract.UiEffect.NavigateBack -> {
                         onBackClick()
                     }
@@ -74,7 +75,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(LocalDimensions.current.sixteen)
+            .padding(ECTheme.dimensions.sixteen)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -82,10 +83,10 @@ fun SearchScreen(
         ) {
             IconButton(
                 onClick = { onBackClick() },
-                modifier = Modifier.size(LocalDimensions.current.fortyEight)
+                modifier = Modifier.size(ECTheme.dimensions.fortyEight)
             ) {
                 Icon(
-                    modifier = Modifier.size(LocalDimensions.current.thirtyEight),
+                    modifier = Modifier.size(ECTheme.dimensions.thirtyEight),
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null
                 )
@@ -112,14 +113,14 @@ fun SearchScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else if (!uiState.errorMessage.isNullOrEmpty()) {
             Text(
                 text = uiState.errorMessage,
-                color = LocalColors.current.red,
+                color = ECTheme.colors.red,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         } else {
@@ -154,15 +155,15 @@ fun ProductListItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = LocalDimensions.current.eight)
+            .padding(vertical = ECTheme.dimensions.eight)
             .clickable { onDetailClick(product.id) },
         colors = CardDefaults.cardColors(
-            containerColor = LocalColors.current.white
+            containerColor = ECTheme.colors.white
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = LocalDimensions.current.two)
+        elevation = CardDefaults.cardElevation(defaultElevation = ECTheme.dimensions.two)
     ) {
         Row(
-            modifier = Modifier.padding(LocalDimensions.current.sixteen),
+            modifier = Modifier.padding(ECTheme.dimensions.sixteen),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {

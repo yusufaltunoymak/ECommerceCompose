@@ -45,7 +45,7 @@ import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.home.HomeContract
-import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
@@ -57,21 +57,21 @@ fun ProductCard(
     onNavigateToDetail: (Int) -> Unit
 ) {
     val iconColor =
-        if (product.isFavorite) LocalColors.current.primary else LocalColors.current.gray
+        if (product.isFavorite) ECTheme.colors.primary else ECTheme.colors.gray
     Card(
         modifier = modifier
             .size(
-                LocalDimensions.current.oneHundredSeventy,
-                LocalDimensions.current.twoHundredSixty
+                ECTheme.dimensions.oneHundredSeventy,
+                ECTheme.dimensions.twoHundredSixty
             )
-            .clip(RoundedCornerShape(LocalDimensions.current.twelve))
+            .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
             .clickable {
                 onNavigateToDetail(product.id)
             },
         colors = CardDefaults.cardColors(
-            containerColor = LocalColors.current.white
+            containerColor = ECTheme.colors.white
         ),
-        elevation = CardDefaults.cardElevation(LocalDimensions.current.eight)
+        elevation = CardDefaults.cardElevation(ECTheme.dimensions.eight)
     ) {
         Column(
             modifier = Modifier
@@ -80,7 +80,7 @@ fun ProductCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(LocalDimensions.current.oneHundredFifty)
+                    .height(ECTheme.dimensions.oneHundredFifty)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
@@ -93,7 +93,7 @@ fun ProductCard(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(LocalDimensions.current.twelve))
+                        .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
                 )
 
                 IconButton(
@@ -101,11 +101,11 @@ fun ProductCard(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(
-                            top = LocalDimensions.current.eight,
-                            end = LocalDimensions.current.eight
+                            top = ECTheme.dimensions.eight,
+                            end = ECTheme.dimensions.eight
                         )
-                        .background(color = LocalColors.current.lightGray, shape = CircleShape)
-                        .size(LocalDimensions.current.thirtySix)
+                        .background(color = ECTheme.colors.lightGray, shape = CircleShape)
+                        .size(ECTheme.dimensions.thirtySix)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
@@ -115,7 +115,7 @@ fun ProductCard(
                 }
             }
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
             Text(
                 text = product.title,
@@ -125,15 +125,15 @@ fun ProductCard(
                 fontFamily = displayFontFamily,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = LocalDimensions.current.eight)
+                modifier = Modifier.padding(start = ECTheme.dimensions.eight)
             )
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.four))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.four))
 
             Row(
                 modifier = Modifier.padding(
-                    start = LocalDimensions.current.eight,
-                    end = LocalDimensions.current.eight
+                    start = ECTheme.dimensions.eight,
+                    end = ECTheme.dimensions.eight
                 ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -143,7 +143,7 @@ fun ProductCard(
                         spanStyles = listOf(
                             AnnotatedString.Range(
                                 item = SpanStyle(
-                                    color = LocalColors.current.red.copy(alpha = 0.6f),
+                                    color = ECTheme.colors.red.copy(alpha = 0.6f),
                                     fontWeight = FontWeight.Light,
                                     textDecoration = TextDecoration.LineThrough
                                 ),
@@ -156,35 +156,35 @@ fun ProductCard(
                     style = MaterialTheme.typography.bodyLarge
                 )
 
-                Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
+                Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
 
                 Text(
                     text = "$${product.salePrice}",
                     fontFamily = displayFontFamily,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = LocalColors.current.black,
+                    color = ECTheme.colors.black,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.four))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.four))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = LocalDimensions.current.eight)
+                modifier = Modifier.padding(start = ECTheme.dimensions.eight)
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = stringResource(id = R.string.rating),
-                    tint = LocalColors.current.primary,
-                    modifier = Modifier.size(LocalDimensions.current.sixteen)
+                    tint = ECTheme.colors.primary,
+                    modifier = Modifier.size(ECTheme.dimensions.sixteen)
                 )
-                Spacer(modifier = Modifier.width(LocalDimensions.current.four))
+                Spacer(modifier = Modifier.width(ECTheme.dimensions.four))
                 Text(
                     text = product.rate.toString(),
                     fontFamily = displayFontFamily,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = LocalColors.current.gray
+                    color = ECTheme.colors.gray
                 )
             }
         }
@@ -202,7 +202,7 @@ fun ProductList(
             ProductCard(
                 product = product,
                 onFavoriteClick = onFavoriteClick,
-                modifier = Modifier.padding(LocalDimensions.current.eight),
+                modifier = Modifier.padding(ECTheme.dimensions.eight),
                 onNavigateToDetail = onNavigateToDetail
             )
         }

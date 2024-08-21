@@ -48,10 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomButton
-import com.hoy.ecommercecompose.ui.theme.ECommerceComposeTheme
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
-import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -131,7 +128,7 @@ fun PaymentScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(LocalDimensions.current.sixteen)
+            .padding(ECTheme.dimensions.sixteen)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -139,20 +136,20 @@ fun PaymentScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = LocalDimensions.current.four),
+                .padding(bottom = ECTheme.dimensions.four),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                tint = LocalColors.current.primary,
+                tint = ECTheme.colors.primary,
                 modifier = Modifier
                     .clickable { onBackPress() }
-                    .size(LocalDimensions.current.twentyFour)
+                    .size(ECTheme.dimensions.twentyFour)
             )
 
-            Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
+            Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
 
             Text(
                 text = "Payment",
@@ -167,27 +164,27 @@ fun PaymentScreen(
             uiState = uiState
         )
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         CardHolderInput(
             uiState = uiState,
             onAction = onAction
         )
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         CardNumberInput(
             uiState = uiState,
             onAction = onAction
         )
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         ExpiryDateAndCvvInput(
             uiState = uiState,
             onAction = onAction
         )
-        Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
         AddressInput(
             uiState = uiState,
@@ -208,27 +205,27 @@ fun BankCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(LocalDimensions.current.four)
-            .clip(RoundedCornerShape(LocalDimensions.current.sixteen))
-            .background(LocalColors.current.primary)
-            .height(LocalDimensions.current.twoHundredTwenty)
+            .padding(ECTheme.dimensions.four)
+            .clip(RoundedCornerShape(ECTheme.dimensions.sixteen))
+            .background(ECTheme.colors.primary)
+            .height(ECTheme.dimensions.twoHundredTwenty)
     ) {
         Column(
             modifier = Modifier
-                .padding(LocalDimensions.current.sixteen)
+                .padding(ECTheme.dimensions.sixteen)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "CARD HOLDER",
-                color = ECommerceComposeTheme.colors.semiTransparentWhite,
+                color = ECTheme.colors.semiTransparentWhite,
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 text = uiState.cardHolderName.uppercase(),
-                color = ECommerceComposeTheme.colors.white,
+                color = ECTheme.colors.white,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = LocalDimensions.current.sixteen)
+                modifier = Modifier.padding(bottom = ECTheme.dimensions.sixteen)
             )
 
             Row(
@@ -237,9 +234,9 @@ fun BankCard(
             ) {
                 Text(
                     text = uiState.cardNumber.chunked(4).joinToString(" "),
-                    fontSize = LocalFontSizes.current.extraLarge,
-                    color = ECommerceComposeTheme.colors.white,
-                    modifier = Modifier.padding(horizontal = LocalDimensions.current.four)
+                    fontSize = ECTheme.typography.extraLarge,
+                    color = ECTheme.colors.white,
+                    modifier = Modifier.padding(horizontal = ECTheme.dimensions.four)
                 )
             }
 
@@ -250,31 +247,31 @@ fun BankCard(
                 Column {
                     Text(
                         text = "EXPIRES",
-                        color = ECommerceComposeTheme.colors.semiTransparentWhite,
+                        color = ECTheme.colors.semiTransparentWhite,
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = "${uiState.selectedMonth}/${uiState.selectedYear}",
-                        color = ECommerceComposeTheme.colors.white,
+                        color = ECTheme.colors.white,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
                 Column {
                     Text(
                         text = "CVV",
-                        color = LocalColors.current.semiTransparentWhite,
+                        color = ECTheme.colors.semiTransparentWhite,
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = uiState.cvv,
-                        color = ECommerceComposeTheme.colors.white,
+                        color = ECTheme.colors.white,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
             Text(
                 text = "VISA",
-                color = ECommerceComposeTheme.colors.white,
+                color = ECTheme.colors.white,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.End)
             )
@@ -379,7 +376,7 @@ fun ExpiryDateAndCvvInput(
             }
         }
 
-        Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
 
         Box(modifier = Modifier.weight(1f)) {
             OutlinedTextField(
@@ -418,7 +415,7 @@ fun ExpiryDateAndCvvInput(
             }
         }
 
-        Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
 
         OutlinedTextField(
             value = uiState.cvv,
@@ -447,7 +444,7 @@ fun AddressInput(
         Text(
             text = "Address",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = LocalDimensions.current.sixteen)
+            modifier = Modifier.padding(bottom = ECTheme.dimensions.sixteen)
         )
 
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -483,7 +480,7 @@ fun AddressInput(
             }
         }
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
         Box(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
@@ -518,7 +515,7 @@ fun AddressInput(
             }
         }
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
         OutlinedTextField(
             value = uiState.addressText,
@@ -526,7 +523,7 @@ fun AddressInput(
             label = { Text(text = "Full Address") },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(LocalDimensions.current.oneHundredFifty),
+                .height(ECTheme.dimensions.oneHundredFifty),
             enabled = uiState.selectedCity.isNotEmpty() && uiState.selectedDistrict.isNotEmpty()
         )
     }
@@ -535,7 +532,7 @@ fun AddressInput(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPaymentScreen() {
-    ECommerceComposeTheme {
+    ECTheme {
         val uiState = PaymentContract.UiState(
             cardHolderName = "JOHN DOE",
             cardNumber = "1234567812345678",

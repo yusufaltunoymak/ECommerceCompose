@@ -13,7 +13,7 @@ import com.hoy.ecommercecompose.ui.components.bottomnavigation.BottomNavigationB
 import com.hoy.ecommercecompose.ui.components.bottomnavigation.bottomNavItems
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.navigation.SetupNavGraph
-import com.hoy.ecommercecompose.ui.theme.ECommerceComposeTheme
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ECommerceComposeTheme {
+            ECTheme {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
