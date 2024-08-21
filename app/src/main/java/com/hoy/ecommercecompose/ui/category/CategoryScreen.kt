@@ -28,7 +28,7 @@ import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
-import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 
@@ -57,15 +57,15 @@ fun CategoryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(LocalDimensions.current.sixteen)
+                .padding(ECTheme.dimensions.sixteen)
         ) {
             Row {
                 IconButton(
                     onClick = { onBackClick() },
-                    modifier = Modifier.size(LocalDimensions.current.fortyEight)
+                    modifier = Modifier.size(ECTheme.dimensions.fortyEight)
                 ) {
                     Icon(
-                        modifier = Modifier.size(LocalDimensions.current.thirtyEight),
+                        modifier = Modifier.size(ECTheme.dimensions.thirtyEight),
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = null
                     )
@@ -87,7 +87,7 @@ fun CategoryScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
             Box(modifier = Modifier.fillMaxSize()) {
                 when {
@@ -98,7 +98,7 @@ fun CategoryScreen(
                     uiState.errorMessage != null -> {
                         Text(
                             text = uiState.errorMessage,
-                            color = LocalColors.current.red,
+                            color = ECTheme.colors.red,
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.align(Alignment.Center)
                         )
@@ -126,21 +126,36 @@ fun CategoryScreen(
                 onDismissRequest = { expanded = false },
             ) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(id = R.string.price_low_to_high), style = MaterialTheme.typography.bodyMedium) },
+                    text = {
+                        Text(
+                            stringResource(id = R.string.price_low_to_high),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     onClick = {
                         viewModel.sortProducts(SortOption.PRICE_LOW_TO_HIGH)
                         expanded = false
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text(stringResource(id = R.string.price_high_to_low), style = MaterialTheme.typography.bodyMedium) },
+                    text = {
+                        Text(
+                            stringResource(id = R.string.price_high_to_low),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     onClick = {
                         viewModel.sortProducts(SortOption.PRICE_HIGH_TO_LOW)
                         expanded = false
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text(stringResource(id = R.string.rating), style = MaterialTheme.typography.bodyMedium) },
+                    text = {
+                        Text(
+                            stringResource(id = R.string.rating),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     onClick = {
                         viewModel.sortProducts(SortOption.RATING)
                         expanded = false
@@ -167,20 +182,20 @@ fun ProductCategoryCard(
         modifier = modifier
             .clickable { onProductDetailClick(product.id) }
             .fillMaxWidth()
-            .padding(LocalDimensions.current.eight)
-            .clip(RoundedCornerShape(LocalDimensions.current.twelve))
+            .padding(ECTheme.dimensions.eight)
+            .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
             .shadow(
-                LocalDimensions.current.four,
-                RoundedCornerShape(LocalDimensions.current.twelve)
+                ECTheme.dimensions.four,
+                RoundedCornerShape(ECTheme.dimensions.twelve)
             ),
-        border = BorderStroke(LocalDimensions.current.one, LocalColors.current.gray),
+        border = BorderStroke(ECTheme.dimensions.one, ECTheme.colors.gray),
         colors = CardDefaults.cardColors(
-            containerColor = LocalColors.current.white
+            containerColor = ECTheme.colors.white
         )
     ) {
         Row(
             modifier = Modifier
-                .padding(LocalDimensions.current.twelve)
+                .padding(ECTheme.dimensions.twelve)
                 .fillMaxWidth()
         ) {
             AsyncImage(
@@ -193,43 +208,43 @@ fun ProductCategoryCard(
                 placeholder = painterResource(id = R.drawable.loading_img),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(LocalDimensions.current.oneHundred)
-                    .clip(RoundedCornerShape(LocalDimensions.current.eight))
+                    .size(ECTheme.dimensions.oneHundred)
+                    .clip(RoundedCornerShape(ECTheme.dimensions.eight))
             )
 
-            Spacer(modifier = Modifier.width(LocalDimensions.current.twelve))
+            Spacer(modifier = Modifier.width(ECTheme.dimensions.twelve))
 
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(vertical = LocalDimensions.current.eight)
+                    .padding(vertical = ECTheme.dimensions.eight)
             ) {
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = LocalColors.current.darkGray,
+                    color = ECTheme.colors.darkGray,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(LocalDimensions.current.six))
+                Spacer(modifier = Modifier.height(ECTheme.dimensions.six))
 
                 Row {
                     Text(
                         text = "$${product.price}",
                         style = MaterialTheme.typography.bodyLarge.copy(textDecoration = TextDecoration.LineThrough),
-                        color = LocalColors.current.gray
+                        color = ECTheme.colors.gray
                     )
-                    Spacer(modifier = Modifier.width(LocalDimensions.current.six))
+                    Spacer(modifier = Modifier.width(ECTheme.dimensions.six))
                     Text(
                         text = "$${product.salePrice}",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = LocalColors.current.red,
+                        color = ECTheme.colors.red,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
-                Spacer(modifier = Modifier.height(LocalDimensions.current.six))
+                Spacer(modifier = Modifier.height(ECTheme.dimensions.six))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -237,14 +252,14 @@ fun ProductCategoryCard(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = LocalColors.current.primary,
-                        modifier = Modifier.size(LocalDimensions.current.sixteen)
+                        tint = ECTheme.colors.primary,
+                        modifier = Modifier.size(ECTheme.dimensions.sixteen)
                     )
-                    Spacer(modifier = Modifier.width(LocalDimensions.current.four))
+                    Spacer(modifier = Modifier.width(ECTheme.dimensions.four))
                     Text(
                         text = product.rate.toString(),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = LocalColors.current.gray
+                        color = ECTheme.colors.gray
                     )
                 }
             }

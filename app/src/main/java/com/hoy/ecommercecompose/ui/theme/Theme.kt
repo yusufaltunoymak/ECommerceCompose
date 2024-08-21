@@ -5,15 +5,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 
-object ECommerceComposeTheme {
+object ECTheme {
     val colors: ECProjectColor
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
+
+    val dimensions: ECDimension
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalDimensions.current
+
+    val typography: ECFontSize
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalFontSizes.current
 }
 
 @Composable
-fun ECommerceComposeTheme(
+fun ECTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

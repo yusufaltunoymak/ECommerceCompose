@@ -4,15 +4,34 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 
@@ -57,8 +76,8 @@ fun AccountScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    horizontal = LocalDimensions.current.sixteen,
-                    vertical = LocalDimensions.current.eight
+                    horizontal = ECTheme.dimensions.sixteen,
+                    vertical = ECTheme.dimensions.eight
                 )
         ) {
             item {
@@ -70,17 +89,17 @@ fun AccountScreen(
                     IconButton(
                         onClick = onBackClick,
                         modifier = Modifier
-                            .size(LocalDimensions.current.fortyEight)
+                            .size(ECTheme.dimensions.fortyEight)
                             .border(
                                 BorderStroke(
-                                    LocalDimensions.current.one,
-                                    LocalColors.current.primary
+                                    ECTheme.dimensions.one,
+                                    ECTheme.colors.primary
                                 ),
-                                shape = RoundedCornerShape(LocalDimensions.current.twelve)
+                                shape = RoundedCornerShape(ECTheme.dimensions.twelve)
                             )
                     ) {
                         Icon(
-                            modifier = Modifier.size(LocalDimensions.current.forty),
+                            modifier = Modifier.size(ECTheme.dimensions.forty),
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                             contentDescription = null
                         )
@@ -100,13 +119,13 @@ fun AccountScreen(
                             }
                         },
                         modifier = Modifier
-                            .size(LocalDimensions.current.fortyEight)
+                            .size(ECTheme.dimensions.fortyEight)
                             .border(
                                 BorderStroke(
-                                    LocalDimensions.current.one,
-                                    LocalColors.current.primary
+                                    ECTheme.dimensions.one,
+                                    ECTheme.colors.primary
                                 ),
-                                shape = RoundedCornerShape(LocalDimensions.current.twelve)
+                                shape = RoundedCornerShape(ECTheme.dimensions.twelve)
                             )
                     ) {
                         Icon(
@@ -116,50 +135,60 @@ fun AccountScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(LocalDimensions.current.twenty))
+                Spacer(modifier = Modifier.height(ECTheme.dimensions.twenty))
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = LocalDimensions.current.four),
+                        .padding(vertical = ECTheme.dimensions.four),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedTextField(
                         value = uiState.currentUser.name!!,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = LocalColors.current.primary,
-                            unfocusedBorderColor = LocalColors.current.primary,
-                            focusedLabelColor = LocalColors.current.secondary,
-                            unfocusedLabelColor = LocalColors.current.secondary,
+                            focusedBorderColor = ECTheme.colors.primary,
+                            unfocusedBorderColor = ECTheme.colors.primary,
+                            focusedLabelColor = ECTheme.colors.secondary,
+                            unfocusedLabelColor = ECTheme.colors.secondary,
                         ),
                         enabled = isEditing,
                         onValueChange = {
                             name = it
                             isSaveEnabled = true
                         },
-                        label = { Text(stringResource(id = R.string.name_label), style = MaterialTheme.typography.bodyMedium) },
+                        label = {
+                            Text(
+                                stringResource(id = R.string.name_label),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        },
                         modifier = Modifier
                             .weight(1f)
-                            .padding(end = LocalDimensions.current.eight)
+                            .padding(end = ECTheme.dimensions.eight)
                     )
 
                     OutlinedTextField(
                         value = uiState.currentUser.surname!!,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = LocalColors.current.primary,
-                            unfocusedBorderColor = LocalColors.current.primary,
-                            focusedLabelColor = LocalColors.current.secondary,
-                            unfocusedLabelColor = LocalColors.current.secondary,
+                            focusedBorderColor = ECTheme.colors.primary,
+                            unfocusedBorderColor = ECTheme.colors.primary,
+                            focusedLabelColor = ECTheme.colors.secondary,
+                            unfocusedLabelColor = ECTheme.colors.secondary,
                         ),
                         enabled = isEditing,
                         onValueChange = {
                             surname = it
                             isSaveEnabled = true
                         },
-                        label = { Text(stringResource(id = R.string.surname_label), style = MaterialTheme.typography.bodyMedium) },
+                        label = {
+                            Text(
+                                stringResource(id = R.string.surname_label),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        },
                         modifier = Modifier
                             .weight(1f)
-                            .padding(end = LocalDimensions.current.eight)
+                            .padding(end = ECTheme.dimensions.eight)
                     )
                 }
 
@@ -167,97 +196,126 @@ fun AccountScreen(
                     value = uiState.currentUser.email!!,
                     enabled = isEditing,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = LocalColors.current.primary,
-                        unfocusedBorderColor = LocalColors.current.primary,
-                        focusedLabelColor = LocalColors.current.secondary,
-                        unfocusedLabelColor = LocalColors.current.secondary,
+                        focusedBorderColor = ECTheme.colors.primary,
+                        unfocusedBorderColor = ECTheme.colors.primary,
+                        focusedLabelColor = ECTheme.colors.secondary,
+                        unfocusedLabelColor = ECTheme.colors.secondary,
                     ),
                     onValueChange = {
                         email = it
                         isSaveEnabled = true
                     },
-                    label = { Text(stringResource(id = R.string.email_label), style = MaterialTheme.typography.bodyMedium) },
+                    label = {
+                        Text(
+                            stringResource(id = R.string.email_label),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = LocalDimensions.current.four)
+                        .padding(vertical = ECTheme.dimensions.four)
                 )
 
                 OutlinedTextField(
                     value = uiState.currentUser.address!!,
                     enabled = isEditing,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = LocalColors.current.primary,
-                        unfocusedBorderColor = LocalColors.current.primary,
-                        focusedLabelColor = LocalColors.current.secondary,
-                        unfocusedLabelColor = LocalColors.current.secondary,
+                        focusedBorderColor = ECTheme.colors.primary,
+                        unfocusedBorderColor = ECTheme.colors.primary,
+                        focusedLabelColor = ECTheme.colors.secondary,
+                        unfocusedLabelColor = ECTheme.colors.secondary,
                     ),
                     onValueChange = {
                         address = it
                         isSaveEnabled = true
                     },
-                    label = { Text(stringResource(id = R.string.address_label), style = MaterialTheme.typography.bodyMedium) },
+                    label = {
+                        Text(
+                            stringResource(id = R.string.address_label),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = LocalDimensions.current.four)
+                        .padding(vertical = ECTheme.dimensions.four)
                 )
 
-                Spacer(modifier = Modifier.height(LocalDimensions.current.twenty))
+                Spacer(modifier = Modifier.height(ECTheme.dimensions.twenty))
 
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
-                        .padding(horizontal = LocalDimensions.current.sixteen)
+                        .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.ic_order, title = stringResource(id = R.string.my_order), onClick = { })
+                MenuItem(
+                    iconId = R.drawable.ic_order,
+                    title = stringResource(id = R.string.my_order),
+                    onClick = { })
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
-                        .padding(horizontal = LocalDimensions.current.sixteen)
+                        .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
 
-                MenuItem(iconId = R.drawable.ic_payment, title = stringResource(id = R.string.payment_methods), onClick = { })
+                MenuItem(
+                    iconId = R.drawable.ic_payment,
+                    title = stringResource(id = R.string.payment_methods),
+                    onClick = { })
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
-                        .padding(horizontal = LocalDimensions.current.sixteen)
+                        .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.circle_lock, title = stringResource(id = R.string.change_password), onClick = { })
+                MenuItem(
+                    iconId = R.drawable.circle_lock,
+                    title = stringResource(id = R.string.change_password),
+                    onClick = { })
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
-                        .padding(horizontal = LocalDimensions.current.sixteen)
+                        .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = { }, textColor = LocalColors.current.red)
+                MenuItem(
+                    iconId = R.drawable.ic_logout,
+                    title = stringResource(id = R.string.log_out),
+                    onClick = { },
+                    textColor = ECTheme.colors.red
+                )
             }
         }
     } else {
         Text(
             text = stringResource(id = R.string.connection_error),
             modifier = Modifier.fillMaxSize(),
-            color = LocalColors.current.red,
+            color = ECTheme.colors.red,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize
         )
     }
 }
 
 @Composable
-fun MenuItem(iconId: Int, title: String, onClick: () -> Unit, textColor: Color = LocalColors.current.black) {
+fun MenuItem(
+    iconId: Int,
+    title: String,
+    onClick: () -> Unit,
+    textColor: Color = ECTheme.colors.black
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(vertical = LocalDimensions.current.sixteen)
+            .padding(vertical = ECTheme.dimensions.sixteen)
     ) {
         Image(
             painter = painterResource(id = iconId),
             contentDescription = null,
-            modifier = Modifier.size(LocalDimensions.current.twentyFour)
+            modifier = Modifier.size(ECTheme.dimensions.twentyFour)
         )
-        Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,

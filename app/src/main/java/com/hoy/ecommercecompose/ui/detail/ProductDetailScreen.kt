@@ -50,9 +50,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
-import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.bodyFontFamily
 import kotlinx.coroutines.flow.Flow
 
@@ -108,7 +106,7 @@ fun ProductDetailScreen(
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                         contentDescription = stringResource(id = R.string.back_icon),
-                                        tint = LocalColors.current.primary
+                                        tint = ECTheme.colors.primary
                                     )
                                 }
 
@@ -117,7 +115,7 @@ fun ProductDetailScreen(
                                         Icon(
                                             imageVector = Icons.Default.Share,
                                             contentDescription = stringResource(id = R.string.share),
-                                            tint = LocalColors.current.primary
+                                            tint = ECTheme.colors.primary
                                         )
                                     }
                                     IconButton(
@@ -130,7 +128,7 @@ fun ProductDetailScreen(
                                                 Icons.Default.FavoriteBorder
                                             },
                                             contentDescription = stringResource(id = R.string.favorite),
-                                            tint = LocalColors.current.primary
+                                            tint = ECTheme.colors.primary
                                         )
                                     }
                                 }
@@ -140,20 +138,20 @@ fun ProductDetailScreen(
                         Box(
                             modifier = Modifier.clip(
                                 RoundedCornerShape(
-                                    topStart = LocalDimensions.current.sixteen,
-                                    topEnd = LocalDimensions.current.sixteen
+                                    topStart = ECTheme.dimensions.sixteen,
+                                    topEnd = ECTheme.dimensions.sixteen
                                 )
                             )
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .background(color = LocalColors.current.white)
+                                    .background(color = ECTheme.colors.white)
                                     .fillMaxSize()
-                                    .padding(LocalDimensions.current.sixteen)
+                                    .padding(ECTheme.dimensions.sixteen)
                                     .clip(
                                         RoundedCornerShape(
-                                            topStart = LocalDimensions.current.sixteen,
-                                            topEnd = LocalDimensions.current.sixteen
+                                            topStart = ECTheme.dimensions.sixteen,
+                                            topEnd = ECTheme.dimensions.sixteen
                                         )
                                     )
                             ) {
@@ -161,37 +159,37 @@ fun ProductDetailScreen(
                                     Text(
                                         text = it,
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = LocalFontSizes.current.extraLarge
+                                        fontSize = ECTheme.typography.extraLarge
                                     )
                                 }
                                 Text(
                                     text = "$${uiState.productDetail.price}",
-                                    fontSize = LocalFontSizes.current.large,
+                                    fontSize = ECTheme.typography.large,
                                     fontWeight = FontWeight.Bold,
                                     fontStyle = FontStyle.Italic
                                 )
 
-                                Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+                                Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
                                 RatingBar(rating = uiState.productDetail.rate.orEmpty())
 
-                                Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+                                Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
                                 Text(
                                     text = "Detail",
-                                    color = LocalColors.current.primary,
+                                    color = ECTheme.colors.primary,
                                     fontWeight = FontWeight.SemiBold,
-                                    fontSize = LocalFontSizes.current.large
+                                    fontSize = ECTheme.typography.large
                                 )
 
                                 Text(
                                     text = "${uiState.productDetail.description}",
-                                    fontSize = LocalFontSizes.current.body,
-                                    color = LocalColors.current.black,
+                                    fontSize = ECTheme.typography.body,
+                                    color = ECTheme.colors.black,
                                     fontFamily = bodyFontFamily
                                 )
 
-                                Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+                                Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
                                 Column(
                                     modifier = Modifier
@@ -203,11 +201,11 @@ fun ProductDetailScreen(
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier
-                                            .clip(RoundedCornerShape(LocalDimensions.current.thirtyFour))
-                                            .background(color = LocalColors.current.black)
+                                            .clip(RoundedCornerShape(ECTheme.dimensions.thirtyFour))
+                                            .background(color = ECTheme.colors.black)
                                             .padding(
-                                                horizontal = LocalDimensions.current.four,
-                                                vertical = LocalDimensions.current.two
+                                                horizontal = ECTheme.dimensions.four,
+                                                vertical = ECTheme.dimensions.two
                                             )
                                     ) {
                                         Row(
@@ -215,8 +213,8 @@ fun ProductDetailScreen(
                                             modifier = Modifier
                                                 .border(
                                                     BorderStroke(
-                                                        LocalDimensions.current.one,
-                                                        LocalColors.current.white
+                                                        ECTheme.dimensions.one,
+                                                        ECTheme.colors.white
                                                     ),
                                                     shape = CircleShape
                                                 )
@@ -226,19 +224,22 @@ fun ProductDetailScreen(
                                                 Icon(
                                                     Icons.Default.KeyboardArrowDown,
                                                     contentDescription = null,
-                                                    tint = LocalColors.current.white
+                                                    tint = ECTheme.colors.white
                                                 )
                                             }
-                                            Text(text = stringResource(id = R.string.one_text), style = TextStyle(color = LocalColors.current.white))
+                                            Text(
+                                                text = stringResource(id = R.string.one_text),
+                                                style = TextStyle(color = ECTheme.colors.white)
+                                            )
                                             IconButton(onClick = { /* increase quantity */ }) {
                                                 Icon(
                                                     Icons.Default.KeyboardArrowUp,
                                                     contentDescription = null,
-                                                    tint = LocalColors.current.white
+                                                    tint = ECTheme.colors.white
                                                 )
                                             }
                                         }
-                                        Spacer(modifier = Modifier.width(LocalDimensions.current.thirty))
+                                        Spacer(modifier = Modifier.width(ECTheme.dimensions.thirty))
                                         Button(
                                             onClick = {
                                                 onAction(
@@ -248,16 +249,16 @@ fun ProductDetailScreen(
                                                 )
                                             },
                                             colors = ButtonDefaults.buttonColors(
-                                                containerColor = LocalColors.current.primary
+                                                containerColor = ECTheme.colors.primary
                                             )
                                         ) {
                                             Text(
                                                 text = stringResource(id = R.string.add_to_cart),
-                                                modifier = Modifier.padding(LocalDimensions.current.eight),
+                                                modifier = Modifier.padding(ECTheme.dimensions.eight),
                                             )
                                         }
                                     }
-                                    Spacer(modifier = Modifier.height(LocalDimensions.current.thirty))
+                                    Spacer(modifier = Modifier.height(ECTheme.dimensions.thirty))
                                 }
                             }
                         }
@@ -277,7 +278,7 @@ fun RatingBar(
     modifier: Modifier = Modifier,
     rating: Double = 0.0,
     stars: Int = 5,
-    starsColor: Color = LocalColors.current.primary
+    starsColor: Color = ECTheme.colors.primary
 ) {
     var isHalfStar = (rating % 1) != 0.0
 
@@ -302,11 +303,11 @@ fun RatingBar(
         }
         Text(
             text = "$rating",
-            color = LocalColors.current.black,
-            fontSize = LocalFontSizes.current.body,
+            color = ECTheme.colors.black,
+            fontSize = ECTheme.typography.body,
             fontFamily = bodyFontFamily,
             modifier = modifier
-                .padding(start = LocalDimensions.current.four)
+                .padding(start = ECTheme.dimensions.four)
                 .align(Alignment.CenterVertically)
         )
     }
@@ -319,7 +320,7 @@ fun ImageList(modifier: Modifier = Modifier, uiState: ProductDetailContract.UiSt
             imageUrls = detail.getImageList().filterNotNull(),
             modifier = modifier
                 .fillMaxWidth()
-                .height(LocalDimensions.current.threeHundred)
+                .height(ECTheme.dimensions.threeHundred)
         )
     }
 }

@@ -45,7 +45,7 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.local.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
-import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -72,13 +72,13 @@ fun CartScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(LocalDimensions.current.sixteen)
+            .padding(ECTheme.dimensions.sixteen)
     ) {
         Text(
             text = stringResource(id = R.string.my_cart),
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier
-                .padding(bottom = LocalDimensions.current.sixteen)
+                .padding(bottom = ECTheme.dimensions.sixteen)
                 .align(Alignment.CenterHorizontally)
         )
 
@@ -138,28 +138,28 @@ fun CartItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = LocalDimensions.current.eight)
+            .padding(vertical = ECTheme.dimensions.eight)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(LocalDimensions.current.eight),
-            elevation = CardDefaults.cardElevation(LocalDimensions.current.four),
-            colors = CardDefaults.cardColors(containerColor = LocalColors.current.white)
+            shape = RoundedCornerShape(ECTheme.dimensions.eight),
+            elevation = CardDefaults.cardElevation(ECTheme.dimensions.four),
+            colors = CardDefaults.cardColors(containerColor = ECTheme.colors.white)
         ) {
             uiState.product?.let { product ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(LocalDimensions.current.eight),
+                        .padding(ECTheme.dimensions.eight),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
                         painter = rememberAsyncImagePainter(model = uiState.product.imageOne),
                         contentDescription = null,
-                        modifier = Modifier.size(LocalDimensions.current.seventyTwo)
+                        modifier = Modifier.size(ECTheme.dimensions.seventyTwo)
                     )
 
-                    Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
+                    Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
 
                     Column(
                         modifier = Modifier
@@ -169,17 +169,17 @@ fun CartItem(
                     ) {
                         Text(
                             text = uiState.product.title,
-                            color = LocalColors.current.gray,
-                            modifier = Modifier.padding(bottom = LocalDimensions.current.eight)
+                            color = ECTheme.colors.gray,
+                            modifier = Modifier.padding(bottom = ECTheme.dimensions.eight)
                         )
 
                         Text(
                             text = "$${"%.2f".format(product.price * product.quantity)}",
-                            color = LocalColors.current.gray
+                            color = ECTheme.colors.gray
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(LocalDimensions.current.sixteen))
+                    Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
 
                     Column(
                         horizontalAlignment = Alignment.End,
@@ -188,24 +188,24 @@ fun CartItem(
                     ) {
                         IconButton(
                             onClick = { deleteProductFromCart(product.productId) },
-                            modifier = Modifier.size(LocalDimensions.current.thirtyTwo)
+                            modifier = Modifier.size(ECTheme.dimensions.thirtyTwo)
                         ) {
                             Icon(
                                 Icons.Default.Delete,
                                 contentDescription = stringResource(id = R.string.remove_item),
-                                tint = LocalColors.current.red
+                                tint = ECTheme.colors.red
                             )
                         }
 
                         Box(
                             modifier = Modifier
                                 .background(
-                                    color = LocalColors.current.white,
-                                    shape = RoundedCornerShape(LocalDimensions.current.eight)
+                                    color = ECTheme.colors.white,
+                                    shape = RoundedCornerShape(ECTheme.dimensions.eight)
                                 )
                                 .padding(
-                                    horizontal = LocalDimensions.current.eight,
-                                    vertical = LocalDimensions.current.four
+                                    horizontal = ECTheme.dimensions.eight,
+                                    vertical = ECTheme.dimensions.four
                                 )
                         ) {
                             Row(
@@ -214,29 +214,29 @@ fun CartItem(
                             ) {
                                 IconButton(
                                     onClick = { decreaseQuantity(product.productId) },
-                                    modifier = Modifier.size(LocalDimensions.current.twentyFour)
+                                    modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowDown,
                                         contentDescription = stringResource(id = R.string.decrease_quantity),
-                                        tint = LocalColors.current.darkGray,
-                                        modifier = Modifier.size(LocalDimensions.current.sixteen)
+                                        tint = ECTheme.colors.darkGray,
+                                        modifier = Modifier.size(ECTheme.dimensions.sixteen)
                                     )
                                 }
                                 Text(
                                     text = "${product.quantity}",
-                                    color = LocalColors.current.darkGray,
-                                    modifier = Modifier.padding(horizontal = LocalDimensions.current.four)
+                                    color = ECTheme.colors.darkGray,
+                                    modifier = Modifier.padding(horizontal = ECTheme.dimensions.four)
                                 )
                                 IconButton(
                                     onClick = { increaseQuantity(product.productId) },
-                                    modifier = Modifier.size(LocalDimensions.current.twentyFour)
+                                    modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowUp,
                                         contentDescription = stringResource(id = R.string.increase_quantity),
-                                        tint = LocalColors.current.darkGray,
-                                        modifier = Modifier.size(LocalDimensions.current.sixteen)
+                                        tint = ECTheme.colors.darkGray,
+                                        modifier = Modifier.size(ECTheme.dimensions.sixteen)
                                     )
                                 }
                             }
@@ -258,7 +258,7 @@ fun CartFooter(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = LocalDimensions.current.eight)
+            .padding(vertical = ECTheme.dimensions.eight)
     ) {
         OutlinedTextField(
             value = uiState.discountCode,
@@ -276,13 +276,13 @@ fun CartFooter(
             },
             trailingIcon = {
                 Button(
-                    modifier = Modifier.padding(end = LocalDimensions.current.eight),
+                    modifier = Modifier.padding(end = ECTheme.dimensions.eight),
                     onClick = onApplyDiscount,
                     enabled = uiState.discountCode.isNotEmpty(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (uiState.discountCode.isNotEmpty()) LocalColors.current.primary else LocalColors.current.gray
+                        containerColor = if (uiState.discountCode.isNotEmpty()) ECTheme.colors.primary else ECTheme.colors.gray
                     ),
-                    shape = RoundedCornerShape(LocalDimensions.current.sixteen)
+                    shape = RoundedCornerShape(ECTheme.dimensions.sixteen)
                 ) {
                     Text(stringResource(id = R.string.apply))
                 }
@@ -290,7 +290,7 @@ fun CartFooter(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -308,7 +308,7 @@ fun CartFooter(
             )
         }
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.four))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.four))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -326,7 +326,7 @@ fun CartFooter(
             )
         }
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         CustomButton(text = stringResource(id = R.string.payment), onClick = { onPaymentClick() })
     }
