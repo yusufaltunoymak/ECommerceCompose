@@ -36,9 +36,15 @@ class ECDimension {
     val twentyEight: Dp
         @Composable
         get() = 28.dp
+    val thirty: Dp
+        @Composable
+        get() = 30.dp
     val thirtyTwo: Dp
         @Composable
         get() = 32.dp
+    val thirtyFour: Dp
+        @Composable
+        get() = 34.dp
     val thirtySix: Dp
         @Composable
         get() = 36.dp
@@ -72,6 +78,9 @@ class ECDimension {
     val twoHundredSixty: Dp
         @Composable
         get() = 260.dp
+    val threeHundred: Dp
+        @Composable
+        get() = 300.dp
 }
 
 internal val LocalDimensions = staticCompositionLocalOf { ECDimension() }

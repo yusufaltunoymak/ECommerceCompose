@@ -34,4 +34,8 @@
     <string name="search_icon">Search Icon</string>
     <string name="search_for_products">Search for products</string>
     <string name="list_icon">List Icon</string>
+    <string name="share">Share</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="one_text">1</string>
+    <string name="add_to_cart">Add to Cart</string>
 </resources>

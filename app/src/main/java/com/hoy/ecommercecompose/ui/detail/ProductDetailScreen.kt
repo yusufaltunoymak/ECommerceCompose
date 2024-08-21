@@ -40,17 +40,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.theme.LocalColors
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 import com.hoy.ecommercecompose.ui.theme.bodyFontFamily
 import kotlinx.coroutines.flow.Flow
 
@@ -105,7 +107,7 @@ fun ProductDetailScreen(
                                 IconButton(onClick = { onBackClick() }) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = null,
+                                        contentDescription = stringResource(id = R.string.back_icon),
                                         tint = LocalColors.current.primary
                                     )
                                 }
@@ -114,14 +116,18 @@ fun ProductDetailScreen(
                                     IconButton(onClick = {}) {
                                         Icon(
                                             imageVector = Icons.Default.Share,
-                                            contentDescription = null,
+                                            contentDescription = stringResource(id = R.string.share),
                                             tint = LocalColors.current.primary
                                         )
                                     }
                                     IconButton(onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }) {
                                         Icon(
-                                            imageVector = if (uiState.productDetail.isFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                            contentDescription = null,
+                                            imageVector = if (uiState.productDetail.isFavorite == true) {
+                                                Icons.Default.Favorite
+                                            } else {
+                                                Icons.Default.FavoriteBorder
+                                            },
+                                            contentDescription = stringResource(id = R.string.favorite),
                                             tint = LocalColors.current.primary
                                         )
                                     }
@@ -132,53 +138,58 @@ fun ProductDetailScreen(
                         Box(
                             modifier = Modifier.clip(
                                 RoundedCornerShape(
-                                    topStart = 16.dp,
-                                    topEnd = 16.dp
+                                    topStart = LocalDimensions.current.sixteen,
+                                    topEnd = LocalDimensions.current.sixteen
                                 )
                             )
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .background(color = Color.White)
+                                    .background(color = LocalColors.current.white)
                                     .fillMaxSize()
-                                    .padding(16.dp)
-                                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                                    .padding(LocalDimensions.current.sixteen)
+                                    .clip(
+                                        RoundedCornerShape(
+                                            topStart = LocalDimensions.current.sixteen,
+                                            topEnd = LocalDimensions.current.sixteen
+                                        )
+                                    )
                             ) {
                                 uiState.productDetail.title?.let {
                                     Text(
                                         text = it,
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 24.sp
+                                        fontSize = LocalFontSizes.current.extraLarge
                                     )
                                 }
                                 Text(
                                     text = "$${uiState.productDetail.price}",
-                                    fontSize = 20.sp,
+                                    fontSize = LocalFontSizes.current.large,
                                     fontWeight = FontWeight.Bold,
                                     fontStyle = FontStyle.Italic
                                 )
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
 
                                 RatingBar(rating = uiState.productDetail.rate.orEmpty())
 
-                                Spacer(modifier = Modifier.height(16.dp))
+                                Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
                                 Text(
                                     text = "Detail",
                                     color = LocalColors.current.primary,
                                     fontWeight = FontWeight.SemiBold,
-                                    fontSize = 20.sp
+                                    fontSize = LocalFontSizes.current.large
                                 )
 
                                 Text(
                                     text = "${uiState.productDetail.description}",
-                                    fontSize = 18.sp,
-                                    color = Color.Black,
+                                    fontSize = LocalFontSizes.current.body,
+                                    color = LocalColors.current.black,
                                     fontFamily = bodyFontFamily
                                 )
 
-                                Spacer(modifier = Modifier.height(16.dp))
+                                Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
 
                                 Column(
                                     modifier = Modifier
@@ -190,15 +201,21 @@ fun ProductDetailScreen(
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier
-                                            .clip(RoundedCornerShape(34.dp))
-                                            .background(color = Color.Black)
-                                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                                            .clip(RoundedCornerShape(LocalDimensions.current.thirtyFour))
+                                            .background(color = LocalColors.current.black)
+                                            .padding(
+                                                horizontal = LocalDimensions.current.four,
+                                                vertical = LocalDimensions.current.two
+                                            )
                                     ) {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
                                                 .border(
-                                                    BorderStroke(1.dp, Color.White),
+                                                    BorderStroke(
+                                                        LocalDimensions.current.one,
+                                                        LocalColors.current.white
+                                                    ),
                                                     shape = CircleShape
                                                 )
                                                 .clip(CircleShape)
@@ -207,40 +224,38 @@ fun ProductDetailScreen(
                                                 Icon(
                                                     Icons.Default.KeyboardArrowDown,
                                                     contentDescription = null,
-                                                    tint = Color.White
+                                                    tint = LocalColors.current.white
                                                 )
                                             }
-                                            Text(text = "1", style = TextStyle(color = Color.White))
+                                            Text(text = stringResource(id = R.string.one_text), style = TextStyle(color = LocalColors.current.white))
                                             IconButton(onClick = { /* increase quantity */ }) {
                                                 Icon(
                                                     Icons.Default.KeyboardArrowUp,
                                                     contentDescription = null,
-                                                    tint = Color.White
+                                                    tint = LocalColors.current.white
                                                 )
                                             }
                                         }
-                                        Spacer(modifier = Modifier.width(30.dp))
+                                        Spacer(modifier = Modifier.width(LocalDimensions.current.thirty))
                                         Button(
                                             onClick = {
-                                                uiState.productDetail.let { productDetail ->
-                                                    onAction(
-                                                        ProductDetailContract.UiAction.AddToCartClick(
-                                                            productDetail
-                                                        )
+                                                onAction(
+                                                    ProductDetailContract.UiAction.AddToCartClick(
+                                                        uiState.productDetail
                                                     )
-                                                }
+                                                )
                                             },
                                             colors = ButtonDefaults.buttonColors(
                                                 containerColor = LocalColors.current.primary
                                             )
                                         ) {
                                             Text(
-                                                text = "Add to Cart",
-                                                modifier = Modifier.padding(6.dp),
+                                                text = stringResource(id = R.string.add_to_cart),
+                                                modifier = Modifier.padding(LocalDimensions.current.eight),
                                             )
                                         }
                                     }
-                                    Spacer(modifier = Modifier.height(30.dp))
+                                    Spacer(modifier = Modifier.height(LocalDimensions.current.thirty))
                                 }
                             }
                         }
@@ -278,18 +293,18 @@ fun RatingBar(
                         Icons.Rounded.StarOutline
                     }
                 },
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.rating),
                 tint = starsColor,
                 modifier = modifier
             )
         }
         Text(
             text = "$rating",
-            color = Color.Black,
-            fontSize = 18.sp,
+            color = LocalColors.current.black,
+            fontSize = LocalFontSizes.current.body,
             fontFamily = bodyFontFamily,
             modifier = modifier
-                .padding(start = 4.dp)
+                .padding(start = LocalDimensions.current.four)
                 .align(Alignment.CenterVertically)
         )
     }
@@ -302,7 +317,7 @@ fun ImageList(modifier: Modifier = Modifier, uiState: ProductDetailContract.UiSt
             imageUrls = detail.getImageList().filterNotNull(),
             modifier = modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(LocalDimensions.current.threeHundred)
         )
     }
 }
