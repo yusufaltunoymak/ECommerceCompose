@@ -27,7 +27,6 @@ class GoogleAuthUiClient @Inject constructor(
                 buildSignInRequest()
             ).await()
         } catch (e: Exception) {
-            e.printStackTrace()
             if (e is CancellationException) throw e
             null
         }
@@ -54,7 +53,6 @@ class GoogleAuthUiClient @Inject constructor(
                     errorMessage = null
                 )
             } catch (e: Exception) {
-                e.printStackTrace()
                 if (e is CancellationException) throw e
                 SignInResult(
                     data = null,
@@ -74,7 +72,6 @@ class GoogleAuthUiClient @Inject constructor(
             oneTapClient.signOut().await()
             auth.signOut()
         } catch (e: Exception) {
-            e.printStackTrace()
             if (e is CancellationException) throw e
         }
     }

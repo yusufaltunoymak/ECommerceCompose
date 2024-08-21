@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.ui.login
+package com.hoy.ecommercecompose.ui.passwordchanged
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
+import com.hoy.ecommercecompose.ui.login.LoginContract
 
 @Composable
 fun PasswordChangedScreen(

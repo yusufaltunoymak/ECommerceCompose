@@ -7,6 +7,7 @@ import com.hoy.ecommercecompose.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+private const val MINIMUM_ACCEPTABLE_RATE = 4.0
 
 class GetProductsUseCase @Inject constructor(
     private val productRepository: ProductRepository
@@ -22,7 +23,7 @@ class GetProductsUseCase @Inject constructor(
 
                 val filteredList = response.productDto.filter { product ->
                     product.rate?.let { rate ->
-                        rate > 4.0
+                        rate > MINIMUM_ACCEPTABLE_RATE
                     } == true
                 }
 
