@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -99,7 +98,7 @@ fun CategoryScreen(
                     uiState.errorMessage != null -> {
                         Text(
                             text = uiState.errorMessage,
-                            color = Color.Red,
+                            color = LocalColors.current.red,
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.align(Alignment.Center)
                         )
@@ -174,9 +173,9 @@ fun ProductCategoryCard(
                 LocalDimensions.current.four,
                 RoundedCornerShape(LocalDimensions.current.twelve)
             ),
-        border = BorderStroke(LocalDimensions.current.one, Color.Gray),
+        border = BorderStroke(LocalDimensions.current.one, LocalColors.current.gray),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = LocalColors.current.white
         )
     ) {
         Row(
@@ -208,7 +207,7 @@ fun ProductCategoryCard(
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.DarkGray,
+                    color = LocalColors.current.darkGray,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -219,13 +218,13 @@ fun ProductCategoryCard(
                     Text(
                         text = "$${product.price}",
                         style = MaterialTheme.typography.bodyLarge.copy(textDecoration = TextDecoration.LineThrough),
-                        color = Color.Gray
+                        color = LocalColors.current.gray
                     )
                     Spacer(modifier = Modifier.width(LocalDimensions.current.six))
                     Text(
                         text = "$${product.salePrice}",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Red,
+                        color = LocalColors.current.red,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -245,7 +244,7 @@ fun ProductCategoryCard(
                     Text(
                         text = product.rate.toString(),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = LocalColors.current.gray
                     )
                 }
             }

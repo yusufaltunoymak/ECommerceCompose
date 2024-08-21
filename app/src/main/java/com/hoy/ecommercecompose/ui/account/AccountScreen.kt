@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -232,21 +231,21 @@ fun AccountScreen(
                         .padding(horizontal = LocalDimensions.current.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = { }, textColor = Color.Red)
+                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = { }, textColor = LocalColors.current.red)
             }
         }
     } else {
         Text(
             text = stringResource(id = R.string.connection_error),
             modifier = Modifier.fillMaxSize(),
-            color = Color.Red,
+            color = LocalColors.current.red,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize
         )
     }
 }
 
 @Composable
-fun MenuItem(iconId: Int, title: String, onClick: () -> Unit, textColor: Color = Color.Black) {
+fun MenuItem(iconId: Int, title: String, onClick: () -> Unit, textColor: Color = LocalColors.current.black) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.search
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
@@ -40,6 +38,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
+import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 
@@ -120,7 +119,7 @@ fun SearchScreen(
         } else if (!uiState.errorMessage.isNullOrEmpty()) {
             Text(
                 text = uiState.errorMessage,
-                color = Color.Red,
+                color = LocalColors.current.red,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         } else {
@@ -158,7 +157,7 @@ fun ProductListItem(
             .padding(vertical = LocalDimensions.current.eight)
             .clickable { onDetailClick(product.id) },
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = LocalColors.current.white
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = LocalDimensions.current.two)
     ) {

@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -176,7 +175,7 @@ fun CartItem(
 
                         Text(
                             text = "$${"%.2f".format(product.price * product.quantity)}",
-                            color = Color.Gray
+                            color = LocalColors.current.gray
                         )
                     }
 
@@ -220,7 +219,7 @@ fun CartItem(
                                     Icon(
                                         Icons.Default.KeyboardArrowDown,
                                         contentDescription = stringResource(id = R.string.decrease_quantity),
-                                        tint = Color.DarkGray,
+                                        tint = LocalColors.current.darkGray,
                                         modifier = Modifier.size(LocalDimensions.current.sixteen)
                                     )
                                 }
