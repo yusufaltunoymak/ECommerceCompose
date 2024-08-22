@@ -25,7 +25,6 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.ui.home.HomeContract
 import com.hoy.ecommercecompose.ui.theme.ECTheme
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
 @Composable

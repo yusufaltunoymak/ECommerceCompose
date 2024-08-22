@@ -53,7 +53,6 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.ECTheme
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

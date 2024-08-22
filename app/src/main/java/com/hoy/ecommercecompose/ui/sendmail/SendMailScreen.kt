@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.sendmail
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,16 +20,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.ECTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SendMailScreen(
@@ -36,7 +44,34 @@ fun SendMailScreen(
     uiState: SendMailContract.SendMailUiState,
     onAction: (SendMailContract.SendMailUiAction) -> Unit,
     onNavigateToLogin: () -> Unit,
+    uiEffect: Flow<SendMailContract.UiEffect>
 ) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(uiEffect, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            uiEffect.collect { effect ->
+                when (effect) {
+                    is SendMailContract.UiEffect.ShowToast -> {
+                        Toast.makeText(
+                            context,
+                            context.getString(effect.messageResId),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    SendMailContract.UiEffect.NavigateToLogin -> {
+                        onNavigateToLogin()
+                    }
+
+                    SendMailContract.UiEffect.BackClick -> {
+                        onBackClick()
+                    }
+                }
+            }
+        }
+    }
+
     val isEmailFieldEmpty = uiState.email.isEmpty()
 
     Column(
@@ -133,6 +168,7 @@ fun SendMailScreenPreview() {
         onBackClick = {},
         uiState = SendMailContract.SendMailUiState(),
         onAction = {},
-        onNavigateToLogin = {}
+        onNavigateToLogin = {},
+        uiEffect = flowOf()
     )
 }

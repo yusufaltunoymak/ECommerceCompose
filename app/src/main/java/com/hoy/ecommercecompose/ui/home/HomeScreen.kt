@@ -32,7 +32,6 @@ import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.ProductList
 import com.hoy.ecommercecompose.ui.theme.ECTheme
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
 

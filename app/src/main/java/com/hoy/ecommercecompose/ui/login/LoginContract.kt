@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.login
 
 import android.content.Intent
 import android.content.IntentSender
-import com.hoy.ecommercecompose.ui.signup.SignUpContract.UiAction
 
 object LoginContract {
     data class UiState(

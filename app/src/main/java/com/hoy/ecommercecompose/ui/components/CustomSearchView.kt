@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.theme.ECTheme
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 
 @Composable
 fun CustomSearchView(

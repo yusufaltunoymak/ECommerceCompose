@@ -541,7 +541,7 @@ fun PreviewPaymentScreen() {
             selectedMonth = "12",
             selectedYear = "2025",
             selectedCity = "Ankara",
-            selectedDistrict = "Çankaya",
+            selectedDistrict = "California",
             addressText = "1234 Elm Street"
         )
         PaymentScreen(uiState = uiState, onAction = {}, onBackPress = {}, uiEffect = flow {})

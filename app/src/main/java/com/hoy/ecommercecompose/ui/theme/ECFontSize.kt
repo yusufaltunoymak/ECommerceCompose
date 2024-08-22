@@ -12,6 +12,9 @@ class ECFontSize {
     val medium: TextUnit
         @Composable
         get() = 16.sp
+    val body: TextUnit
+        @Composable
+        get() = 18.sp
     val large: TextUnit
         @Composable
         get() = 20.sp
@@ -21,12 +24,7 @@ class ECFontSize {
     val sizeTitle: TextUnit
         @Composable
         get() = 32.sp
-    val subtitle: TextUnit
-        @Composable
-        get() = 28.sp
-    val body: TextUnit
-        @Composable
-        get() = 18.sp
+
 }
 
 internal val LocalFontSizes = staticCompositionLocalOf { ECFontSize() }

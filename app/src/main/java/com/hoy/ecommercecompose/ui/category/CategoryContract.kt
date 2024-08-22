@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.category
 
-
 import com.hoy.ecommercecompose.domain.model.ProductUi
 
 object CategoryContract {

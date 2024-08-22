@@ -39,6 +39,26 @@ import com.hoy.ecommercecompose.ui.sendmail.SendMailViewModel
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
 import com.hoy.ecommercecompose.ui.signup.SignupScreen
 
+enum class NavRoute(val route: String) {
+    WELCOME("welcome"),
+    LOGIN("login"),
+    SIGNUP("signup"),
+    RESET_PASSWORD("reset_password"),
+    SEND_MAIL("send_mail"),
+    HOME("home"),
+    PRODUCT_DETAIL("product_detail?productId={productId}"),
+    CATEGORY_SCREEN("category_screen?category={category}"),
+    FAVORITE("favorite"),
+    PROFILE("profile"),
+    SEARCH("search"),
+    CART("cart"),
+    PAYMENT("payment");
+
+    fun withArgs(vararg args: String): String {
+        return route.split("?").first() + args.joinToString(prefix = "?", separator = "&")
+    }
+}
+
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
@@ -48,16 +68,16 @@ fun SetupNavGraph(
     val currentUser = FirebaseAuth.getInstance().currentUser
     NavHost(
         navController = navController,
-        startDestination = if (currentUser != null) "home" else "welcome",
+        startDestination = if (currentUser != null) NavRoute.HOME.route else NavRoute.WELCOME.route,
         modifier = modifier
     ) {
-        composable("welcome") {
+        composable(NavRoute.WELCOME.route) {
             WelcomeScreen(
-                onLoginClick = { navController.navigate("login") },
-                onRegisterClick = { navController.navigate("signup") }
+                onLoginClick = { navController.navigate(NavRoute.LOGIN.route) },
+                onRegisterClick = { navController.navigate(NavRoute.SIGNUP.route) }
             )
         }
-        composable("signup") {
+        composable(NavRoute.SIGNUP.route) {
             val viewModel: SignUpViewModel = hiltViewModel()
             val signupState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -68,13 +88,13 @@ fun SetupNavGraph(
                 uiEffect = uiEffect,
                 onBackClick = { navController.popBackStack() },
                 onNavigateToHome = {
-                    navController.navigate("home") {
-                        popUpTo("welcome") { inclusive = true }
+                    navController.navigate(NavRoute.HOME.route) {
+                        popUpTo(NavRoute.WELCOME.route) { inclusive = true }
                     }
                 }
             )
         }
-        composable("login") {
+        composable(NavRoute.LOGIN.route) {
             val loginViewModel: LoginViewModel = hiltViewModel()
             val loginViewState by loginViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = loginViewModel.uiEffect
@@ -83,16 +103,16 @@ fun SetupNavGraph(
                 uiState = loginViewState,
                 uiEffect = uiEffect,
                 onAction = loginViewModel::onAction,
-                onForgotPasswordClick = { navController.navigate("send_mail") },
+                onForgotPasswordClick = { navController.navigate(NavRoute.SEND_MAIL.route) },
                 onNavigateToHome = {
-                    navController.navigate("home") {
-                        popUpTo("welcome") { inclusive = true }
+                    navController.navigate(NavRoute.HOME.route) {
+                        popUpTo(NavRoute.WELCOME.route) { inclusive = true }
                     }
                 },
                 onBackClick = { navController.navigateUp() },
             )
         }
-        composable("reset_password") {
+        composable(NavRoute.RESET_PASSWORD.route) {
             val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
             val resetPasswordUiState by resetPasswordViewModel.resetUiState.collectAsStateWithLifecycle()
 
@@ -103,33 +123,35 @@ fun SetupNavGraph(
                 navController = navController
             )
         }
-        composable("send_mail") {
+        composable(NavRoute.SEND_MAIL.route) {
             val sendMailViewModel: SendMailViewModel = hiltViewModel()
-            val sendMailUiState by sendMailViewModel.sendMailUiState.collectAsStateWithLifecycle()
+            val sendMailUiState by sendMailViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = sendMailViewModel.uiEffect
 
             SendMailScreen(
                 onBackClick = { navController.popBackStack() },
                 uiState = sendMailUiState,
                 onAction = sendMailViewModel::onAction,
-                onNavigateToLogin = { navController.navigate("login") }
+                uiEffect = uiEffect,
+                onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) }
             )
         }
 
-        composable("home") {
+        composable(NavRoute.HOME.route) {
             val homeViewModel: HomeViewModel = hiltViewModel()
             val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = homeViewModel.uiEffect
             homeViewModel.getProducts()
 
             HomeScreen(
-                onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=$it")
+                onNavigateToDetail = { productId ->
+                    navController.navigate(NavRoute.PRODUCT_DETAIL.withArgs("productId=$productId"))
                 },
                 onNavigateToSearch = {
-                    navController.navigate("search")
+                    navController.navigate(NavRoute.SEARCH.route)
                 },
-                onCategoryListClick = {
-                    navController.navigate("category_screen?category=$it")
+                onCategoryListClick = { category ->
+                    navController.navigate(NavRoute.CATEGORY_SCREEN.withArgs("category=$category"))
                 },
                 onAction = homeViewModel::onAction,
                 uiState = homeUiState,
@@ -138,7 +160,7 @@ fun SetupNavGraph(
         }
 
         composable(
-            route = "product_detail?productId={productId}",
+            route = NavRoute.PRODUCT_DETAIL.route,
             arguments = listOf(
                 navArgument(name = "productId") {
                     type = NavType.IntType
@@ -157,7 +179,7 @@ fun SetupNavGraph(
         }
 
         composable(
-            route = "category_screen?category={category}",
+            route = NavRoute.CATEGORY_SCREEN.route,
             arguments = listOf(
                 navArgument(name = "category") {
                     type = NavType.StringType
@@ -173,14 +195,14 @@ fun SetupNavGraph(
                 uiState = uiState,
                 viewModel = viewModel,
                 onAction = viewModel::onAction,
-                onBackClick = {navController.popBackStack()},
+                onBackClick = { navController.popBackStack() },
                 onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=$it")
+                    navController.navigate(NavRoute.PRODUCT_DETAIL.withArgs("productId=$it"))
                 }
             )
         }
 
-        composable("favorite") {
+        composable(NavRoute.FAVORITE.route) {
             val viewModel: FavoriteViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -192,23 +214,23 @@ fun SetupNavGraph(
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
                 onNavigateToDetail = {
-                    navController.navigate("product_detail?productId=$it")
+                    navController.navigate(NavRoute.PRODUCT_DETAIL.withArgs("productId=$it"))
                 },
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable("profile") {
+        composable(NavRoute.PROFILE.route) {
             val viewModel: AccountViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
             AccountScreen(
                 uiEffect = uiEffect,
-                uiState =uiState,
+                uiState = uiState,
                 onAction = viewModel::onAction,
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable("search") {
+        composable(NavRoute.SEARCH.route) {
             val searchViewModel: SearchViewModel = hiltViewModel()
             val searchUiState by searchViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = searchViewModel.uiEffect
@@ -217,7 +239,7 @@ fun SetupNavGraph(
             }
             SearchScreen(
                 onDetailClick = {
-                    navController.navigate("product_detail?productId=$it")
+                    navController.navigate(NavRoute.PRODUCT_DETAIL.withArgs("productId=$it"))
                 },
                 onAction = searchViewModel::onAction,
                 uiState = searchUiState,
@@ -226,7 +248,7 @@ fun SetupNavGraph(
 
             )
         }
-        composable("cart") {
+        composable(NavRoute.CART.route) {
             val cartViewModel: CartViewModel = hiltViewModel()
             val cartUiState by cartViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = cartViewModel.uiEffect
@@ -237,10 +259,10 @@ fun SetupNavGraph(
                 uiState = cartUiState,
                 onAction = cartViewModel::onAction,
                 uiEffect = uiEffect,
-                onNavigatePayment = { navController.navigate("payment") }
+                onNavigatePayment = { navController.navigate(NavRoute.PAYMENT.route) }
             )
         }
-        composable("payment") {
+        composable(NavRoute.PAYMENT.route) {
             val paymentViewModel: PaymentViewModel = hiltViewModel()
             val paymentUiState by paymentViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = paymentViewModel.uiEffect

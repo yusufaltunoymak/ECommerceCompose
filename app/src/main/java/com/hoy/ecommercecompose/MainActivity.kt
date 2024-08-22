@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.ui.components.bottomnavigation.BottomNavigationBar
 import com.hoy.ecommercecompose.ui.components.bottomnavigation.bottomNavItems
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
+import com.hoy.ecommercecompose.ui.navigation.NavRoute
 import com.hoy.ecommercecompose.ui.navigation.SetupNavGraph
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,16 +29,15 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-                val hideBottomNavRoutes =
-                    listOf(
-                        "welcome",
-                        "login",
-                        "signup",
-                        "search",
-                        "product_detail?productId={productId}",
-                        "category_screen?category={category}",
-                        "payment"
-                    )
+                val hideBottomNavRoutes = listOf(
+                    NavRoute.WELCOME.route,
+                    NavRoute.LOGIN.route,
+                    NavRoute.SIGNUP.route,
+                    NavRoute.SEARCH.route,
+                    NavRoute.PRODUCT_DETAIL.route,
+                    NavRoute.CATEGORY_SCREEN.route,
+                    NavRoute.PAYMENT.route
+                )
                 val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
                 Scaffold(
                     bottomBar = {
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 onFabClick = {
-                                    // FAB tıklama işlemi burada tanımlanabilir
+
                                 }
                             )
                         }

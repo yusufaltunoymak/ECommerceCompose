@@ -16,6 +16,6 @@ object ResetPasswordContract {
         data class ChangeEmail(val email: String) : ResetPasswordUiAction()
         data class ChangePassword(val password: String) : ResetPasswordUiAction()
         data class ChangeConfirmPassword(val confirmPassword: String) : ResetPasswordUiAction()
-        object ResetPassword : ResetPasswordUiAction()
+        data object ResetPassword : ResetPasswordUiAction()
     }
 }
