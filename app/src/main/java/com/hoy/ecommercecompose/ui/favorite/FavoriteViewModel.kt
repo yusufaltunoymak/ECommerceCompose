@@ -66,7 +66,7 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun deleteFavorite(productId: Int) {
+    private fun deleteFavorite(productId: Int) {
         viewModelScope.launch {
             val deleteFromFavoriteBody = DeleteFromFavoriteBody(
                 userId = firebaseAuth.currentUser?.uid ?: "",

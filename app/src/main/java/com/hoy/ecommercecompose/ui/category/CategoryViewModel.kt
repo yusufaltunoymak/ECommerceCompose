@@ -6,13 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.domain.usecase.category.GetProductsByCategoryUseCase
-import com.hoy.ecommercecompose.ui.detail.ProductDetailContract
-import com.hoy.ecommercecompose.ui.home.HomeContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -60,12 +57,12 @@ class CategoryViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         categoryList.clear()
-                        categoryList.addAll(result.data ?: emptyList())
+                        categoryList.addAll(result.data)
                         _uiState.update { it.copy(isLoading = false, categoryList = categoryList) }
                     }
                     is Resource.Error -> {
                         _uiState.update { it.copy(isLoading = false) }
-                        _uiEffect.send(CategoryContract.UiEffect.ShowError(result.message.orEmpty()))
+                        _uiEffect.send(CategoryContract.UiEffect.ShowError(result.message))
                     }
                 }
             }

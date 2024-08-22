@@ -85,7 +85,7 @@ class ProductDetailViewModel @Inject constructor(
     private fun toggleFavorite() {
         val productDetail = _uiState.value.productDetail ?: return
         viewModelScope.launch {
-            productDetail.id?.let { id ->
+            productDetail.id?.let {
                 if (productDetail.isFavorite == true) {
                     deleteFavorite(productDetail.id)
                 } else {
