@@ -1,5 +1,7 @@
 package com.hoy.ecommercecompose.ui.detail
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -60,6 +62,7 @@ fun ProductDetailScreen(
     onAction: (ProductDetailContract.UiAction) -> Unit,
     uiEffect: Flow<ProductDetailContract.UiEffect>,
     onBackClick: () -> Unit,
+    context: Context
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
@@ -70,6 +73,14 @@ fun ProductDetailScreen(
                     is ProductDetailContract.UiEffect.ShowError -> TODO()
                     is ProductDetailContract.UiEffect.ShowToastMessage -> {}
                     ProductDetailContract.UiEffect.NavigateBack -> TODO()
+                    is ProductDetailContract.UiEffect.ShareProduct -> {
+                        val shareIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, effect.shareText)
+                            type = "text/plain"
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share product via"))
+                    }
                 }
             }
         }
@@ -111,7 +122,9 @@ fun ProductDetailScreen(
                                 }
 
                                 Row {
-                                    IconButton(onClick = {}) {
+                                    IconButton(onClick = {
+                                        onAction(ProductDetailContract.UiAction.ShareProduct)
+                                    }) {
                                         Icon(
                                             imageVector = Icons.Default.Share,
                                             contentDescription = stringResource(id = R.string.share),
