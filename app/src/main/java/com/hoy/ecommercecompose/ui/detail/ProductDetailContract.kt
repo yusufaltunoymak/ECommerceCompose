@@ -15,6 +15,7 @@ object ProductDetailContract {
         data object ToggleFavoriteClick : UiAction()
         data class AddToCartClick(val productDetail: ProductDetail) : UiAction()
         data object BackButtonClick : UiAction()
+        data object ShareProduct : UiAction()
     }
 
     sealed class UiEffect {
@@ -22,5 +23,6 @@ object ProductDetailContract {
         data object BackScreen : UiEffect()
         data object ShowToastMessage : UiEffect()
         data object NavigateBack : UiEffect()
+        data class ShareProduct(val shareText: String) : UiEffect()
     }
 }
