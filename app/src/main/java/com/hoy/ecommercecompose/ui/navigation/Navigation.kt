@@ -30,8 +30,8 @@ import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.payment.PaymentScreen
 import com.hoy.ecommercecompose.ui.payment.PaymentViewModel
-import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
-import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
+import com.hoy.ecommercecompose.ui.changepassword.ChangePasswordScreen
+import com.hoy.ecommercecompose.ui.changepassword.ChangePasswordViewModel
 import com.hoy.ecommercecompose.ui.search.SearchScreen
 import com.hoy.ecommercecompose.ui.search.SearchViewModel
 import com.hoy.ecommercecompose.ui.sendmail.SendMailScreen
@@ -90,17 +90,6 @@ fun SetupNavGraph(
                     }
                 },
                 onBackClick = { navController.navigateUp() },
-            )
-        }
-        composable("reset_password") {
-            val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
-            val resetPasswordUiState by resetPasswordViewModel.resetUiState.collectAsStateWithLifecycle()
-
-            ResetPasswordScreen(
-                onBackClick = { navController.popBackStack() },
-                uiState = resetPasswordUiState,
-                onAction = resetPasswordViewModel::onAction,
-                navController = navController
             )
         }
         composable("send_mail") {
@@ -205,7 +194,9 @@ fun SetupNavGraph(
                 uiEffect = uiEffect,
                 uiState =uiState,
                 onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() }
+                onNavigateToLogin= { navController.navigate("login") },
+                onBackClick = { navController.popBackStack() },
+                onNavigateToPassword = { navController.navigate("change_password")}
             )
         }
         composable("search") {
@@ -249,6 +240,15 @@ fun SetupNavGraph(
                 onAction = paymentViewModel::onAction,
                 uiEffect = uiEffect,
                 onBackPress = { navController.popBackStack() }
+            )
+        }
+        composable("change_password") {
+            val viewModel: ChangePasswordViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            ChangePasswordScreen(
+                uiState = uiState,
+                onAction = viewModel::onAction,
+                onBackClick = { navController.popBackStack() }
             )
         }
     }

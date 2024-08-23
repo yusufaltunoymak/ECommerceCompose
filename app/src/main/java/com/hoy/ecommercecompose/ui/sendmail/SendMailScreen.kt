@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.sendmail
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +42,7 @@ fun SendMailScreen(
     onNavigateToLogin: () -> Unit,
 ) {
     val isEmailFieldEmpty = uiState.email.isEmpty()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -100,12 +103,14 @@ fun SendMailScreen(
 
         Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
 
+
         CustomButton(
             text = stringResource(id = R.string.send_mail_button_text),
             onClick = {
                 onAction(
                     SendMailContract.SendMailUiAction.SendMail,
                 )
+                Toast.makeText(context, R.string.email_sent, Toast.LENGTH_SHORT).show()
                 onNavigateToLogin()
             },
             enabled = !isEmailFieldEmpty

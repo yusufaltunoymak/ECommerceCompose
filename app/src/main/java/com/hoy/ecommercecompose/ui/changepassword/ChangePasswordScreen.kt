@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.ui.resetpassword
+package com.hoy.ecommercecompose.ui.changepassword
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -26,11 +26,10 @@ import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
 
 @Composable
-fun ResetPasswordScreen(
+fun ChangePasswordScreen(
     onBackClick: () -> Unit,
-    uiState: ResetPasswordContract.ResetPasswordUiState,
-    onAction: (ResetPasswordContract.ResetPasswordUiAction) -> Unit,
-    navController: NavController
+    uiState: ChangePasswordContract.UiState,
+    onAction: (ChangePasswordContract.UiAction) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -76,7 +75,7 @@ fun ResetPasswordScreen(
 
         CustomTextField(
             value = uiState.email,
-            onValueChange = { onAction(ResetPasswordContract.ResetPasswordUiAction.ChangeEmail(it)) },
+            onValueChange = { },
             label = stringResource(R.string.new_password),
             leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
             isError = uiState.showEmailError,
@@ -87,7 +86,7 @@ fun ResetPasswordScreen(
 
         CustomTextField(
             value = uiState.password,
-            onValueChange = { onAction(ResetPasswordContract.ResetPasswordUiAction.ChangePassword(it)) },
+            onValueChange = { onAction(ChangePasswordContract.UiAction.ChangePassword(it)) },
             label = stringResource(R.string.confirm_password),
             isPassword = true,
             leadingIcon = {
@@ -102,7 +101,7 @@ fun ResetPasswordScreen(
 
         CustomButton(
             text = stringResource(R.string.reset_password),
-            onClick = { onAction(ResetPasswordContract.ResetPasswordUiAction.ResetPassword) }
+            onClick = { onAction(ChangePasswordContract.UiAction.ResetPassword) }
         )
     }
 }
@@ -110,10 +109,9 @@ fun ResetPasswordScreen(
 @Preview(showBackground = true)
 @Composable
 fun ResetPasswordScreenPreview() {
-    ResetPasswordScreen(
+    ChangePasswordScreen(
         onBackClick = { },
-        uiState = ResetPasswordContract.ResetPasswordUiState(),
+        uiState = ChangePasswordContract.UiState(),
         onAction = { },
-        navController = rememberNavController()
     )
 }

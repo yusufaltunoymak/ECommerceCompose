@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.theme.LocalColors
 import com.hoy.ecommercecompose.ui.theme.LocalDimensions
@@ -32,6 +33,8 @@ fun AccountScreen(
     uiState: AccountContract.UiState,
     onAction: (AccountContract.UiAction) -> Unit,
     onBackClick: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateToPassword: ()-> Unit,
 ) {
 
     var name by remember { mutableStateOf(uiState.currentUser?.name.orEmpty()) }
@@ -224,14 +227,19 @@ fun AccountScreen(
                         .padding(horizontal = LocalDimensions.current.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.circle_lock, title = stringResource(id = R.string.change_password), onClick = { })
+                MenuItem(iconId = R.drawable.circle_lock, title = stringResource(id = R.string.change_password), onClick = {
+                    onNavigateToPassword()
+                })
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
                         .padding(horizontal = LocalDimensions.current.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = { }, textColor = LocalColors.current.red)
+                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    onNavigateToLogin()
+                }, textColor = LocalColors.current.red)
             }
         }
     } else {
