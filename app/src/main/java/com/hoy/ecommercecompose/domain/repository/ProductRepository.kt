@@ -31,6 +31,8 @@ interface ProductRepository {
     suspend fun updateCartProduct(product: ProductEntity)
     fun getCartProductsLocal(userId: String): Flow<Resource<List<ProductEntity>>>
     suspend fun deleteFromCartProduct(productId: Int)
+    suspend fun isProductInCart(productId: Int): Boolean
+
 
     suspend fun clearCart(userId: String)
     suspend fun addPaymentDetails(payment: PaymentEntity)

@@ -87,6 +87,9 @@ fun ProductDetailScreen(
                         }
                         context.startActivity(Intent.createChooser(shareIntent, "Share product via"))
                     }
+                    is ProductDetailContract.UiEffect.ShowAlreadyInCartMessage -> {
+                            Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

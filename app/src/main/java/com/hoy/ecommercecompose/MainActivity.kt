@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             onFabClick = {
-
+                                navController.navigate(NavRoute.ORDER.route)
                             }
                         )
                     }

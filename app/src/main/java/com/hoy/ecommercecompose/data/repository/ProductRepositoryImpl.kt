@@ -81,6 +81,10 @@ class ProductRepositoryImpl @Inject constructor(
         return productDao.deleteFromCartProduct(productId)
     }
 
+    override suspend fun isProductInCart(productId: Int): Boolean {
+        return productDao.isProductInCart(productId)
+    }
+
     override suspend fun clearCart(userId: String) {
         return productDao.clearCart(userId)
     }

@@ -25,6 +25,9 @@ interface ProductDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateCartProduct(product: ProductEntity)
 
+    @Query("SELECT COUNT(*) > 0 FROM products_table WHERE productId = :productId")
+    suspend fun isProductInCart(productId: Int): Boolean
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPaymentDetails(paymentEntity: PaymentEntity)
 
