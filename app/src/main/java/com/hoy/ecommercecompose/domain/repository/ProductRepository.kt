@@ -1,10 +1,8 @@
 package com.hoy.ecommercecompose.domain.repository
 
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
+import com.hoy.ecommercecompose.data.source.local.payment.model.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
@@ -36,12 +34,9 @@ interface ProductRepository {
 
     suspend fun clearCart(userId: String)
     suspend fun addPaymentDetails(payment: PaymentEntity)
-    suspend fun processOrder(
-        paymentEntity: PaymentEntity,
-        orderedProducts: List<OrderedProductEntity>,
-        userId: String
-    )
+    suspend fun processOrder(userId: String, paymentEntity: PaymentEntity)
 
-    suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>)
-    fun getOrdersWithProducts(userId: String): Flow<List<PaymentWithProducts>>
+    fun getUserOrders(userId: String): Flow<List<PaymentEntity>>
+
+
 }

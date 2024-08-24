@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.data.source.local
+package com.hoy.ecommercecompose.data.source.local.payment.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,11 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "products_table")
 data class ProductEntity(
-    @ColumnInfo("userId")
-    val id: String,
     @PrimaryKey
     @ColumnInfo("productId")
     val productId: Int,
+    @ColumnInfo("userId")
+    val id: String,
     @ColumnInfo("category")
     val category: String,
     @ColumnInfo("count")
@@ -38,3 +38,4 @@ data class ProductEntity(
     @ColumnInfo("quantity")
     val quantity: Int
 )
+

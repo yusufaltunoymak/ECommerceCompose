@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                     launchSingleTop = true
                                     restoreState = true
+
                                 }
                             },
                             onFabClick = {

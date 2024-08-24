@@ -1,7 +1,6 @@
 package com.hoy.ecommercecompose.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.ui.home.HomeContract
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -35,7 +35,7 @@ fun CategoryCard(
 ) {
     Card(
         modifier = modifier
-            .clickable { onCategoryListClick(category.name) }
+            .noRippleClickable { onCategoryListClick(category.name) }
             .size(ECTheme.dimensions.oneHundred, ECTheme.dimensions.oneHundredTwenty),
         colors = CardDefaults.cardColors(
             containerColor = ECTheme.colors.white

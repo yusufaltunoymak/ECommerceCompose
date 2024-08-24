@@ -6,9 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
+import com.hoy.ecommercecompose.data.source.local.payment.model.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -30,26 +29,16 @@ interface ProductDao {
     suspend fun addPaymentDetails(paymentEntity: PaymentEntity)
 
     @Query("SELECT * FROM payment_table WHERE userId = :userId")
-    fun getPaymentDetails(userId: String): Flow<List<PaymentEntity>>
+    fun getUserOrders(userId: String): Flow<List<PaymentEntity>>
 
     @Query("DELETE FROM products_table WHERE userId = :userId")
     suspend fun clearCart(userId: String)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>)
 
     @Transaction
-    suspend fun processOrder(
-        paymentEntity: PaymentEntity,
-        orderedProducts: List<OrderedProductEntity>,
-        userId: String
-    ) {
+    suspend fun processOrder(userId: String, paymentEntity: PaymentEntity) {
         addPaymentDetails(paymentEntity)
-        addOrderedProducts(orderedProducts)
         clearCart(userId)
     }
 
-    @Transaction
-    @Query("SELECT * FROM payment_table WHERE userId = :userId")
-    fun getOrdersWithProducts(userId: String): Flow<List<PaymentWithProducts>>
 }

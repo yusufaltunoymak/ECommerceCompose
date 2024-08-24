@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.ui.detail
 
+import android.widget.Toast
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
@@ -31,7 +32,6 @@ import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -52,6 +53,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
+import com.hoy.ecommercecompose.ui.components.NonClickableProgress
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.bodyFontFamily
 import kotlinx.coroutines.flow.Flow
@@ -64,6 +66,7 @@ fun ProductDetailScreen(
     onBackClick: () -> Unit,
     context: Context
 ) {
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -71,7 +74,10 @@ fun ProductDetailScreen(
                 when (effect) {
                     is ProductDetailContract.UiEffect.BackScreen -> onBackClick()
                     is ProductDetailContract.UiEffect.ShowError -> TODO()
-                    is ProductDetailContract.UiEffect.ShowToastMessage -> {}
+                    is ProductDetailContract.UiEffect.ShowToastMessage -> {
+                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                    }
+
                     ProductDetailContract.UiEffect.NavigateBack -> TODO()
                     is ProductDetailContract.UiEffect.ShareProduct -> {
                         val shareIntent = Intent().apply {
@@ -86,203 +92,196 @@ fun ProductDetailScreen(
         }
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (!uiState.isLoading && uiState.productDetail != null) {
+            LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+                item {
+                    Box {
+                        ImageList(modifier = Modifier.fillMaxWidth(), uiState = uiState)
+                        TopBar(onBackClick = onBackClick, onAction = onAction, uiState = uiState)
+                    }
+                    ProductDetails(uiState = uiState)
+                    AddToCartSection(onAction = onAction, uiState = uiState)
+                }
+            }
+        }
+        if (uiState.isLoading) {
+            NonClickableProgress()
+        }
+    }
+}
+
+@Composable
+fun TopBar(
+    onBackClick: () -> Unit,
+    onAction: (ProductDetailContract.UiAction) -> Unit,
+    uiState: ProductDetailContract.UiState
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Top
     ) {
-        when {
-            uiState.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+        IconButton(onClick = { onBackClick() }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(id = R.string.back_icon),
+                tint = ECTheme.colors.primary
+            )
+        }
+        Row {
+            IconButton(onClick = {}) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = stringResource(id = R.string.share),
+                    tint = ECTheme.colors.primary
+                )
+            }
+            IconButton(onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }) {
+                Icon(
+                    imageVector = if (uiState.productDetail?.isFavorite == true) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    },
+                    contentDescription = stringResource(id = R.string.favorite),
+                    tint = ECTheme.colors.primary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductDetails(uiState: ProductDetailContract.UiState) {
+    Box(
+        modifier = Modifier.clip(
+            RoundedCornerShape(
+                topStart = ECTheme.dimensions.sixteen,
+                topEnd = ECTheme.dimensions.sixteen
+            )
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .background(color = ECTheme.colors.white)
+                .fillMaxSize()
+                .padding(ECTheme.dimensions.sixteen)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = ECTheme.dimensions.sixteen,
+                        topEnd = ECTheme.dimensions.sixteen
+                    )
+                )
+        ) {
+            uiState.productDetail?.title?.let {
+                Text(
+                    text = it,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = ECTheme.typography.extraLarge
+                )
+            }
+            Text(
+                text = "$${uiState.productDetail?.price}",
+                fontSize = ECTheme.typography.large,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic
+            )
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
+            RatingBar(rating = uiState.productDetail?.rate.orEmpty())
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
+            Text(
+                text = "Detail",
+                color = ECTheme.colors.primary,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = ECTheme.typography.large
+            )
+            Text(
+                text = "${uiState.productDetail?.description}",
+                fontSize = ECTheme.typography.body,
+                color = ECTheme.colors.black,
+                fontFamily = bodyFontFamily
+            )
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
+        }
+    }
+}
+
+
+@Composable
+fun AddToCartSection(
+    onAction: (ProductDetailContract.UiAction) -> Unit,
+    uiState: ProductDetailContract.UiState
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clip(RoundedCornerShape(ECTheme.dimensions.thirtyFour))
+                .background(color = ECTheme.colors.black)
+                .padding(
+                    horizontal = ECTheme.dimensions.four,
+                    vertical = ECTheme.dimensions.two
+                )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .border(
+                        BorderStroke(
+                            ECTheme.dimensions.one,
+                            ECTheme.colors.white
+                        ),
+                        shape = CircleShape
+                    )
+                    .clip(CircleShape)
+            ) {
+                IconButton(onClick = { /* decrease quantity */ }) {
+                    Icon(
+                        Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = ECTheme.colors.white
+                    )
+                }
+                Text(
+                    text = stringResource(id = R.string.one_text),
+                    style = TextStyle(color = ECTheme.colors.white)
+                )
+                IconButton(onClick = { /* increase quantity */ }) {
+                    Icon(
+                        Icons.Default.KeyboardArrowUp,
+                        contentDescription = null,
+                        tint = ECTheme.colors.white
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(ECTheme.dimensions.thirty))
+            Button(
+                onClick = {
+                    uiState.productDetail?.let { productDetail ->
+                        onAction(
+                            ProductDetailContract.UiAction.AddToCartClick(productDetail = productDetail)
+                        )
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ECTheme.colors.primary
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.add_to_cart),
+                    modifier = Modifier.padding(ECTheme.dimensions.eight),
                 )
             }
 
-            uiState.productDetail != null -> {
-                LazyColumn(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    item {
-                        Box {
-                            ImageList(
-                                modifier = Modifier.fillMaxWidth(),
-                                uiState = uiState
-                            )
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.Top
-                            ) {
-                                IconButton(onClick = { onBackClick() }) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = stringResource(id = R.string.back_icon),
-                                        tint = ECTheme.colors.primary
-                                    )
-                                }
-
-                                Row {
-                                    IconButton(onClick = {
-                                        onAction(ProductDetailContract.UiAction.ShareProduct)
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Share,
-                                            contentDescription = stringResource(id = R.string.share),
-                                            tint = ECTheme.colors.primary
-                                        )
-                                    }
-                                    IconButton(
-                                        onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }
-                                    ) {
-                                        Icon(
-                                            imageVector = if (uiState.productDetail.isFavorite == true) {
-                                                Icons.Default.Favorite
-                                            } else {
-                                                Icons.Default.FavoriteBorder
-                                            },
-                                            contentDescription = stringResource(id = R.string.favorite),
-                                            tint = ECTheme.colors.primary
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
-                        Box(
-                            modifier = Modifier.clip(
-                                RoundedCornerShape(
-                                    topStart = ECTheme.dimensions.sixteen,
-                                    topEnd = ECTheme.dimensions.sixteen
-                                )
-                            )
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .background(color = ECTheme.colors.white)
-                                    .fillMaxSize()
-                                    .padding(ECTheme.dimensions.sixteen)
-                                    .clip(
-                                        RoundedCornerShape(
-                                            topStart = ECTheme.dimensions.sixteen,
-                                            topEnd = ECTheme.dimensions.sixteen
-                                        )
-                                    )
-                            ) {
-                                uiState.productDetail.title?.let {
-                                    Text(
-                                        text = it,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = ECTheme.typography.extraLarge
-                                    )
-                                }
-                                Text(
-                                    text = "$${uiState.productDetail.price}",
-                                    fontSize = ECTheme.typography.large,
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic
-                                )
-
-                                Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
-
-                                RatingBar(rating = uiState.productDetail.rate.orEmpty())
-
-                                Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
-
-                                Text(
-                                    text = "Detail",
-                                    color = ECTheme.colors.primary,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = ECTheme.typography.large
-                                )
-
-                                Text(
-                                    text = "${uiState.productDetail.description}",
-                                    fontSize = ECTheme.typography.body,
-                                    color = ECTheme.colors.black,
-                                    fontFamily = bodyFontFamily
-                                )
-
-                                Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
-
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .fillMaxHeight(),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Bottom
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(ECTheme.dimensions.thirtyFour))
-                                            .background(color = ECTheme.colors.black)
-                                            .padding(
-                                                horizontal = ECTheme.dimensions.four,
-                                                vertical = ECTheme.dimensions.two
-                                            )
-                                    ) {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            modifier = Modifier
-                                                .border(
-                                                    BorderStroke(
-                                                        ECTheme.dimensions.one,
-                                                        ECTheme.colors.white
-                                                    ),
-                                                    shape = CircleShape
-                                                )
-                                                .clip(CircleShape)
-                                        ) {
-                                            IconButton(onClick = { /* decrease quantity */ }) {
-                                                Icon(
-                                                    Icons.Default.KeyboardArrowDown,
-                                                    contentDescription = null,
-                                                    tint = ECTheme.colors.white
-                                                )
-                                            }
-                                            Text(
-                                                text = stringResource(id = R.string.one_text),
-                                                style = TextStyle(color = ECTheme.colors.white)
-                                            )
-                                            IconButton(onClick = { /* increase quantity */ }) {
-                                                Icon(
-                                                    Icons.Default.KeyboardArrowUp,
-                                                    contentDescription = null,
-                                                    tint = ECTheme.colors.white
-                                                )
-                                            }
-                                        }
-                                        Spacer(modifier = Modifier.width(ECTheme.dimensions.thirty))
-                                        Button(
-                                            onClick = {
-                                                onAction(
-                                                    ProductDetailContract.UiAction.AddToCartClick(
-                                                        uiState.productDetail
-                                                    )
-                                                )
-                                            },
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = ECTheme.colors.primary
-                                            )
-                                        ) {
-                                            Text(
-                                                text = stringResource(id = R.string.add_to_cart),
-                                                modifier = Modifier.padding(ECTheme.dimensions.eight),
-                                            )
-                                        }
-                                    }
-                                    Spacer(modifier = Modifier.height(ECTheme.dimensions.thirty))
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            uiState.errorMessage != null -> {
-                Text(text = uiState.errorMessage)
-            }
         }
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.thirty))
     }
 }
 

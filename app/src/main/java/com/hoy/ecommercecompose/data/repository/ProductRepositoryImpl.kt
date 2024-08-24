@@ -2,10 +2,8 @@ package com.hoy.ecommercecompose.data.repository
 
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.source.local.ProductDao
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
+import com.hoy.ecommercecompose.data.source.local.payment.model.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.ApiService
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
@@ -97,19 +95,11 @@ class ProductRepositoryImpl @Inject constructor(
         return productDao.addPaymentDetails(payment)
     }
 
-    override suspend fun processOrder(
-        paymentEntity: PaymentEntity,
-        orderedProducts: List<OrderedProductEntity>,
-        userId: String
-    ) {
-        productDao.processOrder(paymentEntity, orderedProducts, userId)
+    override suspend fun processOrder(userId: String, paymentEntity: PaymentEntity) {
+        productDao.processOrder(userId, paymentEntity)
     }
 
-    override suspend fun addOrderedProducts(orderedProducts: List<OrderedProductEntity>) {
-        productDao.addOrderedProducts(orderedProducts)
-    }
-
-    override fun getOrdersWithProducts(userId: String): Flow<List<PaymentWithProducts>> {
-        return productDao.getOrdersWithProducts(userId)
+    override fun getUserOrders(userId: String): Flow<List<PaymentEntity>> {
+        return productDao.getUserOrders(userId)
     }
 }

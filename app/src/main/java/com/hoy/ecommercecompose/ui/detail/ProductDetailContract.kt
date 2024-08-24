@@ -21,7 +21,7 @@ object ProductDetailContract {
     sealed class UiEffect {
         data object ShowError : UiEffect()
         data object BackScreen : UiEffect()
-        data object ShowToastMessage : UiEffect()
+        data class ShowToastMessage(val message: String) : UiEffect()
         data object NavigateBack : UiEffect()
         data class ShareProduct(val shareText: String) : UiEffect()
     }

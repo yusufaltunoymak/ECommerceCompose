@@ -1,7 +1,6 @@
 package com.hoy.ecommercecompose.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.home.HomeContract
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -64,7 +64,7 @@ fun ProductCard(
                 ECTheme.dimensions.twoHundredSixty
             )
             .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
-            .clickable {
+            .noRippleClickable {
                 onNavigateToDetail(product.id)
             },
         colors = CardDefaults.cardColors(
