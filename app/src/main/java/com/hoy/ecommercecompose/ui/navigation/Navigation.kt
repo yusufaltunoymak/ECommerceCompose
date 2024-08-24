@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -156,7 +157,8 @@ fun SetupNavGraph(
                 uiState = uiState,
                 uiEffect = uiEffect,
                 onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                context = LocalContext.current
             )
         }
 

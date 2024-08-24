@@ -61,6 +61,9 @@ class ProductDetailViewModel @Inject constructor(
             is ProductDetailContract.UiAction.BackButtonClick -> {
                 navigateBack()
             }
+            is ProductDetailContract.UiAction.ShareProduct -> {
+                shareProduct()
+            }
         }
     }
 
@@ -209,6 +212,14 @@ class ProductDetailViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun shareProduct() {
+        val productDetail = _uiState.value.productDetail ?: return
+        val shareText = "Check out this product: ${productDetail.title} for \$${productDetail.price}. View it here: https://ecommerce.com/product/${productDetail.id}"
+        viewModelScope.launch {
+            _uiEffect.send(ProductDetailContract.UiEffect.ShareProduct(shareText))
         }
     }
 
