@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.ProductList
@@ -128,7 +128,7 @@ fun SearchNavigationView(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(ECTheme.dimensions.eight))
-            .clickable {
+            .noRippleClickable {
                 onNavigateToSearch()
             }
             .background(containerColor)

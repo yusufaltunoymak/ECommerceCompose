@@ -28,6 +28,8 @@ import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
+import com.hoy.ecommercecompose.ui.order.OrderScreen
+import com.hoy.ecommercecompose.ui.order.OrderViewModel
 import com.hoy.ecommercecompose.ui.payment.PaymentScreen
 import com.hoy.ecommercecompose.ui.payment.PaymentViewModel
 import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
@@ -38,26 +40,6 @@ import com.hoy.ecommercecompose.ui.sendmail.SendMailScreen
 import com.hoy.ecommercecompose.ui.sendmail.SendMailViewModel
 import com.hoy.ecommercecompose.ui.signup.SignUpViewModel
 import com.hoy.ecommercecompose.ui.signup.SignupScreen
-
-enum class NavRoute(val route: String) {
-    WELCOME("welcome"),
-    LOGIN("login"),
-    SIGNUP("signup"),
-    RESET_PASSWORD("reset_password"),
-    SEND_MAIL("send_mail"),
-    HOME("home"),
-    PRODUCT_DETAIL("product_detail?productId={productId}"),
-    CATEGORY_SCREEN("category_screen?category={category}"),
-    FAVORITE("favorite"),
-    PROFILE("profile"),
-    SEARCH("search"),
-    CART("cart"),
-    PAYMENT("payment");
-
-    fun withArgs(vararg args: String): String {
-        return route.split("?").first() + args.joinToString(prefix = "?", separator = "&")
-    }
-}
 
 @Composable
 fun SetupNavGraph(
@@ -271,6 +253,19 @@ fun SetupNavGraph(
                 onAction = paymentViewModel::onAction,
                 uiEffect = uiEffect,
                 onBackPress = { navController.popBackStack() }
+            )
+        }
+        composable(NavRoute.ORDER.route) {
+            val orderViewModel: OrderViewModel = hiltViewModel()
+            val orderUiState by orderViewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = orderViewModel.uiEffect
+            OrderScreen(
+                uiState = orderUiState,
+                onAction = orderViewModel::onAction,
+                uiEffect = uiEffect,
+                navigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }

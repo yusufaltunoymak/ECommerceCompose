@@ -1,7 +1,7 @@
 package com.hoy.ecommercecompose.ui.cart
 
 import androidx.compose.ui.graphics.Color
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 
 object CartContract {
     data class UiState(

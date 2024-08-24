@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.DeleteProductFromCartUseCase
 import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
@@ -154,7 +154,8 @@ class CartViewModel @Inject constructor(
         }
 
         _uiState.update {
-            val totalPrice = it.cartProductList.sumOf { product -> product.price * product.quantity }
+            val totalPrice =
+                it.cartProductList.sumOf { product -> product.price * product.quantity }
             it.copy(
                 totalCartPrice = totalPrice - discount,
                 discountPrice = discount,

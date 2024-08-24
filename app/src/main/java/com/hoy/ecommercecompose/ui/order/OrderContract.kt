@@ -1,11 +1,11 @@
 package com.hoy.ecommercecompose.ui.order
 
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentWithProducts
+import com.hoy.ecommercecompose.data.source.local.payment.model.PaymentEntity
 
 object OrderContract {
     data class UiState(
         val isLoading: Boolean = false,
-        val orders: List<PaymentWithProducts> = emptyList(),
+        val orders: List<PaymentEntity> = emptyList(),
         val errorMessage: String? = null
     )
 

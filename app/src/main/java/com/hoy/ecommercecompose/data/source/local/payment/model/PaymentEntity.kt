@@ -1,4 +1,4 @@
-package com.hoy.ecommercecompose.data.source.local.payment
+package com.hoy.ecommercecompose.data.source.local.payment.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "payment_table")
 data class PaymentEntity(
     @PrimaryKey(autoGenerate = true)
-    val orderId: Int = 0,
+    @ColumnInfo("paymentId")
+    val paymentId: Int = 0,
     @ColumnInfo("userId")
     val userId: String,
     @ColumnInfo("cardNumber")
@@ -16,12 +17,22 @@ data class PaymentEntity(
     val cardHolderName: String,
     @ColumnInfo("expirationDate")
     val expirationDate: String,
-    @ColumnInfo("amount")
-    val amount: Double,
     @ColumnInfo("city")
     val city: String,
     @ColumnInfo("district")
     val district: String,
     @ColumnInfo("fullAddress")
-    val fullAddress: String
+    val fullAddress: String,
+    @ColumnInfo("productId")
+    val productId: Int,
+    @ColumnInfo("imageOne")
+    val imageOne: String,
+    @ColumnInfo("title")
+    val title: String,
+    @ColumnInfo("quantity")
+    val quantity: Int,
+    @ColumnInfo("price")
+    val price: Double,
+    @ColumnInfo("OrderDate")
+    val orderDate: Long = System.currentTimeMillis(),
 )

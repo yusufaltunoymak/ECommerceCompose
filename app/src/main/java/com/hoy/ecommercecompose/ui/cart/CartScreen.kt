@@ -42,11 +42,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.ECTheme
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

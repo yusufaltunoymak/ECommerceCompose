@@ -5,10 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.data.datasources.CityRepository
-import com.hoy.ecommercecompose.data.mapper.mapToOrderedProductEntity
 import com.hoy.ecommercecompose.data.mapper.toPaymentEntity
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
-import com.hoy.ecommercecompose.domain.usecase.payment.AddOrderedProductsUseCase
+import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.AddPaymentUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.ValidateOrderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,8 +26,8 @@ class PaymentViewModel @Inject constructor(
     private val addPaymentUseCase: AddPaymentUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val validateOrderUseCase: ValidateOrderUseCase,
-    private val addOrderedProductsUseCase: AddOrderedProductsUseCase,
-    private val cityRepository: CityRepository
+    private val cityRepository: CityRepository,
+    private val getCartProductsUseCase: GetCartProductsLocalUseCase,
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<PaymentContract.UiState> =
         MutableStateFlow(PaymentContract.UiState())
@@ -38,12 +37,31 @@ class PaymentViewModel @Inject constructor(
     val uiEffect: Flow<PaymentContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
     init {
+        updateUiState { copy(userId = firebaseAuthRepository.getUserId()) }
         loadCities()
+        getCartProduct()
     }
 
     private fun loadCities() {
         val cities = cityRepository.getCities()
         updateUiState { copy(cities = cities) }
+    }
+
+    private fun getCartProduct() {
+        viewModelScope.launch {
+            getCartProductsUseCase(userId = uiState.value.userId).collect {
+                when (it) {
+                    is Resource.Loading -> {}
+                    is Resource.Success -> {
+                        updateUiState { copy(cartProducts = it.data) }
+                    }
+
+                    is Resource.Error -> {
+                        _uiEffect.send(PaymentContract.UiEffect.ShowAlertDialog(it.message))
+                    }
+                }
+            }
+        }
     }
 
     fun onAction(action: PaymentContract.UiAction) {
@@ -114,33 +132,40 @@ class PaymentViewModel @Inject constructor(
             if (validationErrors.isNotEmpty()) {
                 updateUiState { copy(validationErrors = validationErrors) }
                 _uiEffect.send(
-                    PaymentContract.UiEffect.ShowAlertDialog(
-                        validationErrors.joinToString(
-                            "\n"
-                        )
-                    )
+                    PaymentContract.UiEffect.ShowAlertDialog(validationErrors.joinToString("\n"))
                 )
                 return@launch
             }
-            val userId = firebaseAuthRepository.getUserId()
-            val payment = uiState.value.toPaymentEntity(userId)
-            val orderedProducts = uiState.value.cartProducts.map { product ->
-                mapToOrderedProductEntity(product, payment.orderId)
-            }
-            addOrderedProductsUseCase(orderedProducts)
 
-            addPaymentUseCase(payment, orderedProducts, userId).collect { resource ->
+            val paymentEntity = uiState.value.toPaymentEntity(
+                userId = uiState.value.userId,
+                productId = uiState.value.cartProducts.firstOrNull()?.productId ?: 0,
+                title = uiState.value.cartProducts.firstOrNull()?.title ?: "",
+                imageOne = uiState.value.cartProducts.firstOrNull()?.imageOne ?: "",
+                quantity = uiState.value.cartProducts.sumOf { it.quantity },
+                price = uiState.value.cartProducts.sumOf { it.price * it.quantity }
+            )
+
+            
+
+            addPaymentUseCase(paymentEntity).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        // Loading
+                        updateUiState { copy(isLoading = true) }
                     }
 
                     is Resource.Success -> {
-                        _uiEffect.send(PaymentContract.UiEffect.ShowOrderConfirmation(R.string.order_success_received))
+                        updateUiState { copy(isLoading = false) }
+                        _uiEffect.send(
+                            PaymentContract.UiEffect.ShowOrderConfirmation(R.string.order_success_received)
+                        )
                     }
 
                     is Resource.Error -> {
-                        _uiEffect.send(PaymentContract.UiEffect.ShowAlertDialog("Order failed: ${resource.message}"))
+                        updateUiState { copy(isLoading = false) }
+                        _uiEffect.send(
+                            PaymentContract.UiEffect.ShowAlertDialog("Order failed: ${resource.message}")
+                        )
                     }
                 }
             }

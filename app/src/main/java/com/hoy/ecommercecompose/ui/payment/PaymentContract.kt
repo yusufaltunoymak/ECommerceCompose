@@ -1,11 +1,12 @@
 package com.hoy.ecommercecompose.ui.payment
 
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.City
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.City
 
 object PaymentContract {
     data class UiState(
         val isLoading: Boolean = false,
+        val userId: String = "",
         val cardHolderName: String = "",
         val cardNumber: String = "",
         val expiryDate: String = "",
