@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +11,7 @@ import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.AddToCartLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
+import com.hoy.ecommercecompose.domain.usecase.cart.IsProductInCartUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductDetailUseCase
@@ -33,7 +33,7 @@ class ProductDetailViewModel @Inject constructor(
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val addToCartLocalUseCase: AddToCartLocalUseCase,
-    private val getCartProductsLocalUseCase: GetCartProductsLocalUseCase
+    private val isProductInCartUseCase: IsProductInCartUseCase
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<ProductDetailContract.UiState> =
         MutableStateFlow(ProductDetailContract.UiState())
@@ -161,54 +161,33 @@ class ProductDetailViewModel @Inject constructor(
 
     private fun addToCart(product: ProductDetail) {
         viewModelScope.launch {
-            Log.d("ProductDetailViewModel", "addToCart: $product")
-            val userId = firebaseAuthRepository.getUserId()
-            getCartProductsLocalUseCase(userId).collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
-
-                    is Resource.Success -> {
-                        val productExistsInCart = resource.data.any { it.productId == product.id }
-                        if (productExistsInCart) {
-                            _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage("Product already in cart"))
-                        } else {
-                            addProductToCart(product)
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        updateUiState { copy(errorMessage = resource.message, isLoading = false) }
-                    }
-                }
+            val productId = product.id ?: return@launch
+            val isProductInCart = isProductInCartUseCase(productId)
+            if(isProductInCart) {
+                _uiEffect.send(ProductDetailContract.UiEffect.ShowAlreadyInCartMessage("Product is already in the cart"))
             }
-        }
-    }
+            else {
+                val productEntity = product.mapToProductEntity(
+                    userId = firebaseAuthRepository.getUserId(),
+                    productId = product.id,
+                    category = "",
+                    count = 1,
+                    quantity = 1
+                )
+                addToCartLocalUseCase(productEntity).collect {
+                    when (it) {
+                        is Resource.Loading -> {
+                            updateUiState { copy(isLoading = true) }
+                        }
 
-    private fun addProductToCart(product: ProductDetail) {
-        viewModelScope.launch {
-            Log.d("ProductDetailViewModel", "addProductToCart: $product")
-            val productEntity = product.mapToProductEntity(
-                userId = firebaseAuthRepository.getUserId(),
-                productId = product.id ?: 0,
-                category = "",
-                count = 1,
-                quantity = 1
-            )
-            addToCartLocalUseCase(productEntity).collect {
-                when (it) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
+                        is Resource.Success -> {
+                            updateUiState { copy(isLoading = false) }
+                            _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage("Product added to cart"))
+                        }
 
-                    is Resource.Success -> {
-                        updateUiState { copy(isLoading = false) }
-                        _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage("Product added to cart"))
-                    }
-
-                    is Resource.Error -> {
-                        updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                        }
                     }
                 }
             }

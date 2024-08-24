@@ -50,7 +50,6 @@ fun OrderScreen(
                 when (effect) {
                     is OrderContract.UiEffect.ShowError -> {
                     }
-
                     is OrderContract.UiEffect.NavigateBack -> navigateBack()
                 }
             }

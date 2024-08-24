@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -29,9 +31,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -46,6 +51,7 @@ import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.ECTheme
+import com.hoy.ecommercecompose.ui.theme.LocalDimensions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -57,70 +63,80 @@ fun CartScreen(
     onNavigatePayment: () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             uiEffect.collect { effect ->
                 when (effect) {
                     is CartContract.UiEffect.PaymentClick -> onNavigatePayment()
-                    is CartContract.UiEffect.ShowToast -> TODO()
+                    is CartContract.UiEffect.ShowDeleteConfirmation -> {
+                        val result = snackbarHostState.showSnackbar(
+                            message = "Do you want to delete this item?",
+                            actionLabel = "Yes"
+                        )
+                        if (result == SnackbarResult.ActionPerformed) {
+                            onAction(CartContract.UiAction.DeleteProductFromCart(effect.id))
+                        }
+                    }
                 }
             }
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(ECTheme.dimensions.sixteen)
-    ) {
-        Text(
-            text = stringResource(id = R.string.my_cart),
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier
-                .padding(bottom = ECTheme.dimensions.sixteen)
-                .align(Alignment.CenterHorizontally)
-        )
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(ECTheme.dimensions.sixteen)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.my_cart),
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier
+                        .padding(bottom = ECTheme.dimensions.sixteen)
+                        .align(Alignment.CenterHorizontally)
+                )
 
-        CartItemList(
-            cartProductList = uiState.cartProductList,
-            modifier = Modifier.weight(1f),
-            onDeleteCartClick = { onAction(CartContract.UiAction.DeleteProductFromCart(it)) },
-            increaseQuantity = { onAction(CartContract.UiAction.IncreaseQuantity(it)) },
-            decreaseQuantity = { onAction(CartContract.UiAction.DecreaseQuantity(it)) }
-        )
-        if (uiState.cartProductList.isNotEmpty()) {
-            CartFooter(
-                uiState = uiState,
-                onDiscountCodeChange = { /* Handle discount code change */ },
-                onApplyDiscount = { /* Handle discount application */ },
-                onPaymentClick = { onNavigatePayment() }
-            )
-        } else {
-            ECEmptyScreen(
-                title = R.string.empty_cart_title,
-                description = R.string.empty_cart_desc,
-                icon = R.drawable.ic_cart
-            )
+                CartItemList(
+                    cartProductList = uiState.cartProductList,
+                    modifier = Modifier.weight(1f),
+                    onAction = onAction
+                )
+                if (uiState.cartProductList.isNotEmpty()) {
+                    CartFooter(
+                        uiState = uiState,
+                        onDiscountCodeChange = { /* Handle discount code change */ },
+                        onApplyDiscount = { /* Handle discount application */ },
+                        onPaymentClick = { onNavigatePayment() }
+                    )
+                } else {
+                    ECEmptyScreen(
+                        title = R.string.empty_cart_title,
+                        description = R.string.empty_cart_desc,
+                        icon = R.drawable.ic_cart
+                    )
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable
 fun CartItemList(
     cartProductList: List<ProductEntity>,
     modifier: Modifier = Modifier,
-    onDeleteCartClick: (Int) -> Unit,
-    increaseQuantity: (Int) -> Unit,
-    decreaseQuantity: (Int) -> Unit
+    onAction: (CartContract.UiAction) -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         items(cartProductList) { product ->
             CartItem(
                 modifier = Modifier.fillMaxWidth(),
                 uiState = CartContract.UiState(product = product),
-                increaseQuantity = { increaseQuantity(it) },
-                decreaseQuantity = { decreaseQuantity(it) },
-                deleteProductFromCart = { onDeleteCartClick(it) },
+                onAction = onAction
             )
         }
     }
@@ -130,9 +146,7 @@ fun CartItemList(
 fun CartItem(
     modifier: Modifier = Modifier,
     uiState: CartContract.UiState,
-    deleteProductFromCart: (Int) -> Unit,
-    increaseQuantity: (Int) -> Unit,
-    decreaseQuantity: (Int) -> Unit
+    onAction: (CartContract.UiAction) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -185,17 +199,6 @@ fun CartItem(
                         verticalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxHeight()
                     ) {
-                        IconButton(
-                            onClick = { deleteProductFromCart(product.productId) },
-                            modifier = Modifier.size(ECTheme.dimensions.thirtyTwo)
-                        ) {
-                            Icon(
-                                Icons.Default.Delete,
-                                contentDescription = stringResource(id = R.string.remove_item),
-                                tint = ECTheme.colors.red
-                            )
-                        }
-
                         Box(
                             modifier = Modifier
                                 .background(
@@ -212,11 +215,17 @@ fun CartItem(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 IconButton(
-                                    onClick = { decreaseQuantity(product.productId) },
+                                    onClick = {
+                                        if(product.quantity == 1) {
+                                            onAction(CartContract.UiAction.ShowDeleteConfirmation(product.productId))
+                                        } else {
+                                            onAction(CartContract.UiAction.DecreaseQuantity(product.productId))
+                                        }
+                                    },
                                     modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                 ) {
                                     Icon(
-                                        Icons.Default.KeyboardArrowDown,
+                                        imageVector = if (product.quantity == 1) Icons.Default.Delete else Icons.Default.KeyboardArrowDown,
                                         contentDescription = stringResource(id = R.string.decrease_quantity),
                                         tint = ECTheme.colors.darkGray,
                                         modifier = Modifier.size(ECTheme.dimensions.sixteen)
@@ -228,7 +237,7 @@ fun CartItem(
                                     modifier = Modifier.padding(horizontal = ECTheme.dimensions.four)
                                 )
                                 IconButton(
-                                    onClick = { increaseQuantity(product.productId) },
+                                    onClick = { onAction(CartContract.UiAction.IncreaseQuantity(product.productId)) },
                                     modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                 ) {
                                     Icon(

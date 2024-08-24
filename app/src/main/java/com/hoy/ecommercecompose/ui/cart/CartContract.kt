@@ -24,10 +24,11 @@ object CartContract {
         data class DecreaseQuantity(val id: Int) : UiAction()
         data class OnDiscountCodeChange(val newCode: String) : UiAction()
         data object ApplyDiscount : UiAction()
+        data class ShowDeleteConfirmation(val id: Int) : UiAction()
     }
 
     sealed class UiEffect {
-        data class ShowToast(val message: String) : UiEffect()
+        data class ShowDeleteConfirmation(val id: Int) : UiEffect()
         data object PaymentClick : UiEffect()
     }
 }
