@@ -31,6 +31,7 @@ import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.ProductList
+import com.hoy.ecommercecompose.ui.components.SpecialProductList
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
@@ -107,6 +108,21 @@ fun HomeScreen(
             fontFamily = displayFontFamily
         )
         ProductList(
+            uiState = uiState,
+            onFavoriteClick = { product ->
+                onAction(HomeContract.UiAction.ToggleFavoriteClick(product))
+            },
+            onNavigateToDetail = onNavigateToDetail
+        )
+
+        Text(
+            text = "Special products for you",
+            style = MaterialTheme.typography.titleLarge,
+            color = ECTheme.colors.darkGray,
+            fontFamily = displayFontFamily
+        )
+
+        SpecialProductList(
             uiState = uiState,
             onFavoriteClick = { product ->
                 onAction(HomeContract.UiAction.ToggleFavoriteClick(product))

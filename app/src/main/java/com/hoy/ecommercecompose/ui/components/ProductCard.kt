@@ -207,3 +207,21 @@ fun ProductList(
         }
     }
 }
+
+@Composable
+fun SpecialProductList(
+    uiState: HomeContract.UiState,
+    onFavoriteClick: (ProductUi) -> Unit,
+    onNavigateToDetail: (Int) -> Unit,
+) {
+    LazyRow {
+        items(uiState.specialProductList) { product ->
+            ProductCard(
+                product = product,
+                onFavoriteClick = onFavoriteClick,
+                modifier = Modifier.padding(ECTheme.dimensions.eight),
+                onNavigateToDetail = onNavigateToDetail
+            )
+        }
+    }
+}

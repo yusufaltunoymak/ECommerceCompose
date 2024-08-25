@@ -146,8 +146,6 @@ class PaymentViewModel @Inject constructor(
                 price = uiState.value.cartProducts.sumOf { it.price * it.quantity }
             )
 
-            
-
             addPaymentUseCase(paymentEntity).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {

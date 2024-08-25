@@ -125,7 +125,10 @@ fun SetupNavGraph(
             val homeViewModel: HomeViewModel = hiltViewModel()
             val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = homeViewModel.uiEffect
-            homeViewModel.getProducts()
+            LaunchedEffect(Unit) {
+                homeViewModel.getProducts()
+                homeViewModel.getSpecialProducts()
+            }
 
             HomeScreen(
                 onNavigateToDetail = { productId ->
@@ -213,8 +216,8 @@ fun SetupNavGraph(
                 uiState = uiState,
                 onAction = viewModel::onAction,
                 onBackClick = { navController.popBackStack() },
-                onNavigateToPassword = {navController.navigate(NavRoute.RESET_PASSWORD.route)},
-                onNavigateToLogin = {navController.navigate(NavRoute.LOGIN.route)}
+                onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
+                onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) }
             )
         }
         composable(NavRoute.SEARCH.route) {

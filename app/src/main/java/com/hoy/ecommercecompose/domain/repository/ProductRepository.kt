@@ -33,12 +33,9 @@ interface ProductRepository {
     suspend fun deleteFromCartProduct(productId: Int)
     suspend fun isProductInCart(productId: Int): Boolean
 
-
     suspend fun clearCart(userId: String)
     suspend fun addPaymentDetails(payment: PaymentEntity)
     suspend fun processOrder(userId: String, paymentEntity: PaymentEntity)
 
     fun getUserOrders(userId: String): Flow<List<PaymentEntity>>
-
-
 }

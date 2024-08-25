@@ -52,9 +52,8 @@ fun AccountScreen(
     onAction: (AccountContract.UiAction) -> Unit,
     onBackClick: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onNavigateToPassword: ()-> Unit,
+    onNavigateToPassword: () -> Unit,
 ) {
-
     var name by remember { mutableStateOf(uiState.currentUser?.name.orEmpty()) }
     var surname by remember { mutableStateOf(uiState.currentUser?.surname.orEmpty()) }
     var email by remember { mutableStateOf(uiState.currentUser?.email.orEmpty()) }
@@ -231,7 +230,12 @@ fun AccountScreen(
                         address = it
                         isSaveEnabled = true
                     },
-                    label = { Text(stringResource(id = R.string.address_label), style = MaterialTheme.typography.bodyMedium) },
+                    label = {
+                        Text(
+                            stringResource(id = R.string.address_label),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = ECTheme.dimensions.four)
@@ -248,7 +252,8 @@ fun AccountScreen(
                 MenuItem(
                     iconId = R.drawable.ic_order,
                     title = stringResource(id = R.string.my_order),
-                    onClick = { })
+                    onClick = { }
+                )
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
@@ -259,16 +264,23 @@ fun AccountScreen(
                 MenuItem(
                     iconId = R.drawable.ic_payment,
                     title = stringResource(id = R.string.payment_methods),
-                    onClick = { })
+                    onClick = { }
+                )
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
                         .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(iconId = R.drawable.circle_lock, title = stringResource(id = R.string.change_password), onClick = {
-                    onNavigateToPassword()
-                })
+                MenuItem(
+                    iconId = R.drawable.circle_lock,
+                    title = stringResource(
+                        id = R.string.change_password
+                    ),
+                    onClick = {
+                        onNavigateToPassword()
+                    }
+                )
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier

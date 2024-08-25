@@ -12,6 +12,7 @@ import com.hoy.ecommercecompose.domain.usecase.category.GetCategoriesUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductsUseCase
+import com.hoy.ecommercecompose.domain.usecase.product.GetSpecialProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +30,8 @@ class HomeViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
-    private val firebaseAuthRepository: FirebaseAuthRepository
+    private val firebaseAuthRepository: FirebaseAuthRepository,
+    private val getSpecialProductsUseCase: GetSpecialProductsUseCase
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<HomeContract.UiState> =
         MutableStateFlow(HomeContract.UiState())
@@ -42,6 +44,7 @@ class HomeViewModel @Inject constructor(
         getUserInformation()
         getCategories()
         getProducts()
+        getSpecialProducts()
     }
 
     fun onAction(action: HomeContract.UiAction) {
@@ -111,6 +114,26 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getSpecialProducts() {
+        viewModelScope.launch {
+            getSpecialProductsUseCase(firebaseAuthRepository.getUserId()).collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        updateUiState { copy(specialProductList = result.data, isLoading = false) }
+                    }
+
+                    is Resource.Error -> {
+                        updateUiState { copy(errorMessage = result.message, isLoading = false) }
+                    }
+
+                    is Resource.Loading -> {
+                        updateUiState { copy(isLoading = true) }
+                    }
+                }
+            }
+        }
+    }
+
     private fun addToFavorites(userId: String, productId: Int) {
         val baseBody = BaseBody(productId, userId)
         viewModelScope.launch {
@@ -125,8 +148,16 @@ class HomeViewModel @Inject constructor(
                                     product
                                 }
                             }
+                            val updatedSpecialProductList = specialProductList.map { product ->
+                                if (product.id == productId) {
+                                    product.copy(isFavorite = true)
+                                } else {
+                                    product
+                                }
+                            }
                             copy(
                                 productList = updatedProductList,
+                                specialProductList = updatedSpecialProductList,
                                 addToFavorites = result.data,
                                 isLoading = false
                             )

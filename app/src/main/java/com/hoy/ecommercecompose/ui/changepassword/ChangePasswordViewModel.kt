@@ -52,7 +52,6 @@ class ChangePasswordViewModel : ViewModel() {
             try {
                 it.updatePassword(currentState.password).await()
                 _uiEffect.send(ChangePasswordContract.UiEffect.ShowToast(R.string.password_changed_message))
-
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(errorMessage = e.message)
             }

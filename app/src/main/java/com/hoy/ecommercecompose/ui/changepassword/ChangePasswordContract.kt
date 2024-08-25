@@ -17,4 +17,3 @@ object ChangePasswordContract {
         data class ShowToast(val message: Int) : UiEffect()
     }
 }
-

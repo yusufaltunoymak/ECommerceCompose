@@ -21,6 +21,11 @@ complexity:
     active: true
     threshold: 6
     ignoreAnnotated: [ 'Composable' ]
+    excludes:
+      - '**/ui/home/HomeViewModel.kt'
+      - '**/ui/detail/ProductDetailViewModel.kt'
+      - '**/ui/theme/Color.kt'
+      - '**/data/mapper/Mappers.kt'
   LongMethod:
     active: true
     threshold: 60

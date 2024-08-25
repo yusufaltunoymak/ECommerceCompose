@@ -261,4 +261,3 @@ fun FavoriteProductCardPreview() {
         onBackClick = {}
     )
 }
-

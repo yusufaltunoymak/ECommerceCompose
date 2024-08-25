@@ -10,8 +10,7 @@ object CategoryContract {
         val errorMessage: String? = null,
     )
 
-    sealed class UiAction {
-    }
+    sealed class UiAction
 
     sealed class UiEffect {
         data class ShowError(val message: String) : UiEffect()
