@@ -21,8 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomOutlinedButton
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
-import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 
 @Composable
 fun WelcomeScreen(
@@ -32,7 +31,7 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(LocalDimensions.current.sixteen),
+            .padding(ECTheme.dimensions.sixteen),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,17 +43,17 @@ fun WelcomeScreen(
         )
         Text(
             text = stringResource(id = R.string.app_name_hoy),
-            fontSize = LocalFontSizes.current.sizeTitle,
+            fontSize = ECTheme.typography.sizeTitle,
             fontWeight = FontWeight.Thin,
             fontStyle = FontStyle.Italic
         )
         Text(
             text = stringResource(id = R.string.ecommerce_title),
-            fontSize = LocalFontSizes.current.sizeTitle,
+            fontSize = ECTheme.typography.sizeTitle,
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(LocalDimensions.current.fortyEight))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.fortyEight))
 
         CustomButton(text = stringResource(id = R.string.login_but), onClick = onLoginClick)
         CustomOutlinedButton(

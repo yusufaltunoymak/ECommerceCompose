@@ -24,8 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 
 @Composable
 fun BottomNavigationBar(
@@ -44,17 +43,17 @@ fun BottomNavigationBar(
     ) {
         Surface(
             color = Color.White,
-            shape = RoundedCornerShape(LocalDimensions.current.sixteen),
+            shape = RoundedCornerShape(ECTheme.dimensions.sixteen),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .height(LocalDimensions.current.fiftySix)
-                .clip(RoundedCornerShape(LocalDimensions.current.sixteen)),
-            elevation = LocalDimensions.current.eight
+                .height(ECTheme.dimensions.fiftySix)
+                .clip(RoundedCornerShape(ECTheme.dimensions.sixteen)),
+            elevation = ECTheme.dimensions.eight
         ) {
             BottomNavigation(
-                backgroundColor = LocalColors.current.white,
-                contentColor = LocalColors.current.white
+                backgroundColor = ECTheme.colors.white,
+                contentColor = ECTheme.colors.white
             ) {
                 items.forEach { item ->
                     BottomNavigationItem(
@@ -62,7 +61,7 @@ fun BottomNavigationBar(
                             Icon(
                                 item.icon,
                                 contentDescription = getNavItemName(navItem = item),
-                                tint = LocalColors.current.primary
+                                tint = ECTheme.colors.primary
                             )
                         },
                         selected = currentRoute == item.route,
@@ -75,11 +74,11 @@ fun BottomNavigationBar(
 
         FloatingActionButton(
             onClick = onFabClick,
-            backgroundColor = LocalColors.current.primary,
+            backgroundColor = ECTheme.colors.primary,
             contentColor = Color.White,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = LocalDimensions.current.negativeTwentyEight)
+                .offset(y = ECTheme.dimensions.negativeTwentyEight)
         ) {
             Icon(Icons.Default.Home, contentDescription = stringResource(id = R.string.home))
         }

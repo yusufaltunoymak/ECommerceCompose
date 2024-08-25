@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.DeleteProductFromCartUseCase
 import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
@@ -41,6 +41,7 @@ class CartViewModel @Inject constructor(
             is CartContract.UiAction.DecreaseQuantity -> decreaseQuantity(action.id)
             is CartContract.UiAction.OnDiscountCodeChange -> onDiscountCodeChange(action.newCode)
             is CartContract.UiAction.ApplyDiscount -> applyDiscount()
+            is CartContract.UiAction.ShowDeleteConfirmation -> showDeleteConfirmation(action.id)
         }
     }
 
@@ -71,6 +72,12 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    private fun showDeleteConfirmation(id: Int) {
+        viewModelScope.launch {
+            _uiEffect.send(CartContract.UiEffect.ShowDeleteConfirmation(id))
+        }
+    }
+
     private fun deleteProductFromCart(id: Int) {
         viewModelScope.launch {
             deleteProductFromCartUseCase(id)
@@ -97,6 +104,8 @@ class CartViewModel @Inject constructor(
                     val updatedProduct = it.copy(quantity = it.quantity - 1)
                     updateCartProduct(updatedProduct)
                     updateTotalPrice()
+                } else {
+                    showDeleteConfirmation(it.productId)
                 }
             }
         }
@@ -154,7 +163,8 @@ class CartViewModel @Inject constructor(
         }
 
         _uiState.update {
-            val totalPrice = it.cartProductList.sumOf { product -> product.price * product.quantity }
+            val totalPrice =
+                it.cartProductList.sumOf { product -> product.price * product.quantity }
             it.copy(
                 totalCartPrice = totalPrice - discount,
                 discountPrice = discount,

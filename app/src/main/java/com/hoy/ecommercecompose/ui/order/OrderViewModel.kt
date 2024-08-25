@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
-import com.hoy.ecommercecompose.domain.usecase.order.GetOrdersWithProductsUseCase
+import com.hoy.ecommercecompose.domain.usecase.order.GetUserOrdersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrderViewModel @Inject constructor(
-    private val getOrdersWithProductsUseCase: GetOrdersWithProductsUseCase,
+    private val getUserOrdersUseCase: GetUserOrdersUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OrderContract.UiState())
@@ -44,34 +44,26 @@ class OrderViewModel @Inject constructor(
 
     private fun loadOrders() {
         viewModelScope.launch {
+            updateUiState { copy(isLoading = true, errorMessage = null) }
             val userId = firebaseAuthRepository.getUserId()
-            getOrdersWithProductsUseCase(userId).collect { resource ->
+            getUserOrdersUseCase(userId).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         updateUiState { copy(isLoading = true) }
                     }
 
                     is Resource.Success -> {
-                        updateUiState {
-                            copy(
-                                isLoading = false,
-                                orders = resource.data,
-                                errorMessage = null
-                            )
-                        }
+                        val sortedOrders = resource.data.sortedByDescending { it.orderDate }
+                        updateUiState { copy(isLoading = false, orders = sortedOrders) }
                     }
 
                     is Resource.Error -> {
-                        handleError(resource.message)
+                        updateUiState { copy(isLoading = false, errorMessage = resource.message) }
+                        emitUiEffect(OrderContract.UiEffect.ShowError(resource.message))
                     }
                 }
             }
         }
-    }
-
-    private suspend fun handleError(message: String) {
-        updateUiState { copy(isLoading = false, errorMessage = message) }
-        emitUiEffect(OrderContract.UiEffect.ShowError(message))
     }
 
     private fun updateUiState(block: OrderContract.UiState.() -> OrderContract.UiState) {

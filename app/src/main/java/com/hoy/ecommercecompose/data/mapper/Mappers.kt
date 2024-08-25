@@ -1,9 +1,8 @@
 package com.hoy.ecommercecompose.data.mapper
 
 import com.hoy.ecommercecompose.common.orEmpty
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.OrderedProductEntity
-import com.hoy.ecommercecompose.data.source.local.payment.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.PaymentEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.data.source.remote.model.ProductDto
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
@@ -71,36 +70,32 @@ fun ProductDetail.mapToProductEntity(
     )
 }
 
-fun ProductEntity.toOrderedProduct(orderId: Int): OrderedProductEntity {
-    return OrderedProductEntity(
-        orderId = orderId,
-        productId = this.productId,
-        quantity = this.quantity,
-        price = this.price
-    )
-}
 
-fun PaymentContract.UiState.toPaymentEntity(userId: String): PaymentEntity {
+fun PaymentContract.UiState.toPaymentEntity(
+    userId: String,
+    productId: Int,
+    title: String,
+    imageOne: String,
+    quantity: Int,
+    price: Double
+): PaymentEntity {
     return PaymentEntity(
         userId = userId,
         cardNumber = this.cardNumber,
         cardHolderName = this.cardHolderName,
         expirationDate = this.expiryDate,
-        amount = this.productEntity?.price ?: 0.0,
         city = this.selectedCity,
         district = this.selectedDistrict,
-        fullAddress = this.addressText
+        fullAddress = this.addressText,
+
+        productId = productId,
+        title = title,
+        imageOne = imageOne,
+        quantity = quantity,
+        price = price,
     )
 }
 
-fun mapToOrderedProductEntity(product: ProductEntity, orderId: Int): OrderedProductEntity {
-    return OrderedProductEntity(
-        orderId = orderId,
-        productId = product.productId,
-        quantity = product.quantity,
-        price = product.price
-    )
-}
 
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(

@@ -10,6 +10,8 @@ import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.AddToCartLocalUseCase
+import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
+import com.hoy.ecommercecompose.domain.usecase.cart.IsProductInCartUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.product.GetProductDetailUseCase
@@ -30,7 +32,8 @@ class ProductDetailViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
-    private val addToCartLocalUseCase: AddToCartLocalUseCase
+    private val addToCartLocalUseCase: AddToCartLocalUseCase,
+    private val isProductInCartUseCase: IsProductInCartUseCase
 ) : ViewModel() {
     private var _uiState: MutableStateFlow<ProductDetailContract.UiState> =
         MutableStateFlow(ProductDetailContract.UiState())
@@ -57,6 +60,9 @@ class ProductDetailViewModel @Inject constructor(
 
             is ProductDetailContract.UiAction.BackButtonClick -> {
                 navigateBack()
+            }
+            is ProductDetailContract.UiAction.ShareProduct -> {
+                shareProduct()
             }
         }
     }
@@ -85,7 +91,7 @@ class ProductDetailViewModel @Inject constructor(
     private fun toggleFavorite() {
         val productDetail = _uiState.value.productDetail ?: return
         viewModelScope.launch {
-            productDetail.id?.let { id ->
+            productDetail.id?.let {
                 if (productDetail.isFavorite == true) {
                     deleteFavorite(productDetail.id)
                 } else {
@@ -155,30 +161,44 @@ class ProductDetailViewModel @Inject constructor(
 
     private fun addToCart(product: ProductDetail) {
         viewModelScope.launch {
-            val productEntity = product.mapToProductEntity(
-                userId = firebaseAuthRepository.getUserId(),
-                productId = product.id ?: 0,
-                category = "",
-                count = 1,
-                quantity = 1
-            )
-            addToCartLocalUseCase(productEntity).collect {
-                when (it) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
+            val productId = product.id ?: return@launch
+            val isProductInCart = isProductInCartUseCase(productId)
+            if(isProductInCart) {
+                _uiEffect.send(ProductDetailContract.UiEffect.ShowAlreadyInCartMessage("Product is already in the cart"))
+            }
+            else {
+                val productEntity = product.mapToProductEntity(
+                    userId = firebaseAuthRepository.getUserId(),
+                    productId = product.id,
+                    category = "",
+                    count = 1,
+                    quantity = 1
+                )
+                addToCartLocalUseCase(productEntity).collect {
+                    when (it) {
+                        is Resource.Loading -> {
+                            updateUiState { copy(isLoading = true) }
+                        }
 
-                    is Resource.Success -> {
-                        updateUiState { copy(isLoading = false) }
-                        _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
-                    }
+                        is Resource.Success -> {
+                            updateUiState { copy(isLoading = false) }
+                            _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage("Product added to cart"))
+                        }
 
-                    is Resource.Error -> {
-                        updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                        }
                     }
                 }
             }
-            // _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage)
+        }
+    }
+
+    private fun shareProduct() {
+        val productDetail = _uiState.value.productDetail ?: return
+        val shareText = "Check out this product: ${productDetail.title} for \$${productDetail.price}. View it here: https://ecommerce.com/product/${productDetail.id}"
+        viewModelScope.launch {
+            _uiEffect.send(ProductDetailContract.UiEffect.ShareProduct(shareText))
         }
     }
 

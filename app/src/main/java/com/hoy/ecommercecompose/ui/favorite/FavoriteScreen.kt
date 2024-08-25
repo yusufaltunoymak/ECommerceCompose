@@ -52,8 +52,7 @@ import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -104,7 +103,7 @@ fun FavoriteScreen(
                 uiState.errorMessage != null -> {
                     Text(
                         text = uiState.errorMessage,
-                        color = LocalColors.current.red,
+                        color = ECTheme.colors.red,
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
@@ -147,20 +146,20 @@ fun FavoriteProductCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onNavigateToDetail(product.id) }
-            .padding(LocalDimensions.current.eight)
-            .clip(RoundedCornerShape(LocalDimensions.current.twelve))
+            .padding(ECTheme.dimensions.eight)
+            .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
             .shadow(
-                LocalDimensions.current.four,
-                RoundedCornerShape(LocalDimensions.current.twelve)
+                ECTheme.dimensions.four,
+                RoundedCornerShape(ECTheme.dimensions.twelve)
             ),
-        border = BorderStroke(LocalDimensions.current.one, LocalColors.current.gray),
+        border = BorderStroke(ECTheme.dimensions.one, ECTheme.colors.gray),
         colors = CardDefaults.cardColors(
-            containerColor = LocalColors.current.white
+            containerColor = ECTheme.colors.white
         )
     ) {
         Row(
             modifier = Modifier
-                .padding(LocalDimensions.current.twelve)
+                .padding(ECTheme.dimensions.twelve)
                 .fillMaxWidth()
         ) {
             AsyncImage(
@@ -173,46 +172,46 @@ fun FavoriteProductCard(
                 placeholder = painterResource(id = R.drawable.loading_img),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(LocalDimensions.current.oneHundred)
-                    .clip(RoundedCornerShape(LocalDimensions.current.eight))
+                    .size(ECTheme.dimensions.oneHundred)
+                    .clip(RoundedCornerShape(ECTheme.dimensions.eight))
             )
 
-            Spacer(modifier = Modifier.width(LocalDimensions.current.twelve))
+            Spacer(modifier = Modifier.width(ECTheme.dimensions.twelve))
 
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(vertical = LocalDimensions.current.eight)
+                    .padding(vertical = ECTheme.dimensions.eight)
             ) {
                 Text(
                     text = product.title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = LocalColors.current.darkGray,
+                    color = ECTheme.colors.darkGray,
                     fontFamily = displayFontFamily,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+                Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
                 Row {
                     Text(
                         text = "$${product.price}",
                         fontFamily = displayFontFamily,
                         style = MaterialTheme.typography.bodyLarge.copy(textDecoration = TextDecoration.LineThrough),
-                        color = LocalColors.current.gray
+                        color = ECTheme.colors.gray
                     )
-                    Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
+                    Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
                     Text(
                         text = "$${product.salePrice}",
                         fontFamily = displayFontFamily,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = LocalColors.current.red,
+                        color = ECTheme.colors.red,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
-                Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+                Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -220,15 +219,15 @@ fun FavoriteProductCard(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = stringResource(id = R.string.rating),
-                        tint = LocalColors.current.primary,
-                        modifier = Modifier.size(LocalDimensions.current.sixteen)
+                        tint = ECTheme.colors.primary,
+                        modifier = Modifier.size(ECTheme.dimensions.sixteen)
                     )
-                    Spacer(modifier = Modifier.width(LocalDimensions.current.four))
+                    Spacer(modifier = Modifier.width(ECTheme.dimensions.four))
                     Text(
                         text = product.rate.toString(),
                         fontFamily = displayFontFamily,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = LocalColors.current.gray
+                        color = ECTheme.colors.gray
                     )
                 }
             }
@@ -236,15 +235,15 @@ fun FavoriteProductCard(
             IconButton(
                 onClick = { onFavoriteClick(product) },
                 modifier = Modifier
-                    .background(color = LocalColors.current.white, shape = CircleShape)
-                    .padding(LocalDimensions.current.four)
-                    .size(LocalDimensions.current.thirtySix)
+                    .background(color = ECTheme.colors.white, shape = CircleShape)
+                    .padding(ECTheme.dimensions.four)
+                    .size(ECTheme.dimensions.thirtySix)
             ) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = stringResource(id = R.string.favorite),
-                    tint = LocalColors.current.gray,
-                    modifier = Modifier.size(LocalDimensions.current.twenty)
+                    tint = ECTheme.colors.gray,
+                    modifier = Modifier.size(ECTheme.dimensions.twenty)
                 )
             }
         }

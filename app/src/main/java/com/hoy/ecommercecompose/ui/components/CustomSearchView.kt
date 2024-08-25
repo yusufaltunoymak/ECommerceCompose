@@ -1,6 +1,5 @@
 package com.hoy.ecommercecompose.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -22,8 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.hoy.ecommercecompose.R
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.common.noRippleClickable
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 
 @Composable
 fun CustomSearchView(
@@ -36,13 +35,13 @@ fun CustomSearchView(
     onSortClick: () -> Unit
 ) {
     val containerColor = Color.White
-    val indicatorColor = LocalColors.current.primary.copy(alpha = 0.3f)
+    val indicatorColor = ECTheme.colors.primary.copy(alpha = 0.3f)
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(LocalDimensions.current.eight))
-            .clickable {
+            .clip(RoundedCornerShape(ECTheme.dimensions.eight))
+            .noRippleClickable {
                 onSearchClick()
             }
     ) {
@@ -72,7 +71,7 @@ fun CustomSearchView(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = stringResource(R.string.search),
-                        modifier = Modifier.size(LocalDimensions.current.twentyFour)
+                        modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                     )
                 }
             },
@@ -89,12 +88,12 @@ fun CustomSearchView(
                         contentDescription =
                         if (text.isNotBlank()) stringResource(R.string.clear)
                         else stringResource(R.string.sort),
-                        modifier = Modifier.size(LocalDimensions.current.twentyFour)
+                        modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                     )
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(LocalDimensions.current.eight),
+            shape = RoundedCornerShape(ECTheme.dimensions.eight),
             singleLine = true
         )
     }

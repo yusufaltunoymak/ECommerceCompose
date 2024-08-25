@@ -121,4 +121,8 @@
     <string name="email_sent">Email sent successfully!</string>
 
 
+    <!-- send mail screen -->
+    <string name="mail_sent_success">Mail sent successfully</string>
+    <string name="mail_sent_failure">Mail sent failure</string>
+
 </resources>

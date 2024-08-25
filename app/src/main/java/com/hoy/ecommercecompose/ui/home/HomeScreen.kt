@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.ui.components.CategoryList
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.ProductList
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
 
@@ -69,7 +68,7 @@ fun HomeScreen(
 
     Column(
         modifier = Modifier
-            .padding(LocalDimensions.current.sixteen)
+            .padding(ECTheme.dimensions.sixteen)
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
@@ -78,7 +77,7 @@ fun HomeScreen(
                 Text(
                     text = stringResource(id = R.string.welcome_user, currentUser.name!!),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = LocalColors.current.darkGray,
+                    color = ECTheme.colors.darkGray,
                     fontFamily = displayFontFamily
                 )
             }
@@ -93,7 +92,7 @@ fun HomeScreen(
         Text(
             text = stringResource(id = R.string.categories),
             style = MaterialTheme.typography.titleLarge,
-            color = LocalColors.current.darkGray,
+            color = ECTheme.colors.darkGray,
             fontFamily = displayFontFamily
         )
         CategoryList(
@@ -104,7 +103,7 @@ fun HomeScreen(
         Text(
             text = stringResource(id = R.string.top_rated_products),
             style = MaterialTheme.typography.titleLarge,
-            color = LocalColors.current.darkGray,
+            color = ECTheme.colors.darkGray,
             fontFamily = displayFontFamily
         )
         ProductList(
@@ -122,23 +121,23 @@ fun SearchNavigationView(
     modifier: Modifier = Modifier,
     onNavigateToSearch: () -> Unit
 ) {
-    val containerColor = LocalColors.current.white
-    val indicatorColor = LocalColors.current.primary.copy(alpha = 0.3f)
+    val containerColor = ECTheme.colors.white
+    val indicatorColor = ECTheme.colors.primary.copy(alpha = 0.3f)
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(LocalDimensions.current.eight))
-            .clickable {
+            .clip(RoundedCornerShape(ECTheme.dimensions.eight))
+            .noRippleClickable {
                 onNavigateToSearch()
             }
             .background(containerColor)
             .border(
-                LocalDimensions.current.one,
+                ECTheme.dimensions.one,
                 indicatorColor,
-                RoundedCornerShape(LocalDimensions.current.eight)
+                RoundedCornerShape(ECTheme.dimensions.eight)
             )
-            .padding(LocalDimensions.current.sixteen)
+            .padding(ECTheme.dimensions.sixteen)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -149,8 +148,8 @@ fun SearchNavigationView(
                 contentDescription = stringResource(id = R.string.search_icon),
                 modifier = Modifier
                     .padding(
-                        start = LocalDimensions.current.four,
-                        end = LocalDimensions.current.eight
+                        start = ECTheme.dimensions.four,
+                        end = ECTheme.dimensions.eight
                     )
             )
             Text(
@@ -164,7 +163,7 @@ fun SearchNavigationView(
                 imageVector = Icons.AutoMirrored.Filled.List,
                 contentDescription = stringResource(id = R.string.list_icon),
                 modifier = Modifier
-                    .padding(end = LocalDimensions.current.eight)
+                    .padding(end = ECTheme.dimensions.eight)
             )
         }
     }

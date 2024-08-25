@@ -1,7 +1,7 @@
 package com.hoy.ecommercecompose.ui.cart
 
 import androidx.compose.ui.graphics.Color
-import com.hoy.ecommercecompose.data.source.local.ProductEntity
+import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 
 object CartContract {
     data class UiState(
@@ -24,10 +24,11 @@ object CartContract {
         data class DecreaseQuantity(val id: Int) : UiAction()
         data class OnDiscountCodeChange(val newCode: String) : UiAction()
         data object ApplyDiscount : UiAction()
+        data class ShowDeleteConfirmation(val id: Int) : UiAction()
     }
 
     sealed class UiEffect {
-        data class ShowToast(val message: String) : UiEffect()
+        data class ShowDeleteConfirmation(val id: Int) : UiEffect()
         data object PaymentClick : UiEffect()
     }
 }

@@ -49,9 +49,7 @@ import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
-import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -64,7 +62,7 @@ fun LoginScreen(
     onBackClick: () -> Unit,
     onNavigateToHome: () -> Unit,
 
-) {
+    ) {
     var alertDialogState by remember { mutableStateOf(false) }
 
     val signInLauncher = rememberLauncherForActivityResult(
@@ -115,36 +113,36 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(LocalDimensions.current.sixteen),
+                .padding(ECTheme.dimensions.sixteen),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
             IconButton(
                 onClick = onBackClick,
                 modifier = Modifier
-                    .size(LocalDimensions.current.fortyEight)
+                    .size(ECTheme.dimensions.fortyEight)
                     .border(
-                        BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
-                        shape = RoundedCornerShape(LocalDimensions.current.twelve)
+                        BorderStroke(ECTheme.dimensions.one, ECTheme.colors.primary),
+                        shape = RoundedCornerShape(ECTheme.dimensions.twelve)
                     )
             ) {
                 Icon(
-                    modifier = Modifier.size(LocalDimensions.current.thirtySix),
+                    modifier = Modifier.size(ECTheme.dimensions.thirtySix),
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null
                 )
             }
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.twelve))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.twelve))
 
             Text(
                 text = stringResource(id = R.string.welcome_login_text),
                 fontWeight = FontWeight.Bold,
-                fontSize = LocalFontSizes.current.sizeTitle,
+                fontSize = ECTheme.typography.sizeTitle,
                 modifier = Modifier.align(Alignment.Start)
             )
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
             CustomTextField(
                 value = uiState.email,
@@ -158,7 +156,7 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
             CustomTextField(
                 value = uiState.password,
@@ -173,7 +171,7 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.eight))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -183,51 +181,51 @@ fun LoginScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_forgot_password),
                     contentDescription = null,
-                    modifier = Modifier.size(LocalDimensions.current.twenty)
+                    modifier = Modifier.size(ECTheme.dimensions.twenty)
                 )
                 Text(
                     modifier = Modifier.clickable { onForgotPasswordClick() },
                     text = stringResource(id = R.string.forgot_password_text),
                     fontWeight = FontWeight.Light,
-                    fontSize = LocalFontSizes.current.small,
+                    fontSize = ECTheme.typography.small,
 
-                )
+                    )
             }
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.twentyFour))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
             CustomButton(
                 text = stringResource(id = R.string.login_text),
                 onClick = { onAction(LoginContract.UiAction.SignInClick) },
             )
 
-            Spacer(modifier = Modifier.height(LocalDimensions.current.sixteen))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(LocalDimensions.current.sixteen),
+                    .padding(ECTheme.dimensions.sixteen),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Divider(
-                    color = LocalColors.current.primary,
-                    thickness = LocalDimensions.current.one,
+                    color = ECTheme.colors.primary,
+                    thickness = ECTheme.dimensions.one,
                     modifier = Modifier.weight(1f)
                 )
 
-                Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
+                Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
 
                 Text(
                     text = stringResource(id = R.string.or_login_with_text),
-                    fontSize = LocalFontSizes.current.medium,
-                    color = LocalColors.current.black
+                    fontSize = ECTheme.typography.medium,
+                    color = ECTheme.colors.black
                 )
 
-                Spacer(modifier = Modifier.width(LocalDimensions.current.eight))
+                Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
 
                 Divider(
-                    color = LocalColors.current.primary,
-                    thickness = LocalDimensions.current.one,
+                    color = ECTheme.colors.primary,
+                    thickness = ECTheme.dimensions.one,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -235,16 +233,16 @@ fun LoginScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = LocalDimensions.current.sixteen),
+                    .padding(top = ECTheme.dimensions.sixteen),
                 horizontalArrangement = Arrangement.Center
             ) {
                 IconButton(
                     onClick = { onAction(LoginContract.UiAction.GoogleSignInClick) },
                     modifier = Modifier
-                        .size(LocalDimensions.current.fortyEight)
+                        .size(ECTheme.dimensions.fortyEight)
                         .border(
-                            BorderStroke(LocalDimensions.current.one, LocalColors.current.primary),
-                            shape = RoundedCornerShape(LocalDimensions.current.twelve)
+                            BorderStroke(ECTheme.dimensions.one, ECTheme.colors.primary),
+                            shape = RoundedCornerShape(ECTheme.dimensions.twelve)
                         )
                 ) {
                     Image(
@@ -259,7 +257,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),
-                color = LocalColors.current.primary
+                color = ECTheme.colors.primary
             )
         }
     }

@@ -9,6 +9,12 @@ object SendMailContract {
 
     sealed class SendMailUiAction {
         data class SendEmailAction(val email: String) : SendMailUiAction()
-        object SendMail : SendMailUiAction()
+        data object SendMail : SendMailUiAction()
+    }
+
+    sealed class UiEffect {
+        data class ShowToast(val messageResId: Int) : UiEffect()
+        data object NavigateToLogin : UiEffect()
+        data object BackClick : UiEffect()
     }
 }

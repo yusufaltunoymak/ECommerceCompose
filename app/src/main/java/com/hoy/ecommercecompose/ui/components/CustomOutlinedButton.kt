@@ -13,31 +13,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
-import com.hoy.ecommercecompose.ui.theme.LocalFontSizes
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 
 @Composable
 fun CustomOutlinedButton(
     text: String,
     onClick: () -> Unit,
-    contentColor: Color = LocalColors.current.primary
+    contentColor: Color = ECTheme.colors.primary
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
-            .padding(vertical = LocalDimensions.current.eight)
-            .height(LocalDimensions.current.fiftySix)
+            .padding(vertical = ECTheme.dimensions.eight)
+            .height(ECTheme.dimensions.fiftySix)
             .fillMaxWidth(),
-        border = BorderStroke(LocalDimensions.current.one, contentColor),
-        shape = RoundedCornerShape(LocalDimensions.current.sixteen),
+        border = BorderStroke(ECTheme.dimensions.one, contentColor),
+        shape = RoundedCornerShape(ECTheme.dimensions.sixteen),
         colors = ButtonDefaults.buttonColors(
             contentColor = contentColor,
-            containerColor = LocalColors.current.white
+            containerColor = ECTheme.colors.white
         )
 
     ) {
-        Text(text = text, fontSize = LocalFontSizes.current.medium, fontWeight = FontWeight.Bold)
+        Text(text = text, fontSize = ECTheme.typography.medium, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -47,6 +45,6 @@ fun CustomOutlineButtonPreview() {
     CustomOutlinedButton(
         text = "Button",
         onClick = { },
-        contentColor = LocalColors.current.primary
+        contentColor = ECTheme.colors.primary
     )
 }

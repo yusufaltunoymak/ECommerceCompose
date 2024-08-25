@@ -1,7 +1,6 @@
 package com.hoy.ecommercecompose.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,10 +21,10 @@ import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.data.source.remote.model.Category
 import com.hoy.ecommercecompose.ui.home.HomeContract
-import com.hoy.ecommercecompose.ui.theme.LocalColors
-import com.hoy.ecommercecompose.ui.theme.LocalDimensions
+import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 
 @Composable
@@ -36,12 +35,12 @@ fun CategoryCard(
 ) {
     Card(
         modifier = modifier
-            .clickable { onCategoryListClick(category.name) }
-            .size(LocalDimensions.current.oneHundred, LocalDimensions.current.oneHundredTwenty),
+            .noRippleClickable { onCategoryListClick(category.name) }
+            .size(ECTheme.dimensions.oneHundred, ECTheme.dimensions.oneHundredTwenty),
         colors = CardDefaults.cardColors(
-            containerColor = LocalColors.current.white
+            containerColor = ECTheme.colors.white
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = LocalDimensions.current.two)
+        elevation = CardDefaults.cardElevation(defaultElevation = ECTheme.dimensions.two)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -56,16 +55,16 @@ fun CategoryCard(
                 contentDescription = stringResource(id = R.string.category_image),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(LocalDimensions.current.oneHundred, LocalDimensions.current.sixty)
-                    .background(LocalColors.current.white)
-                    .clip(RoundedCornerShape(LocalDimensions.current.four))
+                    .size(ECTheme.dimensions.oneHundred, ECTheme.dimensions.sixty)
+                    .background(ECTheme.colors.white)
+                    .clip(RoundedCornerShape(ECTheme.dimensions.four))
             )
             Text(
                 text = category.name,
-                color = LocalColors.current.black,
+                color = ECTheme.colors.black,
                 fontFamily = displayFontFamily,
                 modifier = Modifier
-                    .padding(top = LocalDimensions.current.four)
+                    .padding(top = ECTheme.dimensions.four)
                     .align(Alignment.CenterHorizontally)
             )
         }
@@ -83,7 +82,7 @@ fun CategoryList(
             CategoryCard(
                 onCategoryListClick = onCategoryListClick,
                 category = category,
-                modifier = Modifier.padding(LocalDimensions.current.eight)
+                modifier = Modifier.padding(ECTheme.dimensions.eight)
             )
         }
     }
