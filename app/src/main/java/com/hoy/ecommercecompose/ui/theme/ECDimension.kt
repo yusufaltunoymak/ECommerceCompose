@@ -63,6 +63,9 @@ class ECDimension {
     val fortyEight: Dp
         @Composable
         get() = 48.dp
+    val fifty: Dp
+        @Composable
+        get() = 50.dp
     val fiftySix: Dp
         @Composable
         get() = 56.dp
