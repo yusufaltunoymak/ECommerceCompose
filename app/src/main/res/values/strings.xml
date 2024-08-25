@@ -116,7 +116,12 @@
     <string name="card_holder_name">Card Holder Name</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
-    <string name="address">Address</string>
+    <string name="card_number_string">Card Number: %1$s</string>
+    <string name="card_holder_name_string">Card Holder Name: %1$s</string>
+    <string name="city">City: %1$s</string>
+    <string name="district">District: %1$s</string>
+    <string name="full_address">Full Address: %1$s</string>
+    <string name="price">Price: %1$.2f</string>
     <string name="notification">Notification</string>
     <string name="email_sent">Email sent successfully!</string>
     <string name="error">Something went wrong!</string>
