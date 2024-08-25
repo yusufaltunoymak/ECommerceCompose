@@ -278,7 +278,7 @@ fun AccountScreen(
                 MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = {
                     FirebaseAuth.getInstance().signOut()
                     onNavigateToLogin()
-                }, textColor = LocalColors.current.red)
+                }, textColor = ECTheme.colors.red)
             }
         }
     } else {

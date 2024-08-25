@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +46,8 @@ fun SendMailScreen(
     onNavigateToLogin: () -> Unit,
     uiEffect: Flow<SendMailContract.UiEffect>
 ) {
+    val isEmailFieldEmpty = uiState.email.isEmpty()
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
@@ -72,9 +73,6 @@ fun SendMailScreen(
             }
         }
     }
-
-    val isEmailFieldEmpty = uiState.email.isEmpty()
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -142,8 +140,6 @@ fun SendMailScreen(
                 onAction(
                     SendMailContract.SendMailUiAction.SendMail,
                 )
-                Toast.makeText(context, R.string.email_sent, Toast.LENGTH_SHORT).show()
-                onNavigateToLogin()
             },
             enabled = !isEmailFieldEmpty
         )

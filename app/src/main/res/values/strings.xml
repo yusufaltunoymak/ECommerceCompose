@@ -119,6 +119,7 @@
     <string name="address">Address</string>
     <string name="notification">Notification</string>
     <string name="email_sent">Email sent successfully!</string>
+    <string name="error">Something went wrong!</string>
 
 
     <!-- send mail screen -->
