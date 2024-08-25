@@ -19,6 +19,8 @@ import com.hoy.ecommercecompose.ui.cart.CartScreen
 import com.hoy.ecommercecompose.ui.cart.CartViewModel
 import com.hoy.ecommercecompose.ui.category.CategoryScreen
 import com.hoy.ecommercecompose.ui.category.CategoryViewModel
+import com.hoy.ecommercecompose.ui.changepassword.ChangePasswordScreen
+import com.hoy.ecommercecompose.ui.changepassword.ChangePasswordViewModel
 import com.hoy.ecommercecompose.ui.detail.ProductDetailScreen
 import com.hoy.ecommercecompose.ui.detail.ProductDetailViewModel
 import com.hoy.ecommercecompose.ui.favorite.FavoriteScreen
@@ -33,8 +35,6 @@ import com.hoy.ecommercecompose.ui.order.OrderScreen
 import com.hoy.ecommercecompose.ui.order.OrderViewModel
 import com.hoy.ecommercecompose.ui.payment.PaymentScreen
 import com.hoy.ecommercecompose.ui.payment.PaymentViewModel
-import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordScreen
-import com.hoy.ecommercecompose.ui.resetpassword.ResetPasswordViewModel
 import com.hoy.ecommercecompose.ui.search.SearchScreen
 import com.hoy.ecommercecompose.ui.search.SearchViewModel
 import com.hoy.ecommercecompose.ui.sendmail.SendMailScreen
@@ -96,14 +96,15 @@ fun SetupNavGraph(
             )
         }
         composable(NavRoute.RESET_PASSWORD.route) {
-            val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
-            val resetPasswordUiState by resetPasswordViewModel.resetUiState.collectAsStateWithLifecycle()
+            val changePasswordViewModel: ChangePasswordViewModel = hiltViewModel()
+            val changePasswordUiState by changePasswordViewModel.uiState.collectAsStateWithLifecycle()
+            val changePasswordUiEffect = changePasswordViewModel.uiEffect
 
-            ResetPasswordScreen(
+            ChangePasswordScreen(
                 onBackClick = { navController.popBackStack() },
-                uiState = resetPasswordUiState,
-                onAction = resetPasswordViewModel::onAction,
-                navController = navController
+                uiState = changePasswordUiState,
+                onAction = changePasswordViewModel::onAction,
+                uiEffect = changePasswordUiEffect
             )
         }
         composable(NavRoute.SEND_MAIL.route) {
@@ -211,7 +212,9 @@ fun SetupNavGraph(
                 uiEffect = uiEffect,
                 uiState = uiState,
                 onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onNavigateToPassword = {navController.navigate(NavRoute.RESET_PASSWORD.route)},
+                onNavigateToLogin = {navController.navigate(NavRoute.LOGIN.route)}
             )
         }
         composable(NavRoute.SEARCH.route) {

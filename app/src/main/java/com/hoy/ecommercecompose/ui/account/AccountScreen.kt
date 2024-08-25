@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
@@ -50,6 +51,8 @@ fun AccountScreen(
     uiState: AccountContract.UiState,
     onAction: (AccountContract.UiAction) -> Unit,
     onBackClick: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateToPassword: ()-> Unit,
 ) {
 
     var name by remember { mutableStateOf(uiState.currentUser?.name.orEmpty()) }
@@ -228,12 +231,7 @@ fun AccountScreen(
                         address = it
                         isSaveEnabled = true
                     },
-                    label = {
-                        Text(
-                            stringResource(id = R.string.address_label),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    },
+                    label = { Text(stringResource(id = R.string.address_label), style = MaterialTheme.typography.bodyMedium) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = ECTheme.dimensions.four)
@@ -268,22 +266,19 @@ fun AccountScreen(
                         .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(
-                    iconId = R.drawable.circle_lock,
-                    title = stringResource(id = R.string.change_password),
-                    onClick = { })
+                MenuItem(iconId = R.drawable.circle_lock, title = stringResource(id = R.string.change_password), onClick = {
+                    onNavigateToPassword()
+                })
                 Divider(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                     modifier = Modifier
                         .padding(horizontal = ECTheme.dimensions.sixteen)
                         .fillMaxWidth()
                 )
-                MenuItem(
-                    iconId = R.drawable.ic_logout,
-                    title = stringResource(id = R.string.log_out),
-                    onClick = { },
-                    textColor = ECTheme.colors.red
-                )
+                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    onNavigateToLogin()
+                }, textColor = ECTheme.colors.red)
             }
         }
     } else {

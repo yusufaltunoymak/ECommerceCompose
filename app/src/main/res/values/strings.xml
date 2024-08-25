@@ -13,7 +13,7 @@
     <string name="email_text">Email</string>
     <string name="password_text">Password</string>
     <string name="register_text">Register</string>
-    <string name="welcome_login_text">Welcome back!\nGlad to see you, Again!</string>
+    <string name="welcome_login_text">Welcome back!\nGlad to see you, again!</string>
     <string name="enter_mail_text">Enter your e-mail</string>
     <string name="enter_password_text">Enter your password</string>
     <string name="forgot_password_text">Forgot Password?</string>
@@ -117,6 +117,10 @@
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="address">Address</string>
+    <string name="notification">Notification</string>
+    <string name="email_sent">Email sent successfully!</string>
+    <string name="error">Something went wrong!</string>
+
 
     <!-- send mail screen -->
     <string name="mail_sent_success">Mail sent successfully</string>

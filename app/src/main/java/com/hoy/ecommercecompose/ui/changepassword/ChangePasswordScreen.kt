@@ -1,5 +1,6 @@
-package com.hoy.ecommercecompose.ui.resetpassword
+package com.hoy.ecommercecompose.ui.changepassword
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,25 +18,39 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.ECTheme
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ResetPasswordScreen(
+fun ChangePasswordScreen(
     onBackClick: () -> Unit,
-    uiState: ResetPasswordContract.ResetPasswordUiState,
-    onAction: (ResetPasswordContract.ResetPasswordUiAction) -> Unit,
-    navController: NavController
+    uiState: ChangePasswordContract.UiState,
+    onAction: (ChangePasswordContract.UiAction) -> Unit,
+    uiEffect: Flow<ChangePasswordContract.UiEffect>
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(uiEffect) {
+        uiEffect.collect { effect ->
+            when (effect) {
+                is ChangePasswordContract.UiEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -79,19 +94,18 @@ fun ResetPasswordScreen(
         Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
         CustomTextField(
-            value = uiState.email,
-            onValueChange = { onAction(ResetPasswordContract.ResetPasswordUiAction.ChangeEmail(it)) },
+            value = uiState.password,
+            onValueChange = { onAction(ChangePasswordContract.UiAction.ChangePassword(it)) },
             label = stringResource(R.string.new_password),
             leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
-            isError = uiState.showEmailError,
             isPassword = true,
         )
 
         Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         CustomTextField(
-            value = uiState.password,
-            onValueChange = { onAction(ResetPasswordContract.ResetPasswordUiAction.ChangePassword(it)) },
+            value = uiState.confirmPassword,
+            onValueChange = { onAction(ChangePasswordContract.UiAction.ChangeConfirmPassword(it)) },
             label = stringResource(R.string.confirm_password),
             isPassword = true,
             leadingIcon = {
@@ -100,24 +114,14 @@ fun ResetPasswordScreen(
                     contentDescription = null
                 )
             },
-            isError = uiState.showPasswordError
         )
         Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
         CustomButton(
             text = stringResource(R.string.reset_password),
-            onClick = { onAction(ResetPasswordContract.ResetPasswordUiAction.ResetPassword) }
+            onClick = {
+                onAction(ChangePasswordContract.UiAction.ResetPassword)
+            }
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ResetPasswordScreenPreview() {
-    ResetPasswordScreen(
-        onBackClick = { },
-        uiState = ResetPasswordContract.ResetPasswordUiState(),
-        onAction = { },
-        navController = rememberNavController()
-    )
 }

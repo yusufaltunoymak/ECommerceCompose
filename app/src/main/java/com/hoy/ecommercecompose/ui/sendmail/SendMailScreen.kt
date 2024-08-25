@@ -46,6 +46,8 @@ fun SendMailScreen(
     onNavigateToLogin: () -> Unit,
     uiEffect: Flow<SendMailContract.UiEffect>
 ) {
+    val isEmailFieldEmpty = uiState.email.isEmpty()
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
@@ -71,8 +73,6 @@ fun SendMailScreen(
             }
         }
     }
-
-    val isEmailFieldEmpty = uiState.email.isEmpty()
 
     Column(
         modifier = Modifier
@@ -133,13 +133,13 @@ fun SendMailScreen(
 
         Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
+
         CustomButton(
             text = stringResource(id = R.string.send_mail_button_text),
             onClick = {
                 onAction(
                     SendMailContract.SendMailUiAction.SendMail,
                 )
-                onNavigateToLogin()
             },
             enabled = !isEmailFieldEmpty
         )
