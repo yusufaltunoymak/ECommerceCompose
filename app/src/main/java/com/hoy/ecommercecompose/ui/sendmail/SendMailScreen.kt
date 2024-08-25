@@ -133,7 +133,6 @@ fun SendMailScreen(
 
         Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
-
         CustomButton(
             text = stringResource(id = R.string.send_mail_button_text),
             onClick = {

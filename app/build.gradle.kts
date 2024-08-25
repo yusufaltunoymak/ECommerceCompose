@@ -61,51 +61,63 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui.text.google.fonts)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
-    implementation(libs.engage.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    implementation(platform(libs.firebase.bom))
-    androidTestImplementation(libs.androidx.navigation.testing)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.navigation.compose)
-    annotationProcessor(libs.androidx.room.compiler)
+
+    // Compose ve UI
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
-    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material)
+    implementation(libs.coil.compose)
+
+    // Lifecycle and Navigation
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
+    kapt(libs.androidx.room.compiler)
+    annotationProcessor(libs.androidx.room.compiler)
+
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.play.services.auth)
-    implementation(libs.androidx.hilt.navigation.compose)
-    debugImplementation(libs.androidx.ui.tooling)
-    implementation(libs.coil.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    //bottom navigation compose
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.ui)
-    implementation(libs.androidx.material)
+
+    // Hilt (Dependency Injection)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+
+    // Material Icons
     implementation(libs.androidx.material.icons.extended)
 
-    //detekt
+    // Detekt
     detektPlugins(libs.detekt)
 }
+
 
 detekt {
     config.setFrom(file("$rootDir/detekt/detektConfig.yml"))

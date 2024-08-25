@@ -72,11 +72,10 @@ class MainActivity : ComponentActivity() {
                                     }
                                     launchSingleTop = true
                                     restoreState = true
-
                                 }
                             },
                             onFabClick = {
-                                navController.navigate(NavRoute.ORDER.route)
+                                navController.navigate(NavRoute.HOME.route)
                             }
                         )
                     }

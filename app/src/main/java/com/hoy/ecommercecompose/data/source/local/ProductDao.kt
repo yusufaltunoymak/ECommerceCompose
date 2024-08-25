@@ -37,11 +37,9 @@ interface ProductDao {
     @Query("DELETE FROM products_table WHERE userId = :userId")
     suspend fun clearCart(userId: String)
 
-
     @Transaction
     suspend fun processOrder(userId: String, paymentEntity: PaymentEntity) {
         addPaymentDetails(paymentEntity)
         clearCart(userId)
     }
-
 }

@@ -62,7 +62,7 @@ fun LoginScreen(
     onBackClick: () -> Unit,
     onNavigateToHome: () -> Unit,
 
-    ) {
+) {
     var alertDialogState by remember { mutableStateOf(false) }
 
     val signInLauncher = rememberLauncherForActivityResult(
@@ -189,7 +189,7 @@ fun LoginScreen(
                     fontWeight = FontWeight.Light,
                     fontSize = ECTheme.typography.small,
 
-                    )
+                )
             }
 
             Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))

@@ -68,8 +68,27 @@ fun OrderScreen(
             }
         }
     }
+    Column {
+        TopBar()
+        OrderList(paymentList = uiState.orders)
+    }
 
-    OrderList(paymentList = uiState.orders)
+//    OrderList(paymentList = uiState.orders)
+}
+
+@Composable
+fun TopBar(
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = "Orders",
+        fontSize = ECTheme.typography.extraLarge,
+        color = ECTheme.colors.black,
+        style = MaterialTheme.typography.headlineMedium,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(ECTheme.dimensions.twelve)
+    )
 }
 
 @Composable
@@ -79,7 +98,7 @@ fun OrderList(
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(ECTheme.dimensions.eight)
+        contentPadding = PaddingValues(ECTheme.dimensions.four)
     ) {
         items(paymentList) { paymentEntity ->
             OrderCard(paymentEntity = paymentEntity)
@@ -119,12 +138,20 @@ fun OrderCard(paymentEntity: PaymentEntity) {
                     contentDescription = stringResource(id = R.string.product_image),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .height(ECTheme.dimensions.fifty)
+                        .height(ECTheme.dimensions.seventyTwo)
                         .padding(ECTheme.dimensions.four)
                 )
                 Column {
-                    Text(text = paymentEntity.title)
-                    Text(text = paymentEntity.orderDate.formatDateWithTime())
+                    Text(
+                        text = paymentEntity.title,
+                        fontSize = ECTheme.typography.large,
+                        modifier = Modifier.padding(ECTheme.dimensions.four)
+                    )
+                    Text(
+                        text = paymentEntity.orderDate.formatDateWithTime(),
+                        fontSize = ECTheme.typography.large,
+                        modifier = Modifier.padding(ECTheme.dimensions.four)
+                    )
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 OrderItemButton(
@@ -161,17 +188,34 @@ fun OrderItemButton(
 @Composable
 fun OrderDetails(paymentEntity: PaymentEntity) {
     Column {
-        Text(text = stringResource(id = R.string.card_number_string, paymentEntity.cardNumber))
+        Text(
+            text = stringResource(id = R.string.card_number_string, paymentEntity.cardNumber),
+            fontSize = ECTheme.typography.medium
+        )
         Text(
             text = stringResource(
                 id = R.string.card_holder_name_string,
                 paymentEntity.cardHolderName
-            )
+            ),
+            fontSize = ECTheme.typography.medium
         )
-        Text(text = stringResource(id = R.string.city, paymentEntity.city))
-        Text(text = stringResource(id = R.string.district, paymentEntity.district))
-        Text(text = stringResource(id = R.string.full_address, paymentEntity.fullAddress))
-        Text(text = stringResource(id = R.string.price, paymentEntity.price))
+        Text(
+            text = stringResource(id = R.string.city, paymentEntity.city),
+            fontSize = ECTheme.typography.medium
+        )
+        Text(
+            text = stringResource(id = R.string.district, paymentEntity.district),
+            fontSize = ECTheme.typography.medium
+        )
+        Text(
+            text = stringResource(id = R.string.full_address, paymentEntity.fullAddress),
+            fontSize = ECTheme.typography.medium
+        )
+        Text(
+            text = stringResource(id = R.string.price, paymentEntity.price),
+            fontSize = ECTheme.typography.medium,
+            color = ECTheme.colors.primary
+        )
     }
 }
 
@@ -182,5 +226,6 @@ fun OrderScreenPreview() {
         uiState = OrderContract.UiState(),
         uiEffect = flowOf(),
         onAction = {},
-        navigateBack = {})
+        navigateBack = {}
+    )
 }

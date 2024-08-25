@@ -1,8 +1,8 @@
 package com.hoy.ecommercecompose.ui.detail
 
-import android.widget.Toast
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,7 +47,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -85,10 +84,16 @@ fun ProductDetailScreen(
                             putExtra(Intent.EXTRA_TEXT, effect.shareText)
                             type = "text/plain"
                         }
-                        context.startActivity(Intent.createChooser(shareIntent, "Share product via"))
+                        context.startActivity(
+                            Intent.createChooser(
+                                shareIntent,
+                                "Share product via"
+                            )
+                        )
                     }
+
                     is ProductDetailContract.UiEffect.ShowAlreadyInCartMessage -> {
-                            Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -210,7 +215,6 @@ fun ProductDetails(uiState: ProductDetailContract.UiState) {
     }
 }
 
-
 @Composable
 fun AddToCartSection(
     onAction: (ProductDetailContract.UiAction) -> Unit,
@@ -282,7 +286,6 @@ fun AddToCartSection(
                     modifier = Modifier.padding(ECTheme.dimensions.eight),
                 )
             }
-
         }
         Spacer(modifier = Modifier.height(ECTheme.dimensions.thirty))
     }
@@ -340,7 +343,3 @@ fun ImageList(modifier: Modifier = Modifier, uiState: ProductDetailContract.UiSt
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-}

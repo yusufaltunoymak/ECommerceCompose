@@ -12,6 +12,7 @@ object HomeContract {
         val errorMessage: String? = null,
         val categoryList: List<Category> = emptyList(),
         val productList: List<ProductUi> = emptyList(),
+        val specialProductList: List<ProductUi> = emptyList(),
         val addToFavorites: FavoriteResponse? = null,
         val deleteFromFavorites: FavoriteResponse? = null
     )

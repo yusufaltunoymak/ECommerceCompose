@@ -70,7 +70,6 @@ fun ProductDetail.mapToProductEntity(
     )
 }
 
-
 fun PaymentContract.UiState.toPaymentEntity(
     userId: String,
     productId: Int,
@@ -95,7 +94,6 @@ fun PaymentContract.UiState.toPaymentEntity(
         price = price,
     )
 }
-
 
 fun BaseResponse.toFavoriteResponse(): FavoriteResponse {
     return FavoriteResponse(

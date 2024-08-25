@@ -38,11 +38,9 @@ class CategoryViewModel @Inject constructor(
 
     fun onAction(action: CategoryContract.UiAction) {
         when (action) {
-
             else -> {}
         }
     }
-
 
     fun getCategory(): String {
         return savedStateHandle.get<String>("category").orEmpty()

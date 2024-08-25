@@ -10,7 +10,6 @@ import com.hoy.ecommercecompose.domain.model.BaseBody
 import com.hoy.ecommercecompose.domain.model.DeleteFromFavoriteBody
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.AddToCartLocalUseCase
-import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.cart.IsProductInCartUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.AddToFavoriteUseCase
 import com.hoy.ecommercecompose.domain.usecase.favorite.DeleteFavoriteUseCase
@@ -163,10 +162,11 @@ class ProductDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val productId = product.id ?: return@launch
             val isProductInCart = isProductInCartUseCase(productId)
-            if(isProductInCart) {
-                _uiEffect.send(ProductDetailContract.UiEffect.ShowAlreadyInCartMessage("Product is already in the cart"))
-            }
-            else {
+            if (isProductInCart) {
+                _uiEffect.send(
+                    ProductDetailContract.UiEffect.ShowAlreadyInCartMessage("Product is already in the cart")
+                )
+            } else {
                 val productEntity = product.mapToProductEntity(
                     userId = firebaseAuthRepository.getUserId(),
                     productId = product.id,

@@ -24,7 +24,6 @@ class ECFontSize {
     val sizeTitle: TextUnit
         @Composable
         get() = 32.sp
-
 }
 
 internal val LocalFontSizes = staticCompositionLocalOf { ECFontSize() }

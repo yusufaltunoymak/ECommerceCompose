@@ -38,4 +38,3 @@ data class ProductEntity(
     @ColumnInfo("quantity")
     val quantity: Int
 )
-

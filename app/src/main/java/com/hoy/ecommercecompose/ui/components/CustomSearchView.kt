@@ -86,8 +86,11 @@ fun CustomSearchView(
                     Icon(
                         imageVector = if (text.isNotBlank()) Icons.Default.Clear else Icons.AutoMirrored.Filled.List,
                         contentDescription =
-                        if (text.isNotBlank()) stringResource(R.string.clear)
-                        else stringResource(R.string.sort),
+                        if (text.isNotBlank()) {
+                            stringResource(R.string.clear)
+                        } else {
+                            stringResource(R.string.sort)
+                        },
                         modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                     )
                 }

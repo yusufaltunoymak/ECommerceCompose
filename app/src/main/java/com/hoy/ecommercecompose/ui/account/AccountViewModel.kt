@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.auth.GetUserInformationUseCase
-import com.hoy.ecommercecompose.ui.detail.ProductDetailContract
-import com.hoy.ecommercecompose.ui.home.HomeContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +19,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val getUserInformationUseCase: GetUserInformationUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository,
-    ): ViewModel() {
+) : ViewModel() {
 
     private var _uiState: MutableStateFlow<AccountContract.UiState> =
         MutableStateFlow(AccountContract.UiState())
@@ -32,12 +30,10 @@ class AccountViewModel @Inject constructor(
 
     init {
         getUserInformation()
-
     }
 
     fun onAction(action: AccountContract.UiAction) {
         when (action) {
-
             else -> {}
         }
     }

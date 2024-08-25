@@ -352,12 +352,15 @@ fun ExpiryDateAndCvvInput(
                         modifier = Modifier.clickable { onAction(PaymentContract.UiAction.ToggleMonthDropdown) }
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onAction(PaymentContract.UiAction.ToggleMonthDropdown) }
             )
             DropdownMenu(
                 expanded = uiState.isMonthDropdownExpanded,
                 onDismissRequest = { onAction(PaymentContract.UiAction.ToggleMonthDropdown) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .width(ECTheme.dimensions.fortyEight)
             ) {
                 months.forEach { month ->
                     DropdownMenuItem(
@@ -391,12 +394,15 @@ fun ExpiryDateAndCvvInput(
                         modifier = Modifier.clickable { onAction(PaymentContract.UiAction.ToggleYearDropdown) }
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onAction(PaymentContract.UiAction.ToggleYearDropdown) }
             )
             DropdownMenu(
                 expanded = uiState.isYearDropdownExpanded,
                 onDismissRequest = { onAction(PaymentContract.UiAction.ToggleYearDropdown) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .width(ECTheme.dimensions.seventyTwo)
             ) {
                 years.forEach { year ->
                     DropdownMenuItem(

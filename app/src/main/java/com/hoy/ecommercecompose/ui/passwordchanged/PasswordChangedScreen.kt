@@ -62,6 +62,5 @@ fun PasswordChangedScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PasswordChangedScreenPreview() {
-    PasswordChangedScreen(
-    )
+    PasswordChangedScreen()
 }
