@@ -19,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,7 +37,6 @@ fun ChangePasswordScreen(
     onAction: (ChangePasswordContract.UiAction) -> Unit,
     uiEffect: Flow<ChangePasswordContract.UiEffect>
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     LaunchedEffect(uiEffect) {
@@ -89,6 +87,15 @@ fun ChangePasswordScreen(
             fontWeight = FontWeight.Thin,
             fontSize = ECTheme.typography.body,
             modifier = Modifier.align(Alignment.Start)
+        )
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
+
+        CustomTextField(
+            value = uiState.currentPassword,
+            onValueChange = { onAction(ChangePasswordContract.UiAction.ChangeCurrentPassword(it)) },
+            label = stringResource(R.string.current_password),
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
+            isPassword = true,
         )
 
         Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))

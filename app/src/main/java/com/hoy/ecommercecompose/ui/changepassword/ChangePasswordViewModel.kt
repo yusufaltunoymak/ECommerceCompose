@@ -2,9 +2,9 @@ package com.hoy.ecommercecompose.ui.changepassword
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.Resource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,9 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
-class ChangePasswordViewModel : ViewModel() {
+class ChangePasswordViewModel(private val repository: FirebaseAuthRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChangePasswordContract.UiState())
     val uiState: StateFlow<ChangePasswordContract.UiState> = _uiState.asStateFlow()
@@ -37,26 +36,30 @@ class ChangePasswordViewModel : ViewModel() {
                     resetPassword()
                 }
             }
+
+            is ChangePasswordContract.UiAction.ChangeCurrentPassword -> {
+                _uiState.value = _uiState.value.copy(currentPassword = action.currentPassword)
+            }
         }
     }
 
     private suspend fun resetPassword() {
         val currentState = _uiState.value
         if (currentState.password != currentState.confirmPassword) {
-            _uiState.value = _uiState.value.copy(errorMessage = "Passwords do not match")
+            _uiState.value = _uiState.value.copy(errorMessage = R.string.passwords_not_matching)
             return
         }
 
-        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        user?.let {
-            try {
-                it.updatePassword(currentState.password).await()
+        val result = repository.changePassword(currentState.currentPassword, currentState.password)
+        when (result) {
+            is Resource.Success -> {
                 _uiEffect.send(ChangePasswordContract.UiEffect.ShowToast(R.string.password_changed_message))
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(errorMessage = e.message)
             }
-        } ?: run {
-            _uiState.value = _uiState.value.copy(errorMessage = "No user is signed in")
+            is Resource.Error -> {
+                _uiState.value = _uiState.value.copy(errorMessage = 0)
+            }
+
+            Resource.Loading -> TODO()
         }
     }
 }

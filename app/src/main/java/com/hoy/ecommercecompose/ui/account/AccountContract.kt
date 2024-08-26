@@ -9,7 +9,9 @@ object AccountContract {
         val errorMessage: String? = null,
     )
 
-    sealed class UiAction()
+    sealed class UiAction() {
+        data class SaveUserInformation(val user: User) : UiAction()
+    }
 
     sealed class UiEffect()
 }
