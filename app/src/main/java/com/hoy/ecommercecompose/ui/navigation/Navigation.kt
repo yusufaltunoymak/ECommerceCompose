@@ -30,6 +30,8 @@ import com.hoy.ecommercecompose.ui.home.HomeViewModel
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
+import com.hoy.ecommercecompose.ui.notification.NotificationScreen
+import com.hoy.ecommercecompose.ui.notification.NotificationViewModel
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
 import com.hoy.ecommercecompose.ui.order.OrderScreen
 import com.hoy.ecommercecompose.ui.order.OrderViewModel
@@ -217,7 +219,8 @@ fun SetupNavGraph(
                 onAction = viewModel::onAction,
                 onBackClick = { navController.popBackStack() },
                 onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
-                onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) }
+                onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) },
+                onNavigateToOrders = { navController.navigate(NavRoute.ORDER.route) },
             )
         }
         composable(NavRoute.SEARCH.route) {
@@ -270,6 +273,19 @@ fun SetupNavGraph(
             OrderScreen(
                 uiState = orderUiState,
                 onAction = orderViewModel::onAction,
+                uiEffect = uiEffect,
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(NavRoute.NOTIFICATION.route) {
+            val viewModel: NotificationViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+            NotificationScreen(
+                uiState = uiState,
+                onAction = viewModel::onAction,
                 uiEffect = uiEffect,
                 navigateBack = {
                     navController.popBackStack()

@@ -14,7 +14,8 @@ enum class NavRoute(val route: String) {
     SEARCH("search"),
     CART("cart"),
     PAYMENT("payment"),
-    ORDER("order");
+    ORDER("order"),
+    NOTIFICATION("notification");
 
     fun withArgs(vararg args: String): String {
         return route.split("?").first() + args.joinToString(prefix = "?", separator = "&")

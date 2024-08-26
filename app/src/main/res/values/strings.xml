@@ -132,4 +132,9 @@
     <string name="mail_sent_success">Mail sent successfully</string>
     <string name="mail_sent_failure">Mail sent failure</string>
 
+    <string name="no_orders">No Ongoing Orders!</string>
+    <string name="no_orders_long">You don’t have any ongoing orders at this time.</string>
+
+    <string name="no_notifications">You haven’t gotten any notifications yet!</string>
+    <string name="no_notifications_long">We’ll alert you when something cool happens.</string>
 </resources>
