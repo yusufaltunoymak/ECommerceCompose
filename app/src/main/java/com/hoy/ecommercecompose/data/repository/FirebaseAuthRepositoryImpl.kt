@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.data.repository
 
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hoy.ecommercecompose.common.Resource
@@ -69,5 +70,30 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     override fun getUserId(): String {
         return firebaseAuth.currentUser?.uid.orEmpty()
+    }
+
+    override suspend fun updateUserInformation(user: User): Resource<Unit> {
+        return try {
+            Resource.Loading
+            firestore.collection("Users").document(user.id!!).set(user).await()
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An unknown error occurred")
+        }
+    }
+    override suspend fun changePassword(currentPassword: String, newPassword: String): Resource<Unit> {
+        val user = firebaseAuth.currentUser
+        return if (user != null) {
+            try {
+                val credential = EmailAuthProvider.getCredential(user.email!!, currentPassword)
+                user.reauthenticate(credential).await()
+                user.updatePassword(newPassword).await()
+                Resource.Success(Unit)
+            } catch (e: Exception) {
+                Resource.Error(e.message ?: "An unknown error occurred")
+            }
+        } else {
+            Resource.Error("No user is currently logged in")
+        }
     }
 }

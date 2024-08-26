@@ -3,6 +3,7 @@ package com.hoy.ecommercecompose.ui.account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.common.Resource
+import com.hoy.ecommercecompose.data.source.remote.model.User
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.auth.GetUserInformationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val getUserInformationUseCase: GetUserInformationUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository,
-) : ViewModel() {
+    ): ViewModel() {
 
     private var _uiState: MutableStateFlow<AccountContract.UiState> =
         MutableStateFlow(AccountContract.UiState())
@@ -30,11 +31,14 @@ class AccountViewModel @Inject constructor(
 
     init {
         getUserInformation()
+
     }
 
     fun onAction(action: AccountContract.UiAction) {
         when (action) {
-            else -> {}
+            is AccountContract.UiAction.SaveUserInformation -> {
+                saveUserInformation(action.user)
+            }
         }
     }
 
@@ -55,6 +59,24 @@ class AccountViewModel @Inject constructor(
             }
         }
     }
+
+    private fun saveUserInformation(user: User) {
+        viewModelScope.launch {
+            updateUiState { copy(isLoading = true) }
+            when (val result = firebaseAuthRepository.updateUserInformation(user)) {
+                is Resource.Success -> {
+                    updateUiState { copy(currentUser = user, isLoading = false) }
+                }
+                is Resource.Error -> {
+                    updateUiState { copy(errorMessage = result.message, isLoading = false) }
+                }
+                is Resource.Loading -> {
+                    updateUiState { copy(isLoading = true) }
+                }
+            }
+        }
+    }
+
     private fun updateUiState(block: AccountContract.UiState.() -> AccountContract.UiState) {
         _uiState.update(block)
     }

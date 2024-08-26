@@ -113,8 +113,15 @@ fun AccountScreen(
                     IconButton(
                         onClick = {
                             if (isEditing) {
-                                // Handle save action
+                                val updatedUser = uiState.currentUser.copy(
+                                    name = name,
+                                    surname = surname,
+                                    email = email,
+                                    address = address
+                                )
+                                onAction(AccountContract.UiAction.SaveUserInformation(updatedUser))
                                 isEditing = false
+                                isSaveEnabled = false
                             } else {
                                 isEditing = true
                             }
@@ -273,7 +280,7 @@ fun AccountScreen(
                         .fillMaxWidth()
                 )
                 MenuItem(
-                    iconId = R.drawable.circle_lock,
+                    iconId = R.drawable.ic_circle_lock,
                     title = stringResource(
                         id = R.string.change_password
                     ),

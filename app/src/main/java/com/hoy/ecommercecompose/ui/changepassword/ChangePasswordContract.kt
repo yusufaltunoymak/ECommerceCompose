@@ -4,11 +4,13 @@ object ChangePasswordContract {
     data class UiState(
         val password: String = "",
         val confirmPassword: String = "",
-        val errorMessage: String? = null
+        val currentPassword: String = "",
+        val errorMessage: Int? =0,
     )
 
     sealed class UiAction {
         data class ChangePassword(val password: String) : UiAction()
+        data class ChangeCurrentPassword(val currentPassword: String) : UiAction()
         data class ChangeConfirmPassword(val confirmPassword: String) : UiAction()
         object ResetPassword : UiAction()
     }
