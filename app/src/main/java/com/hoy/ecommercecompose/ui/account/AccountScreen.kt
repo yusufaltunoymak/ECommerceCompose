@@ -19,7 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +53,7 @@ fun AccountScreen(
     onBackClick: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToPassword: () -> Unit,
+    onNavigateToOrders: () -> Unit,
 ) {
     var name by remember { mutableStateOf(uiState.currentUser?.name.orEmpty()) }
     var surname by remember { mutableStateOf(uiState.currentUser?.surname.orEmpty()) }
@@ -250,22 +251,24 @@ fun AccountScreen(
 
                 Spacer(modifier = Modifier.height(ECTheme.dimensions.twenty))
 
-                Divider(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(horizontal = ECTheme.dimensions.sixteen)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                 )
                 MenuItem(
                     iconId = R.drawable.ic_order,
                     title = stringResource(id = R.string.my_order),
-                    onClick = { }
+                    onClick = {
+                        onNavigateToOrders()
+                    }
                 )
-                Divider(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(horizontal = ECTheme.dimensions.sixteen)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                 )
 
                 MenuItem(
@@ -273,11 +276,11 @@ fun AccountScreen(
                     title = stringResource(id = R.string.payment_methods),
                     onClick = { }
                 )
-                Divider(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(horizontal = ECTheme.dimensions.sixteen)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                 )
                 MenuItem(
                     iconId = R.drawable.ic_circle_lock,
@@ -288,11 +291,11 @@ fun AccountScreen(
                         onNavigateToPassword()
                     }
                 )
-                Divider(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(horizontal = ECTheme.dimensions.sixteen)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                 )
                 MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = {
                     FirebaseAuth.getInstance().signOut()
