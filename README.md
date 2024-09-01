@@ -1,13 +1,14 @@
-# E-commerce Compose
+# E-commerce Compose 🛒
 
-## Overview
-ECommerceCompose is a user-centric Android application designed as a showcase for modern e-commerce solutions. Developed entirely in Kotlin using Jetpack Compose, the project follows clean architecture principles and leverages the MVVM design pattern to ensure a scalable and maintainable codebase.
+## Overview 
 
-This project serves as an example of how to integrate modern technologies and best practices into the Android development process. From the user interface to the data layer, every aspect of the application is optimized for high performance and ease of maintenance.
+🎯ECommerceCompose is a user-centric Android application developed by a team of three—Hacer(https://github.com/HacerYaman), Oğuzhan(https://github.com/oguzhanozgokce), and Yusuf. Built entirely in Kotlin using Jetpack Compose, the project adheres to Clean Architecture and SOLID principles, resulting in a scalable and maintainable codebase.
 
-ECommerceCompose not only provides core e-commerce functionalities but also serves as a solid reference point for Android developers looking to learn and work with popular libraries such as Jetpack Compose, Room, Hilt, and Firebase. The project aims to offer a practical application while also being an educational resource for developers.
+The primary goal of this project was to learn and apply modern Android development techniques and best practices. Throughout the development process, we focused on taking responsibility within a team setting, resolving conflicts on GitHub, and effectively communicating to overcome challenges. We integrated popular libraries such as Jetpack Compose, Room, Hilt, and Firebase to gain hands-on experience with cutting-edge technologies.
 
-## Project Features
+ECommerceCompose not only provides essential e-commerce functionalities but also aims to be a valuable learning resource for developers who are new to Android development or looking to deepen their skills. The project is optimized for high performance and ease of maintenance, from the user interface to the data layer. Additionally, it serves as a solid reference point for both individual learning and team-based development projects.
+
+## 🚀 Project Features
 - **CLEAN ARCHITECTURE**
 - **MVVM** 
 - **MVI**
@@ -45,3 +46,4 @@ ECommerceCompose not only provides core e-commerce functionalities but also serv
 | **CATEGORY PAGE**                                                      |   **DETAIL PAGE**                                                      |       **PAYMENT PAGE**                                                 |
 
 ##
+
