@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -33,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,7 +60,7 @@ fun CartScreen(
     onNavigatePayment: () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { androidx.compose.material3.SnackbarHostState() }
 
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -70,11 +68,11 @@ fun CartScreen(
                 when (effect) {
                     is CartContract.UiEffect.PaymentClick -> onNavigatePayment()
                     is CartContract.UiEffect.ShowDeleteConfirmation -> {
-                        val result = snackbarHostState.showSnackbar(
+                        val result = snackBarHostState.showSnackbar(
                             message = "Do you want to delete this item?",
                             actionLabel = "Yes"
                         )
-                        if (result == SnackbarResult.ActionPerformed) {
+                        if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
                             onAction(CartContract.UiAction.DeleteProductFromCart(effect.id))
                         }
                     }
@@ -84,7 +82,7 @@ fun CartScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         content = { paddingValues ->
             Column(
                 modifier = Modifier

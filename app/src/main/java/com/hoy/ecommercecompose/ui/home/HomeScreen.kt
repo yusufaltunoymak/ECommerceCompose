@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -37,6 +39,7 @@ import com.hoy.ecommercecompose.ui.components.SpecialProductList
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.displayFontFamily
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun HomeScreen(
@@ -187,4 +190,20 @@ fun SearchNavigationView(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview(
+    @PreviewParameter(HomeScreenPreviewParameter::class) uiState: HomeContract.UiState
+) {
+        HomeScreen(
+            uiState = uiState,
+            uiEffect = flow {
+            },
+            onNavigateToDetail = {},
+            onNavigateToSearch = {},
+            onCategoryListClick = {},
+            onAction = {}
+        )
 }
