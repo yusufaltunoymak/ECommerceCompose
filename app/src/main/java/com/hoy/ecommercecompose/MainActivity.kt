@@ -56,7 +56,8 @@ class MainActivity : ComponentActivity() {
                 NavRoute.SEARCH.route,
                 NavRoute.PRODUCT_DETAIL.route,
                 NavRoute.CATEGORY_SCREEN.route,
-                NavRoute.PAYMENT.route
+                NavRoute.PAYMENT.route,
+                NavRoute.SEND_MAIL.route,
             )
             val shouldShowBottomNav = currentRoute !in hideBottomNavRoutes
             Scaffold(

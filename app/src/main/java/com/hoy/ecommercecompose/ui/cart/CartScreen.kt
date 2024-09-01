@@ -156,7 +156,9 @@ fun CartItem(
             .fillMaxWidth()
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(ECTheme.dimensions.four),
             shape = RoundedCornerShape(ECTheme.dimensions.eight),
             elevation = CardDefaults.cardElevation(ECTheme.dimensions.four),
             colors = CardDefaults.cardColors(containerColor = ECTheme.colors.white)
