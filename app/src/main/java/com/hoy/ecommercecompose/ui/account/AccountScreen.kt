@@ -49,7 +49,6 @@ fun AccountScreen(
     uiEffect: Flow<AccountContract.UiEffect>,
     uiState: AccountContract.UiState,
     onAction: (AccountContract.UiAction) -> Unit,
-    onBackClick: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToPassword: () -> Unit,
     onNavigateToNotifications: () -> Unit,
@@ -134,7 +133,7 @@ fun AccountScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedTextField(
-                        value = uiState.currentUser.name!!,
+                        value = name,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = ECTheme.colors.primary,
                             unfocusedBorderColor = ECTheme.colors.primary,
@@ -158,7 +157,7 @@ fun AccountScreen(
                     )
 
                     OutlinedTextField(
-                        value = uiState.currentUser.surname!!,
+                        value = surname,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = ECTheme.colors.primary,
                             unfocusedBorderColor = ECTheme.colors.primary,
@@ -183,7 +182,7 @@ fun AccountScreen(
                 }
 
                 OutlinedTextField(
-                    value = uiState.currentUser.email!!,
+                    value = email,
                     enabled = isEditing,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = ECTheme.colors.primary,
@@ -207,7 +206,7 @@ fun AccountScreen(
                 )
 
                 OutlinedTextField(
-                    value = uiState.currentUser.address!!,
+                    value = address,
                     enabled = isEditing,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = ECTheme.colors.primary,
