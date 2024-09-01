@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.Resource
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +13,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChangePasswordViewModel(private val repository: FirebaseAuthRepository) : ViewModel() {
+@HiltViewModel
+class ChangePasswordViewModel @Inject constructor(private val repository: FirebaseAuthRepository) :
+    ViewModel() {
 
     private val _uiState = MutableStateFlow(ChangePasswordContract.UiState())
     val uiState: StateFlow<ChangePasswordContract.UiState> = _uiState.asStateFlow()

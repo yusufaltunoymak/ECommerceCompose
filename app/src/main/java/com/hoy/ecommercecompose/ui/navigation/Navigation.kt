@@ -224,7 +224,6 @@ fun SetupNavGraph(
                 uiEffect = uiEffect,
                 uiState = uiState,
                 onAction = viewModel::onAction,
-                onBackClick = { navController.popBackStack() },
                 onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
                 onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) },
                 onNavigateToNotifications = { navController.navigate(NavRoute.NOTIFICATION.route) },
