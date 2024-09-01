@@ -8,17 +8,18 @@ This project serves as an example of how to integrate modern technologies and be
 ECommerceCompose not only provides core e-commerce functionalities but also serves as a solid reference point for Android developers looking to learn and work with popular libraries such as Jetpack Compose, Room, Hilt, and Firebase. The project aims to offer a practical application while also being an educational resource for developers.
 
 ## Project Features
-- **MVVM**: 
-- **MVI**:
-- **COMPOSE**:
-- **NAVIGATION**:
-- **BOTTOM-NAVİGATİON**: 
-- **HILT**: 
-- **RETROFIT**:
-- **ROOM**:
-- **DETEKT**:
-- **VIEWMODEL**:
-- **FIREBASE AUTH**:
+- **CLEAN ARCHITECTURE**
+- **MVVM** 
+- **MVI**
+- **COMPOSE**
+- **NAVIGATION**
+- **BOTTOM-NAVIGATION** 
+- **HILT** 
+- **RETROFIT**
+- **ROOM**
+- **DETEKT**
+- **VIEWMODEL**
+- **FIREBASE AUTH**
   
 
 ## Screens
