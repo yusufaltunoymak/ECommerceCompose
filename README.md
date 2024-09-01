@@ -26,7 +26,7 @@ ECommerceCompose not only provides core e-commerce functionalities but also serv
 
   
 
-## Screens
+## 📸 Screenshots
 
 | <img src="screenshot/welcome.png" alt="Screen1" width="300"/>          | <img src="screenshot/register.png" alt="Screen2" width="300"/>         | <img src="screenshot/login1.png" alt="Screen3" width="300"/>           |
 |:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
