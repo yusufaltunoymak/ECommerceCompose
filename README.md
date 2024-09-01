@@ -12,31 +12,36 @@ ECommerceCompose not only provides core e-commerce functionalities but also serv
 - **MVVM** 
 - **MVI**
 - **COMPOSE**
+- **PREVIEW PARAMETER PROVIDER**
 - **NAVIGATION**
 - **BOTTOM-NAVIGATION** 
 - **HILT** 
 - **RETROFIT**
 - **ROOM**
 - **DETEKT**
-- **VIEWMODEL**
-- **FIREBASE AUTH**
+- **FIREBASE AUTH - FIRESTORE**
+- **COIL**
+- **VERSION CATALOG**
+- **COROUTINES FLOW**
+
   
 
 ## Screens
 
-| ![Screen1](screenshot/welcome.png)          | ![Screen2](screenshot/register.png)         | ![Screen3](screenshot/login.png)            |
-|:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
-|           **WELCOME PAGE**                  |   **REGISTER PAGE**                         |    **LOGIN PAGE**                           |
+| <img src="screenshot/welcome.png" alt="Screen1" width="300"/>          | <img src="screenshot/register.png" alt="Screen2" width="300"/>         | <img src="screenshot/login1.png" alt="Screen3" width="300"/>           |
+|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+|           **WELCOME PAGE**                                             |   **REGISTER PAGE**                                                    |    **LOGIN PAGE**                                                      |
 
-| ![Screen4](screenshot/forgot_password.png)  | ![Screen5](screenshot/home.png)             | ![Screen6](screenshot/favorite.png)         |
-|:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
-|           **FORGOT PASSWORD PAGE**          |   **HOME PAGE**                             |    **Favorites PAGE**                       |
+| <img src="screenshot/forgot_password.png" alt="Screen4" width="300"/>  | <img src="screenshot/home_page.png" alt="Screen5" width="300"/>        | <img src="screenshot/favorite.png" alt="Screen6" width="300"/>         |
+|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+|           **FORGOT PASSWORD PAGE**                                     |   **HOME PAGE**                                                        |    **FAVORITES PAGE**                                                  |
 
-| ![Screen7](screenshot/cart.png)             | ![Screen8](screenshot/search.png)           | ![Screen9](screenshot/notifications.png)    |
-|:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
-| **FORGOT PASSWORD PAGE**                    |   **HOME PAGE**                             |      **Favorites PAGE**                     |
+| <img src="screenshot/cart.png" alt="Screen7" width="300"/>             | <img src="screenshot/search.png" alt="Screen8" width="300"/>           | <img src="screenshot/notifications.png" alt="Screen9" width="300"/>    |
+|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+| **CART PAGE**                                                          |   **SEARCH PAGE**                                                      |      **NOTIFICATIONS PAGE**                                            |
 
-| ![Screen10](screenshot/category.png)        | ![Scree11](screenshot/detail.png)           | ![Screen12](screenshot/payment.png)         |
-|:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
-| **FORGOT PASSWORD PAGE**                    |   **HOME PAGE**                             |       **Favorites PAGE**                    |
+| <img src="screenshot/category.png" alt="Screen10" width="300"/>        | <img src="screenshot/detail.png" alt="Screen11" width="300"/>          | <img src="screenshot/payment.png" alt="Screen12" width="300"/>         |
+|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
+| **CATEGORY PAGE**                                                      |   **DETAIL PAGE**                                                      |       **PAYMENT PAGE**                                                 |
 
+##
