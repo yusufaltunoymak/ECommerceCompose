@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.HorizontalDivider
@@ -53,7 +52,7 @@ fun AccountScreen(
     onBackClick: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToPassword: () -> Unit,
-    onNavigateToOrders: () -> Unit,
+    onNavigateToNotifications: () -> Unit,
 ) {
     var name by remember { mutableStateOf(uiState.currentUser?.name.orEmpty()) }
     var surname by remember { mutableStateOf(uiState.currentUser?.surname.orEmpty()) }
@@ -88,24 +87,6 @@ fun AccountScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier
-                            .size(ECTheme.dimensions.fortyEight)
-                            .border(
-                                BorderStroke(
-                                    ECTheme.dimensions.one,
-                                    ECTheme.colors.primary
-                                ),
-                                shape = RoundedCornerShape(ECTheme.dimensions.twelve)
-                            )
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(ECTheme.dimensions.forty),
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = null
-                        )
-                    }
                     Text(
                         text = stringResource(id = R.string.account_screen_title),
                         style = MaterialTheme.typography.titleLarge
@@ -258,10 +239,10 @@ fun AccountScreen(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                 )
                 MenuItem(
-                    iconId = R.drawable.ic_order,
-                    title = stringResource(id = R.string.my_order),
+                    iconId = R.drawable.ic_notifications,
+                    title = stringResource(id = R.string.notification),
                     onClick = {
-                        onNavigateToOrders()
+                        onNavigateToNotifications()
                     }
                 )
                 HorizontalDivider(

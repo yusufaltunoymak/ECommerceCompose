@@ -38,7 +38,6 @@ fun NotificationScreen(
     onAction: (NotificationContract.UiAction) -> Unit,
     navigateBack: () -> Unit,
 ) {
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -53,7 +52,6 @@ fun NotificationScreen(
         NotificationTopBar()
         NotificationList(notificationList = listOf())
     }
-
 }
 
 @Composable

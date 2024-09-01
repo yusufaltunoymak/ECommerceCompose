@@ -39,7 +39,6 @@ class CategoryViewModel @Inject constructor(
     fun onAction(action: CategoryContract.UiAction) {
         when (action) {
             is CategoryContract.UiAction.ClearError -> updateUiState { copy(errorMessage = "") }
-            is CategoryContract.UiAction.SortProducts -> sortProducts(action.sortOption)
             is CategoryContract.UiAction.SearchProducts -> searchProducts(action.query)
             is CategoryContract.UiAction.ChangeQuery -> changeQuery(action.query)
             is CategoryContract.UiAction.LoadProducts -> updateUiState {
@@ -75,9 +74,6 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    private fun sortProducts(option: SortOption) {
-    }
-
     private fun changeQuery(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
     }
@@ -97,9 +93,5 @@ class CategoryViewModel @Inject constructor(
 
     private fun updateUiState(block: CategoryContract.UiState.() -> CategoryContract.UiState) {
         _uiState.update(block)
-    }
-
-    private suspend fun emitUiEffect(uiEffect: CategoryContract.UiEffect) {
-        _uiEffect.send(uiEffect)
     }
 }

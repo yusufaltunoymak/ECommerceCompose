@@ -21,8 +21,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -124,7 +122,6 @@ fun CategoryScreen(
                     onSearchClick = {
                         // Handle search button click if needed
                     },
-                    onSortClick = { expanded = !expanded }
                 )
             }
 
@@ -161,56 +158,8 @@ fun CategoryScreen(
                     }
                 }
             }
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            stringResource(id = R.string.price_low_to_high),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    },
-                    onClick = {
-                        onAction(CategoryContract.UiAction.SortProducts(SortOption.PRICE_LOW_TO_HIGH))
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            stringResource(id = R.string.price_high_to_low),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    },
-                    onClick = {
-                        onAction(CategoryContract.UiAction.SortProducts(SortOption.PRICE_HIGH_TO_LOW))
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            stringResource(id = R.string.rating),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    },
-                    onClick = {
-                        onAction(CategoryContract.UiAction.SortProducts(SortOption.RATING))
-                        expanded = false
-                    }
-                )
-            }
         }
     }
-}
-
-enum class SortOption {
-    PRICE_LOW_TO_HIGH,
-    PRICE_HIGH_TO_LOW,
-    RATING
 }
 
 @Composable

@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +33,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -52,6 +54,7 @@ import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(
     uiState: CartContract.UiState,
@@ -83,21 +86,18 @@ fun CartScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(id = R.string.my_cart)) }
+            )
+        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(ECTheme.dimensions.sixteen)
+                    .padding(horizontal = ECTheme.dimensions.sixteen)
             ) {
-                Text(
-                    text = stringResource(id = R.string.my_cart),
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier
-                        .padding(bottom = ECTheme.dimensions.sixteen)
-                        .align(Alignment.CenterHorizontally)
-                )
-
                 CartItemList(
                     cartProductList = uiState.cartProductList,
                     modifier = Modifier.weight(1f),
@@ -154,7 +154,6 @@ fun CartItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = ECTheme.dimensions.eight)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),

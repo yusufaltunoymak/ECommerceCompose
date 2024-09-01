@@ -192,8 +192,7 @@ class CartViewModel @Inject constructor(
         }
 
         _uiState.update {
-            val totalPrice =
-                it.cartProductList.sumOf { product -> product.price * product.quantity }
+            it.cartProductList.sumOf { product -> product.price * product.quantity }
             it.copy(
                 totalCartPrice = totalPrice - discount,
                 discountPrice = discount,

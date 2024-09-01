@@ -47,14 +47,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.orEmpty
-import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.NonClickableProgress
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -91,7 +90,8 @@ fun ProductDetailScreen(
                         }
                         context.startActivity(
                             Intent.createChooser(
-                                shareIntent, "Share product via"
+                                shareIntent,
+                                "Share product via"
                             )
                         )
                     }
@@ -126,13 +126,13 @@ fun ProductDetailScreen(
             if (!uiState.isLoading && uiState.productDetail != null) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize(),  // Alt kısımdaki çakışmayı önlemek için ek padding ekledik
+                        .fillMaxSize(), // Alt kısımdaki çakışmayı önlemek için ek padding ekledik
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item {
                         ImageList(modifier = Modifier.fillMaxWidth(), uiState = uiState)
                         ProductDetails(uiState = uiState)
-                        Spacer(modifier = Modifier.height(16.dp))  // İçerik ile alt bar arasına boşluk ekliyoruz
+                        Spacer(modifier = Modifier.height(16.dp)) // İçerik ile alt bar arasına boşluk ekliyoruz
                     }
                 }
             }
@@ -384,4 +384,3 @@ fun ProductDetailScreenPreview(
         context = LocalContext.current
     )
 }
-

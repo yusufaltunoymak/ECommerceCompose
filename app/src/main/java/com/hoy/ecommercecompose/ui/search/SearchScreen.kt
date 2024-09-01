@@ -104,10 +104,6 @@ fun SearchScreen(
                 onSearchClick = {
                     // Handle search button click if needed
                 },
-                onSortClick = {
-                    searchQuery = ""
-                    onAction(SearchContract.UiAction.LoadProduct(uiState.productList))
-                },
                 modifier = Modifier.focusRequester(focusRequester)
             )
         }
