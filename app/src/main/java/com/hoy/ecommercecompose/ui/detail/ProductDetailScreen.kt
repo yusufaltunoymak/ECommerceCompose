@@ -48,15 +48,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.orEmpty
+import com.hoy.ecommercecompose.data.source.remote.model.ProductDetail
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.NonClickableProgress
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import com.hoy.ecommercecompose.ui.theme.bodyFontFamily
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun ProductDetailScreen(
@@ -87,8 +91,7 @@ fun ProductDetailScreen(
                         }
                         context.startActivity(
                             Intent.createChooser(
-                                shareIntent,
-                                "Share product via"
+                                shareIntent, "Share product via"
                             )
                         )
                     }
@@ -162,7 +165,9 @@ fun TopBar(
             )
         }
         Row {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                onAction(ProductDetailContract.UiAction.ShareProduct)
+            }) {
                 Icon(
                     imageVector = Icons.Default.Share,
                     contentDescription = stringResource(id = R.string.share),
@@ -327,8 +332,7 @@ fun RatingBar(
     Row {
         for (index in 1..stars) {
             Icon(
-                imageVector =
-                if (index <= rating) {
+                imageVector = if (index <= rating) {
                     Icons.Rounded.Star
                 } else {
                     if (isHalfStar) {
@@ -365,5 +369,19 @@ fun ImageList(modifier: Modifier = Modifier, uiState: ProductDetailContract.UiSt
                 .height(ECTheme.dimensions.threeHundred)
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductDetailScreenPreview(
+    @PreviewParameter(ProductDetailPreviewParameter::class) uiState: ProductDetailContract.UiState
+) {
+    ProductDetailScreen(
+        uiState = uiState,
+        onAction = {},
+        uiEffect = flow {},
+        onBackClick = {},
+        context = LocalContext.current
+    )
 }
 

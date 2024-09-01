@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.navigationSafeArgs)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.detekt)
+    id("com.google.devtools.ksp")
+
 }
 
 android {
@@ -45,7 +47,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.13"
     }
     packaging {
         resources {
@@ -53,9 +55,7 @@ android {
         }
     }
 }
-kapt {
-    correctErrorTypes = true
-}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -88,8 +88,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
-    kapt(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+
 
     // Retrofit
     implementation(libs.retrofit)

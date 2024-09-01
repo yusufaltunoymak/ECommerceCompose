@@ -39,3 +39,9 @@ interface ProductRepository {
 
     fun getUserOrders(userId: String): Flow<List<PaymentEntity>>
 }
+
+abstract class A {
+    abstract fun a()
+}
+
+class B {}

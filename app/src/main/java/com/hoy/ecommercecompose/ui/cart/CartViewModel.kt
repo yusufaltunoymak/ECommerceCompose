@@ -151,7 +151,6 @@ class CartViewModel @Inject constructor(
         }
     }
 
-
     companion object {
         private const val DISCOUNT_CODE_50 = "SEPETTE50"
         private const val DISCOUNT_CODE_100 = "SEPETTE100"
@@ -186,7 +185,6 @@ class CartViewModel @Inject constructor(
         } else {
             "Invalid discount code."
         }
-
         val discountColor = if (discount > 0) {
             Color.Green
         } else {
@@ -194,6 +192,8 @@ class CartViewModel @Inject constructor(
         }
 
         _uiState.update {
+            val totalPrice =
+                it.cartProductList.sumOf { product -> product.price * product.quantity }
             it.copy(
                 totalCartPrice = totalPrice - discount,
                 discountPrice = discount,
@@ -202,5 +202,4 @@ class CartViewModel @Inject constructor(
             )
         }
     }
-
 }
