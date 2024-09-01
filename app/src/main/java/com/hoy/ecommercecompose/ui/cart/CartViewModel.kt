@@ -134,8 +134,23 @@ class CartViewModel @Inject constructor(
     }
 
     private fun onDiscountCodeChange(newCode: String) {
-        _uiState.update { it.copy(discountCode = newCode) }
+        _uiState.update {
+            if (newCode.isEmpty()) {
+                val totalPrice =
+                    it.cartProductList.sumOf { product -> product.price * product.quantity }
+                it.copy(
+                    discountCode = newCode,
+                    discountPrice = DEFAULT_AMOUNT,
+                    discountMessage = "",
+                    discountMessageColor = Color.Unspecified,
+                    totalCartPrice = totalPrice
+                )
+            } else {
+                it.copy(discountCode = newCode)
+            }
+        }
     }
+
 
     companion object {
         private const val DISCOUNT_CODE_50 = "SEPETTE50"
@@ -146,16 +161,32 @@ class CartViewModel @Inject constructor(
     }
 
     private fun applyDiscount() {
+        val totalPrice =
+            uiState.value.cartProductList.sumOf { product -> product.price * product.quantity }
+
         val discount = when (uiState.value.discountCode.uppercase()) {
             DISCOUNT_CODE_50 -> DISCOUNT_AMOUNT_50
             DISCOUNT_CODE_100 -> DISCOUNT_AMOUNT_100
             else -> DEFAULT_AMOUNT
         }
+
+        if (totalPrice < discount) {
+            _uiState.update {
+                it.copy(
+                    discountPrice = DEFAULT_AMOUNT,
+                    discountMessage = "The discount amount cannot exceed the basket amount.",
+                    discountMessageColor = Color.Red
+                )
+            }
+            return
+        }
+
         val discountMessage = if (discount > 0) {
-            "Discount applied: ${discount.toInt()}"
+            "Discount applied ${discount.toInt()} $"
         } else {
             "Invalid discount code."
         }
+
         val discountColor = if (discount > 0) {
             Color.Green
         } else {
@@ -163,8 +194,6 @@ class CartViewModel @Inject constructor(
         }
 
         _uiState.update {
-            val totalPrice =
-                it.cartProductList.sumOf { product -> product.price * product.quantity }
             it.copy(
                 totalCartPrice = totalPrice - discount,
                 discountPrice = discount,
@@ -173,4 +202,5 @@ class CartViewModel @Inject constructor(
             )
         }
     }
+
 }

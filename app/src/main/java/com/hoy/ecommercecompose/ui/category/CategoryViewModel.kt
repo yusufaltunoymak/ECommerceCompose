@@ -38,7 +38,13 @@ class CategoryViewModel @Inject constructor(
 
     fun onAction(action: CategoryContract.UiAction) {
         when (action) {
-            else -> {}
+            is CategoryContract.UiAction.ClearError -> updateUiState { copy(errorMessage = "") }
+            is CategoryContract.UiAction.SortProducts -> sortProducts(action.sortOption)
+            is CategoryContract.UiAction.SearchProducts -> searchProducts(action.query)
+            is CategoryContract.UiAction.ChangeQuery -> changeQuery(action.query)
+            is CategoryContract.UiAction.LoadProducts -> updateUiState {
+                copy()
+            }
         }
     }
 
@@ -53,11 +59,13 @@ class CategoryViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _uiState.update { it.copy(isLoading = true) }
                     }
+
                     is Resource.Success -> {
                         categoryList.clear()
                         categoryList.addAll(result.data)
                         _uiState.update { it.copy(isLoading = false, categoryList = categoryList) }
                     }
+
                     is Resource.Error -> {
                         _uiState.update { it.copy(isLoading = false) }
                         _uiEffect.send(CategoryContract.UiEffect.ShowError(result.message))
@@ -67,10 +75,10 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    fun sortProducts(option: SortOption) {
+    private fun sortProducts(option: SortOption) {
     }
 
-    fun changeQuery(query: String) {
+    private fun changeQuery(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
     }
 
@@ -85,5 +93,13 @@ class CategoryViewModel @Inject constructor(
                 categoryList = filteredList
             )
         }
+    }
+
+    private fun updateUiState(block: CategoryContract.UiState.() -> CategoryContract.UiState) {
+        _uiState.update(block)
+    }
+
+    private suspend fun emitUiEffect(uiEffect: CategoryContract.UiEffect) {
+        _uiEffect.send(uiEffect)
     }
 }

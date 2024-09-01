@@ -48,8 +48,7 @@ fun CustomHorizontalPager(
 
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(ECTheme.dimensions.twoHundred)
+                .fillMaxSize()
         ) {
             androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
@@ -58,7 +57,6 @@ fun CustomHorizontalPager(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(ECTheme.dimensions.eight)
                 ) {
                     val painter = rememberAsyncImagePainter(model = imageUrls[page])
                     Image(
