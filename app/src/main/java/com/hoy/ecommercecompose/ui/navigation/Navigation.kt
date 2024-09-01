@@ -180,10 +180,17 @@ fun SetupNavGraph(
             val viewModel: CategoryViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
+            LaunchedEffect(uiState.searchQuery) {
+                if (uiState.searchQuery.isEmpty()) {
+                    val category = viewModel.getCategory()
+                    viewModel.getProductsByCategory(category)
+                } else {
+                    viewModel.searchProducts(query = uiState.searchQuery)
+                }
+            }
             CategoryScreen(
                 uiEffect = uiEffect,
                 uiState = uiState,
-                viewModel = viewModel,
                 onAction = viewModel::onAction,
                 onBackClick = { navController.popBackStack() },
                 onNavigateToDetail = {
@@ -270,6 +277,9 @@ fun SetupNavGraph(
             val orderViewModel: OrderViewModel = hiltViewModel()
             val orderUiState by orderViewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = orderViewModel.uiEffect
+            LaunchedEffect(Unit) {
+                orderViewModel.loadOrders()
+            }
             OrderScreen(
                 uiState = orderUiState,
                 onAction = orderViewModel::onAction,

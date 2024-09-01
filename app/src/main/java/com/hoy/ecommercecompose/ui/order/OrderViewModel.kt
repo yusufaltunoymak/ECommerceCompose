@@ -42,7 +42,7 @@ class OrderViewModel @Inject constructor(
         }
     }
 
-    private fun loadOrders() {
+    fun loadOrders() {
         viewModelScope.launch {
             updateUiState { copy(isLoading = true, errorMessage = null) }
             val userId = firebaseAuthRepository.getUserId()

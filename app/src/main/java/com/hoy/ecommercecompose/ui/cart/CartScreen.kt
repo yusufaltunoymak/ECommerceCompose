@@ -108,8 +108,14 @@ fun CartScreen(
                 if (uiState.cartProductList.isNotEmpty()) {
                     CartFooter(
                         uiState = uiState,
-                        onDiscountCodeChange = { /* Handle discount code change */ },
-                        onApplyDiscount = { /* Handle discount application */ },
+                        onDiscountCodeChange = {
+                            onAction(
+                                CartContract.UiAction.OnDiscountCodeChange(
+                                    it
+                                )
+                            )
+                        },
+                        onApplyDiscount = { onAction(CartContract.UiAction.ApplyDiscount) },
                         onPaymentClick = { onNavigatePayment() }
                     )
                 } else {
@@ -216,7 +222,11 @@ fun CartItem(
                                 IconButton(
                                     onClick = {
                                         if (product.quantity == 1) {
-                                            onAction(CartContract.UiAction.ShowDeleteConfirmation(product.productId))
+                                            onAction(
+                                                CartContract.UiAction.ShowDeleteConfirmation(
+                                                    product.productId
+                                                )
+                                            )
                                         } else {
                                             onAction(CartContract.UiAction.DecreaseQuantity(product.productId))
                                         }
@@ -236,7 +246,13 @@ fun CartItem(
                                     modifier = Modifier.padding(horizontal = ECTheme.dimensions.four)
                                 )
                                 IconButton(
-                                    onClick = { onAction(CartContract.UiAction.IncreaseQuantity(product.productId)) },
+                                    onClick = {
+                                        onAction(
+                                            CartContract.UiAction.IncreaseQuantity(
+                                                product.productId
+                                            )
+                                        )
+                                    },
                                     modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                 ) {
                                     Icon(
@@ -270,17 +286,7 @@ fun CartFooter(
         OutlinedTextField(
             value = uiState.discountCode,
             onValueChange = onDiscountCodeChange,
-            label = {
-                if (uiState.discountMessage.isNotEmpty()) {
-                    Text(
-                        text = uiState.discountMessage,
-                        color = uiState.discountMessageColor,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                } else {
-                    Text("Enter Discount Code")
-                }
-            },
+            label = { Text("Enter Discount Code") },
             trailingIcon = {
                 Button(
                     modifier = Modifier.padding(end = ECTheme.dimensions.eight),
@@ -296,6 +302,15 @@ fun CartFooter(
             },
             modifier = Modifier.fillMaxWidth()
         )
+
+        if (uiState.discountMessage.isNotEmpty()) {
+            Text(
+                text = uiState.discountMessage,
+                color = uiState.discountMessageColor,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(vertical = ECTheme.dimensions.four)
+            )
+        }
 
         Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 

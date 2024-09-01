@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +33,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
@@ -100,21 +101,42 @@ fun ProductDetailScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (!uiState.isLoading && uiState.productDetail != null) {
-            LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
-                item {
-                    Box {
+    Scaffold(
+        topBar = {
+            TopBar(onBackClick = onBackClick, onAction = onAction, uiState = uiState)
+        },
+        bottomBar = {
+            AddToCartSection(
+                onAction = onAction,
+                uiState = uiState,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+        }
+    ) { innerPadding ->
+        println("innerPadding: ${innerPadding.calculateBottomPadding()}")
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            if (!uiState.isLoading && uiState.productDetail != null) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),  // Alt kısımdaki çakışmayı önlemek için ek padding ekledik
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
                         ImageList(modifier = Modifier.fillMaxWidth(), uiState = uiState)
-                        TopBar(onBackClick = onBackClick, onAction = onAction, uiState = uiState)
+                        ProductDetails(uiState = uiState)
+                        Spacer(modifier = Modifier.height(16.dp))  // İçerik ile alt bar arasına boşluk ekliyoruz
                     }
-                    ProductDetails(uiState = uiState)
-                    AddToCartSection(onAction = onAction, uiState = uiState)
                 }
             }
-        }
-        if (uiState.isLoading) {
-            NonClickableProgress()
+
+            if (uiState.isLoading) {
+                NonClickableProgress()
+            }
         }
     }
 }
@@ -126,7 +148,9 @@ fun TopBar(
     uiState: ProductDetailContract.UiState
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(ECTheme.colors.white),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
@@ -218,12 +242,12 @@ fun ProductDetails(uiState: ProductDetailContract.UiState) {
 @Composable
 fun AddToCartSection(
     onAction: (ProductDetailContract.UiAction) -> Unit,
-    uiState: ProductDetailContract.UiState
+    uiState: ProductDetailContract.UiState,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {

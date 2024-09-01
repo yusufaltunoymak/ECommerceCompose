@@ -131,6 +131,7 @@
     <!-- send mail screen -->
     <string name="mail_sent_success">Mail sent successfully</string>
     <string name="mail_sent_failure">Mail sent failure</string>
+    <string name="no_orders_found">Not Found Order</string>
 
     <string name="no_orders">No Ongoing Orders!</string>
     <string name="no_orders_long">You don’t have any ongoing orders at this time.</string>
