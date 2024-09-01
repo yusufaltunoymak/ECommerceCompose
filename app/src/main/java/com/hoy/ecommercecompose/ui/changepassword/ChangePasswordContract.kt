@@ -5,7 +5,7 @@ object ChangePasswordContract {
         val password: String = "",
         val confirmPassword: String = "",
         val currentPassword: String = "",
-        val errorMessage: Int? =0,
+        val errorMessage: Int? = 0,
     )
 
     sealed class UiAction {

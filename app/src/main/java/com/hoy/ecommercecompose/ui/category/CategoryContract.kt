@@ -14,7 +14,6 @@ object CategoryContract {
     sealed class UiAction {
         data object ClearError : UiAction()
         data class SearchProducts(val query: String) : UiAction()
-        data class SortProducts(val sortOption: SortOption) : UiAction()
         data class LoadProducts(val categoryList: List<ProductUi>) : UiAction()
         data class ChangeQuery(val query: String) : UiAction()
     }

@@ -10,8 +10,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class NotificationViewModel @Inject constructor(
-) : ViewModel() {
+class NotificationViewModel @Inject constructor() : ViewModel() {
     private var _uiState: MutableStateFlow<NotificationContract.UiState> =
         MutableStateFlow(NotificationContract.UiState())
     val uiState = _uiState.asStateFlow()
@@ -19,13 +18,9 @@ class NotificationViewModel @Inject constructor(
     private val _uiEffect by lazy { Channel<NotificationContract.UiEffect>() }
     val uiEffect: Flow<NotificationContract.UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
-    init {
-    }
-
     fun onAction(action: NotificationContract.UiAction) {
         when (action) {
             else -> {}
         }
     }
 }
-

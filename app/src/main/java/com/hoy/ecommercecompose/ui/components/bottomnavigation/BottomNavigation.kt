@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -58,11 +59,19 @@ fun BottomNavigationBar(
                 items.forEach { item ->
                     BottomNavigationItem(
                         icon = {
-                            Icon(
-                                item.icon,
-                                contentDescription = getNavItemName(navItem = item),
-                                tint = ECTheme.colors.primary
-                            )
+                            item.icon?.let {
+                                Icon(
+                                    it,
+                                    contentDescription = getNavItemName(navItem = item),
+                                    tint = ECTheme.colors.primary
+                                )
+                            } ?: item.drawableIcon?.let {
+                                Icon(
+                                    painter = painterResource(id = it),
+                                    contentDescription = getNavItemName(navItem = item),
+                                    tint = ECTheme.colors.primary
+                                )
+                            }
                         },
                         selected = currentRoute == item.route,
                         onClick = { onItemClick(item) },
@@ -88,7 +97,7 @@ fun BottomNavigationBar(
 val bottomNavItems = listOf(
     BottomNavItem.Favorite,
     BottomNavItem.Cart,
-    BottomNavItem.Notification,
+    BottomNavItem.Order,
     BottomNavItem.Profile
 )
 

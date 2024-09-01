@@ -6,9 +6,7 @@ object NotificationContract {
         val notification: List<Any>? = null,
     )
 
-    sealed class UiAction {
-    }
+    sealed class UiAction
 
-    sealed class UiEffect {
-    }
+    sealed class UiEffect
 }

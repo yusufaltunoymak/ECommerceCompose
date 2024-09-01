@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -181,13 +180,6 @@ fun SearchNavigationView(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.weight(1f)
             )
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.List,
-                contentDescription = stringResource(id = R.string.list_icon),
-                modifier = Modifier
-                    .padding(end = ECTheme.dimensions.eight)
-            )
         }
     }
 }
@@ -197,13 +189,12 @@ fun SearchNavigationView(
 fun HomeScreenPreview(
     @PreviewParameter(HomeScreenPreviewParameter::class) uiState: HomeContract.UiState
 ) {
-        HomeScreen(
-            uiState = uiState,
-            uiEffect = flow {
-            },
-            onNavigateToDetail = {},
-            onNavigateToSearch = {},
-            onCategoryListClick = {},
-            onAction = {}
-        )
+    HomeScreen(
+        uiState = uiState,
+        uiEffect = flow { },
+        onNavigateToDetail = {},
+        onNavigateToSearch = {},
+        onCategoryListClick = {},
+        onAction = {}
+    )
 }

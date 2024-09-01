@@ -18,12 +18,11 @@ interface FirebaseAuthRepository {
 
     fun getUserId(): String
 
-    suspend fun updateUserInformation(user: User) :Resource<Unit>
+    suspend fun updateUserInformation(user: User): Resource<Unit>
 
     suspend fun changePassword(currentPassword: String, newPassword: String): Resource<Unit>
 
     // get user credential
 
     // log out
-
 }

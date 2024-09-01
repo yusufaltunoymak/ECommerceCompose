@@ -227,7 +227,7 @@ fun SetupNavGraph(
                 onBackClick = { navController.popBackStack() },
                 onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
                 onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) },
-                onNavigateToOrders = { navController.navigate(NavRoute.ORDER.route) },
+                onNavigateToNotifications = { navController.navigate(NavRoute.NOTIFICATION.route) },
             )
         }
         composable(NavRoute.SEARCH.route) {

@@ -20,7 +20,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val getUserInformationUseCase: GetUserInformationUseCase,
     private val firebaseAuthRepository: FirebaseAuthRepository,
-    ): ViewModel() {
+) : ViewModel() {
 
     private var _uiState: MutableStateFlow<AccountContract.UiState> =
         MutableStateFlow(AccountContract.UiState())
@@ -31,7 +31,6 @@ class AccountViewModel @Inject constructor(
 
     init {
         getUserInformation()
-
     }
 
     fun onAction(action: AccountContract.UiAction) {

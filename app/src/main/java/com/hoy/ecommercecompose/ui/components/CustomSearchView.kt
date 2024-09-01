@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -32,7 +31,6 @@ fun CustomSearchView(
     placeHolder: String,
     onCloseClicked: () -> Unit,
     onSearchClick: () -> Unit,
-    onSortClick: () -> Unit
 ) {
     val containerColor = Color.White
     val indicatorColor = ECTheme.colors.primary.copy(alpha = 0.3f)
@@ -79,18 +77,11 @@ fun CustomSearchView(
                 IconButton(onClick = {
                     if (text.isNotBlank()) {
                         onCloseClicked()
-                    } else {
-                        onSortClick()
                     }
                 }) {
                     Icon(
-                        imageVector = if (text.isNotBlank()) Icons.Default.Clear else Icons.AutoMirrored.Filled.List,
-                        contentDescription =
-                        if (text.isNotBlank()) {
-                            stringResource(R.string.clear)
-                        } else {
-                            stringResource(R.string.sort)
-                        },
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = stringResource(R.string.clear),
                         modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                     )
                 }

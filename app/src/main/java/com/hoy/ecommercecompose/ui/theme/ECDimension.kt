@@ -6,9 +6,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 class ECDimension {
-    val zero: Dp
-        @Composable
-        get() = 0.dp
     val one: Dp
         @Composable
         get() = 1.dp
@@ -36,18 +33,12 @@ class ECDimension {
     val twentyFour: Dp
         @Composable
         get() = 24.dp
-    val twentyEight: Dp
-        @Composable
-        get() = 28.dp
     val negativeTwentyEight: Dp
         @Composable
         get() = (-28).dp
     val thirty: Dp
         @Composable
         get() = 30.dp
-    val thirtyTwo: Dp
-        @Composable
-        get() = 32.dp
     val thirtyFour: Dp
         @Composable
         get() = 34.dp
@@ -57,15 +48,9 @@ class ECDimension {
     val thirtyEight: Dp
         @Composable
         get() = 38.dp
-    val forty: Dp
-        @Composable
-        get() = 40.dp
     val fortyEight: Dp
         @Composable
         get() = 48.dp
-    val fifty: Dp
-        @Composable
-        get() = 50.dp
     val fiftySix: Dp
         @Composable
         get() = 56.dp
