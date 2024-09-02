@@ -1,5 +1,7 @@
 package com.hoy.ecommercecompose.ui.search
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Card
@@ -49,8 +53,13 @@ fun SearchScreen(
 ) {
     uiEffect.collectWithLifecycle { effect ->
         when (effect) {
-            is SearchContract.UiEffect.GoToDetail -> { onDetailClick(effect.productId) }
-            is SearchContract.UiEffect.NavigateBack -> { onBackClick() }
+            is SearchContract.UiEffect.GoToDetail -> {
+                onDetailClick(effect.productId)
+            }
+
+            is SearchContract.UiEffect.NavigateBack -> {
+                onBackClick()
+            }
         }
     }
 
@@ -71,7 +80,15 @@ fun SearchScreen(
         ) {
             IconButton(
                 onClick = { onBackClick() },
-                modifier = Modifier.size(ECTheme.dimensions.fortyEight)
+                modifier = Modifier
+                    .size(ECTheme.dimensions.fiftySix)
+                    .border(
+                        BorderStroke(
+                            ECTheme.dimensions.two,
+                            ECTheme.colors.primary.copy(alpha = 0.3f)
+                        ),
+                        shape = RoundedCornerShape(ECTheme.dimensions.twelve)
+                    )
             ) {
                 Icon(
                     modifier = Modifier.size(ECTheme.dimensions.thirtyEight),
@@ -79,6 +96,8 @@ fun SearchScreen(
                     contentDescription = null
                 )
             }
+            Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
+
             CustomSearchView(
                 text = searchQuery,
                 onTextChange = { query ->

@@ -91,7 +91,6 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 
-
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -117,6 +116,11 @@ dependencies {
 
     // Detekt
     detektPlugins(libs.detekt)
+
+    //Test
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 
