@@ -47,7 +47,8 @@ fun CustomTextField(
                 focusedIndicatorColor = indicatorColor,
                 unfocusedIndicatorColor = indicatorColor,
             ),
-            isError = isError
+            isError = isError,
+            singleLine = true
         )
         if (isError && errorMessage != null) {
             Text(

@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,17 +37,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
@@ -63,19 +60,13 @@ fun CategoryScreen(
     onNavigateToDetail: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
     var alertDialogState by remember { mutableStateOf(false) }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is CategoryContract.UiEffect.ShowError -> alertDialogState = true
-                    is CategoryContract.UiEffect.NavigateBack -> onBackClick()
-                    is CategoryContract.UiEffect.DetailScreen -> onNavigateToDetail(effect.id)
-                }
-            }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is CategoryContract.UiEffect.ShowError -> alertDialogState = true
+            is CategoryContract.UiEffect.NavigateBack -> onBackClick()
+            is CategoryContract.UiEffect.DetailScreen -> onNavigateToDetail(effect.id)
         }
     }
 

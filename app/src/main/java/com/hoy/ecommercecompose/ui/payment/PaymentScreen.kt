@@ -29,7 +29,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,15 +37,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
@@ -73,22 +70,18 @@ fun PaymentScreen(
     var alertDialogState by remember { mutableStateOf(false) }
     var alertDialogMessage by remember { mutableStateOf("") }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is PaymentContract.UiEffect.ShowAlertDialog -> {
-                        alertDialogState = true
-                        alertDialogMessage = effect.message
-                    }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is PaymentContract.UiEffect.ShowAlertDialog -> {
+                alertDialogState = true
+                alertDialogMessage = effect.message
+            }
 
-                    is PaymentContract.UiEffect.BackScreen -> onBackPress()
-                    is PaymentContract.UiEffect.ShowOrderConfirmation -> {
-                        confirmationMessage = context.getString(effect.message)
-                        showConfirmationDialog = true
-                    }
-                }
+            is PaymentContract.UiEffect.BackScreen -> onBackPress()
+
+            is PaymentContract.UiEffect.ShowOrderConfirmation -> {
+                confirmationMessage = context.getString(effect.message)
+                showConfirmationDialog = true
             }
         }
     }
@@ -288,7 +281,8 @@ fun CardHolderInput(
         value = uiState.cardHolderName.uppercase(),
         onValueChange = { onAction(PaymentContract.UiAction.ChangeCardHolderName(it)) },
         label = { Text(text = "Card Holder Name") },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true
     )
 }
 
@@ -323,7 +317,8 @@ fun CardNumberInput(
         label = { Text(text = "Card Number") },
         visualTransformation = VisualTransformation.None,
         modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        singleLine = true
     )
 }
 

@@ -28,7 +28,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,18 +38,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.common.formatDateWithTime
 import com.hoy.ecommercecompose.data.source.local.payment.model.PaymentEntity
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -66,26 +63,16 @@ fun OrderScreen(
     uiEffect: Flow<OrderContract.UiEffect>,
     navigateBack: () -> Unit,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is OrderContract.UiEffect.ShowError -> {
-                    }
-
-                    is OrderContract.UiEffect.NavigateBack -> navigateBack()
-                }
-            }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is OrderContract.UiEffect.ShowError -> {}
+            is OrderContract.UiEffect.NavigateBack -> navigateBack()
         }
     }
     Column {
         TopBar()
         OrderList(paymentList = uiState.orders)
     }
-
-//    OrderList(paymentList = uiState.orders)
 }
 
 @Composable

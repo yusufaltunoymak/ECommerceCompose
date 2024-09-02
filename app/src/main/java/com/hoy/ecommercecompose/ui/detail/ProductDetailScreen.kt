@@ -36,13 +36,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -50,9 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.common.orEmpty
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.NonClickableProgress
@@ -70,36 +67,32 @@ fun ProductDetailScreen(
     context: Context
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is ProductDetailContract.UiEffect.BackScreen -> onBackClick()
-                    is ProductDetailContract.UiEffect.ShowError -> TODO()
-                    is ProductDetailContract.UiEffect.ShowToastMessage -> {
-                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                    }
 
-                    ProductDetailContract.UiEffect.NavigateBack -> TODO()
-                    is ProductDetailContract.UiEffect.ShareProduct -> {
-                        val shareIntent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, effect.shareText)
-                            type = "text/plain"
-                        }
-                        context.startActivity(
-                            Intent.createChooser(
-                                shareIntent,
-                                "Share product via"
-                            )
-                        )
-                    }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is ProductDetailContract.UiEffect.BackScreen -> onBackClick()
+            is ProductDetailContract.UiEffect.ShowError -> TODO()
+            is ProductDetailContract.UiEffect.ShowToastMessage -> {
+                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+            }
 
-                    is ProductDetailContract.UiEffect.ShowAlreadyInCartMessage -> {
-                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                    }
+            ProductDetailContract.UiEffect.NavigateBack -> TODO()
+            is ProductDetailContract.UiEffect.ShareProduct -> {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, effect.shareText)
+                    type = "text/plain"
                 }
+                context.startActivity(
+                    Intent.createChooser(
+                        shareIntent,
+                        "Share product via"
+                    )
+                )
+            }
+
+            is ProductDetailContract.UiEffect.ShowAlreadyInCartMessage -> {
+                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

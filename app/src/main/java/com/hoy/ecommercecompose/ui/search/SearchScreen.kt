@@ -31,11 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -49,22 +47,13 @@ fun SearchScreen(
     onDetailClick: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is SearchContract.UiEffect.GoToDetail -> {
-                        onDetailClick(effect.productId)
-                    }
-
-                    is SearchContract.UiEffect.NavigateBack -> {
-                        onBackClick()
-                    }
-                }
-            }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is SearchContract.UiEffect.GoToDetail -> { onDetailClick(effect.productId) }
+            is SearchContract.UiEffect.NavigateBack -> { onBackClick() }
         }
     }
+
     var searchQuery by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
