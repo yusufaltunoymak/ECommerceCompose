@@ -35,9 +35,22 @@ class AccountViewModel @Inject constructor(
 
     fun onAction(action: AccountContract.UiAction) {
         when (action) {
-            is AccountContract.UiAction.SaveUserInformation -> {
-                saveUserInformation(action.user)
+            is AccountContract.UiAction.UpdateName -> updateUiState {
+                copy(name = action.name, isSaveEnabled = true)
             }
+            is AccountContract.UiAction.UpdateSurname -> updateUiState {
+                copy(surname = action.surname, isSaveEnabled = true)
+            }
+            is AccountContract.UiAction.UpdateEmail -> updateUiState {
+                copy(email = action.email, isSaveEnabled = true)
+            }
+            is AccountContract.UiAction.UpdateAddress -> updateUiState {
+                copy(address = action.address, isSaveEnabled = true)
+            }
+            is AccountContract.UiAction.ToggleEditing -> updateUiState {
+                copy(isEditing = !isEditing)
+            }
+            is AccountContract.UiAction.SaveUserInformation -> saveUserInformation(action.user)
         }
     }
 
@@ -45,13 +58,20 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getUserInformationUseCase()) {
                 is Resource.Success -> {
-                    updateUiState { copy(currentUser = result.data) }
+                    val user = result.data
+                    updateUiState {
+                        copy(
+                            currentUser = user,
+                            name = user.name!!,
+                            surname = user.surname!!,
+                            email = user.email!!,
+                            address = user.address!!
+                        )
+                    }
                 }
-
                 is Resource.Error -> {
                     updateUiState { copy(errorMessage = result.message) }
                 }
-
                 is Resource.Loading -> {
                     updateUiState { copy(isLoading = true) }
                 }

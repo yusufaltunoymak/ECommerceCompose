@@ -27,10 +27,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
@@ -53,19 +48,14 @@ fun AccountScreen(
     onNavigateToPassword: () -> Unit,
     onNavigateToNotifications: () -> Unit,
 ) {
-    var name by remember { mutableStateOf(uiState.currentUser?.name.orEmpty()) }
-    var surname by remember { mutableStateOf(uiState.currentUser?.surname.orEmpty()) }
-    var email by remember { mutableStateOf(uiState.currentUser?.email.orEmpty()) }
-    var address by remember { mutableStateOf(uiState.currentUser?.address.orEmpty()) }
-    var isSaveEnabled by remember { mutableStateOf(false) }
-    var isEditing by remember { mutableStateOf(false) }
-
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(uiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             uiEffect.collect { effect ->
                 when (effect) {
-                    else -> {}
+                    is AccountContract.UiEffect.LogOutClick -> onNavigateToLogin()
+                    is AccountContract.UiEffect.ChangePasswordClick -> onNavigateToPassword()
+                    is AccountContract.UiEffect.NotificationClick -> onNavigateToNotifications()
                 }
             }
         }
@@ -93,19 +83,16 @@ fun AccountScreen(
 
                     IconButton(
                         onClick = {
-                            if (isEditing) {
+                            if (uiState.isEditing) {
                                 val updatedUser = uiState.currentUser.copy(
-                                    name = name,
-                                    surname = surname,
-                                    email = email,
-                                    address = address
+                                    name = uiState.name,
+                                    surname = uiState.surname,
+                                    email = uiState.email,
+                                    address = uiState.address
                                 )
                                 onAction(AccountContract.UiAction.SaveUserInformation(updatedUser))
-                                isEditing = false
-                                isSaveEnabled = false
-                            } else {
-                                isEditing = true
                             }
+                            onAction(AccountContract.UiAction.ToggleEditing)
                         },
                         modifier = Modifier
                             .size(ECTheme.dimensions.fortyEight)
@@ -118,7 +105,7 @@ fun AccountScreen(
                             )
                     ) {
                         Icon(
-                            imageVector = if (isEditing) Icons.Default.Check else Icons.Default.Edit,
+                            imageVector = if (uiState.isEditing) Icons.Default.Check else Icons.Default.Edit,
                             contentDescription = null
                         )
                     }
@@ -133,18 +120,15 @@ fun AccountScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     OutlinedTextField(
-                        value = name,
+                        value = uiState.name,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = ECTheme.colors.primary,
                             unfocusedBorderColor = ECTheme.colors.primary,
                             focusedLabelColor = ECTheme.colors.secondary,
                             unfocusedLabelColor = ECTheme.colors.secondary,
                         ),
-                        enabled = isEditing,
-                        onValueChange = {
-                            name = it
-                            isSaveEnabled = true
-                        },
+                        enabled = uiState.isEditing,
+                        onValueChange = { onAction(AccountContract.UiAction.UpdateName(it)) },
                         label = {
                             Text(
                                 stringResource(id = R.string.name_label),
@@ -157,18 +141,15 @@ fun AccountScreen(
                     )
 
                     OutlinedTextField(
-                        value = surname,
+                        value = uiState.surname,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = ECTheme.colors.primary,
                             unfocusedBorderColor = ECTheme.colors.primary,
                             focusedLabelColor = ECTheme.colors.secondary,
                             unfocusedLabelColor = ECTheme.colors.secondary,
                         ),
-                        enabled = isEditing,
-                        onValueChange = {
-                            surname = it
-                            isSaveEnabled = true
-                        },
+                        enabled = uiState.isEditing,
+                        onValueChange = { onAction(AccountContract.UiAction.UpdateSurname(it)) },
                         label = {
                             Text(
                                 stringResource(id = R.string.surname_label),
@@ -182,18 +163,15 @@ fun AccountScreen(
                 }
 
                 OutlinedTextField(
-                    value = email,
-                    enabled = isEditing,
+                    value = uiState.email,
+                    enabled = uiState.isEditing,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = ECTheme.colors.primary,
                         unfocusedBorderColor = ECTheme.colors.primary,
                         focusedLabelColor = ECTheme.colors.secondary,
                         unfocusedLabelColor = ECTheme.colors.secondary,
                     ),
-                    onValueChange = {
-                        email = it
-                        isSaveEnabled = true
-                    },
+                    onValueChange = { onAction(AccountContract.UiAction.UpdateEmail(it)) },
                     label = {
                         Text(
                             stringResource(id = R.string.email_label),
@@ -206,18 +184,15 @@ fun AccountScreen(
                 )
 
                 OutlinedTextField(
-                    value = address,
-                    enabled = isEditing,
+                    value = uiState.address,
+                    enabled = uiState.isEditing,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = ECTheme.colors.primary,
                         unfocusedBorderColor = ECTheme.colors.primary,
                         focusedLabelColor = ECTheme.colors.secondary,
                         unfocusedLabelColor = ECTheme.colors.secondary,
                     ),
-                    onValueChange = {
-                        address = it
-                        isSaveEnabled = true
-                    },
+                    onValueChange = { onAction(AccountContract.UiAction.UpdateAddress(it)) },
                     label = {
                         Text(
                             stringResource(id = R.string.address_label),
@@ -277,13 +252,21 @@ fun AccountScreen(
                         .fillMaxWidth(),
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                 )
-                MenuItem(iconId = R.drawable.ic_logout, title = stringResource(id = R.string.log_out), onClick = {
-                    FirebaseAuth.getInstance().signOut()
-                    onNavigateToLogin()
-                }, textColor = ECTheme.colors.red)
+                MenuItem(
+                    iconId = R.drawable.ic_logout,
+                    title = stringResource(id = R.string.login_out),
+                    onClick = { onNavigateToLogin() }
+                )
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(horizontal = ECTheme.dimensions.sixteen)
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+                )
             }
         }
-    } else {
+    }
+ else {
         Text(
             text = stringResource(id = R.string.connection_error),
             modifier = Modifier.fillMaxSize(),
