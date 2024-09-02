@@ -30,25 +30,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -65,19 +62,11 @@ fun FavoriteScreen(
     onNavigateToDetail: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is FavoriteContract.UiEffect.FavoriteProductDetailClick -> onNavigateToDetail(
-                        effect.productId
-                    )
-
-                    is FavoriteContract.UiEffect.ShowError -> TODO()
-                    is FavoriteContract.UiEffect.BackScreen -> onBackClick()
-                }
-            }
+    uiEffect.collectWithLifecycle { effect ->
+        when(effect){
+            is FavoriteContract.UiEffect.FavoriteProductDetailClick -> onNavigateToDetail(effect.productId)
+            is FavoriteContract.UiEffect.ShowError -> TODO()
+            is FavoriteContract.UiEffect.BackScreen -> onBackClick()
         }
     }
 

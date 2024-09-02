@@ -38,14 +38,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
@@ -62,7 +60,7 @@ fun LoginScreen(
     onBackClick: () -> Unit,
     onNavigateToHome: () -> Unit,
 
-) {
+    ) {
     var alertDialogState by remember { mutableStateOf(false) }
 
     val signInLauncher = rememberLauncherForActivityResult(
@@ -83,18 +81,13 @@ fun LoginScreen(
         }
     }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is LoginContract.UiEffect.ShowAlertDialog -> alertDialogState = true
-                    is LoginContract.UiEffect.GoToHome -> onNavigateToHome()
-                    is LoginContract.UiEffect.GoToForgotPasswordClick -> onForgotPasswordClick()
-                    is LoginContract.UiEffect.GoToWelcomeScreen -> {
-                        onBackClick()
-                    }
-                }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is LoginContract.UiEffect.ShowAlertDialog -> alertDialogState = true
+            is LoginContract.UiEffect.GoToHome -> onNavigateToHome()
+            is LoginContract.UiEffect.GoToForgotPasswordClick -> onForgotPasswordClick()
+            is LoginContract.UiEffect.GoToWelcomeScreen -> {
+                onBackClick()
             }
         }
     }
@@ -189,7 +182,7 @@ fun LoginScreen(
                     fontWeight = FontWeight.Light,
                     fontSize = ECTheme.typography.small,
 
-                )
+                    )
             }
 
             Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
@@ -252,6 +245,7 @@ fun LoginScreen(
                 }
             }
         }
+
         if (uiState.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier

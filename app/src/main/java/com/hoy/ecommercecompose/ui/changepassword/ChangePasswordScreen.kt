@@ -18,13 +18,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -39,12 +39,10 @@ fun ChangePasswordScreen(
 ) {
     val context = LocalContext.current
 
-    LaunchedEffect(uiEffect) {
-        uiEffect.collect { effect ->
-            when (effect) {
-                is ChangePasswordContract.UiEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is ChangePasswordContract.UiEffect.ShowToast -> {
+                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

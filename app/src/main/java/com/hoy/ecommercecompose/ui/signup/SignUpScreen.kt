@@ -22,19 +22,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
@@ -51,15 +48,10 @@ fun SignupScreen(
 ) {
     var alertDialogState by remember { mutableStateOf(false) }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is SignUpContract.UiEffect.ShowAlertDialog -> alertDialogState = true
-                    is SignUpContract.UiEffect.GoToMainScreen -> onNavigateToHome()
-                }
-            }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is SignUpContract.UiEffect.ShowAlertDialog -> alertDialogState = true
+            is SignUpContract.UiEffect.GoToMainScreen -> onNavigateToHome()
         }
     }
 

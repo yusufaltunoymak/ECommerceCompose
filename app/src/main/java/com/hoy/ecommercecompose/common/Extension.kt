@@ -2,9 +2,15 @@ package com.hoy.ecommercecompose.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -37,4 +43,18 @@ fun Long.formatDateWithTime(): String {
     val sdf =
         SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     return sdf.format(this)
+}
+
+@Composable
+fun <T> Flow<T>.collectWithLifecycle(
+    collect: suspend (T) -> Unit
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(this, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            this@collectWithLifecycle.collect { effect ->
+                collect(effect)
+            }
+        }
+    }
 }

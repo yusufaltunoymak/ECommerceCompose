@@ -35,18 +35,15 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.data.source.local.payment.model.ProductEntity
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
@@ -62,23 +59,18 @@ fun CartScreen(
     uiEffect: Flow<CartContract.UiEffect>,
     onNavigatePayment: () -> Unit,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
     val snackBarHostState = remember { androidx.compose.material3.SnackbarHostState() }
 
-    LaunchedEffect(uiEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            uiEffect.collect { effect ->
-                when (effect) {
-                    is CartContract.UiEffect.PaymentClick -> onNavigatePayment()
-                    is CartContract.UiEffect.ShowDeleteConfirmation -> {
-                        val result = snackBarHostState.showSnackbar(
-                            message = "Do you want to delete this item?",
-                            actionLabel = "Yes"
-                        )
-                        if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
-                            onAction(CartContract.UiAction.DeleteProductFromCart(effect.id))
-                        }
-                    }
+    uiEffect.collectWithLifecycle { effect ->
+        when (effect) {
+            is CartContract.UiEffect.PaymentClick -> onNavigatePayment()
+            is CartContract.UiEffect.ShowDeleteConfirmation -> {
+                val result = snackBarHostState.showSnackbar(
+                    message = "Do you want to delete this item?",
+                    actionLabel = "Yes"
+                )
+                if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
+                    onAction(CartContract.UiAction.DeleteProductFromCart(effect.id))
                 }
             }
         }
@@ -299,7 +291,8 @@ fun CartFooter(
                     Text(stringResource(id = R.string.apply))
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         if (uiState.discountMessage.isNotEmpty()) {
