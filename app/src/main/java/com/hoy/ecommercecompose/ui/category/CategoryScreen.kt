@@ -1,6 +1,7 @@
 package com.hoy.ecommercecompose.ui.category
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,7 +93,15 @@ fun CategoryScreen(
             Row {
                 IconButton(
                     onClick = { onBackClick() },
-                    modifier = Modifier.size(ECTheme.dimensions.fortyEight)
+                    modifier = Modifier
+                        .size(ECTheme.dimensions.fiftySix)
+                        .border(
+                            BorderStroke(
+                                ECTheme.dimensions.one,
+                                ECTheme.colors.primary.copy(alpha = 0.3f)
+                            ),
+                            shape = RoundedCornerShape(ECTheme.dimensions.twelve)
+                        )
                 ) {
                     Icon(
                         modifier = Modifier.size(ECTheme.dimensions.thirtyEight),
@@ -100,6 +109,9 @@ fun CategoryScreen(
                         contentDescription = null
                     )
                 }
+
+                Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
+
                 CustomSearchView(
                     text = uiState.searchQuery,
                     onTextChange = { query ->
