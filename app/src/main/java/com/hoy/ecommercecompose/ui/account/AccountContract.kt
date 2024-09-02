@@ -28,6 +28,6 @@ object AccountContract {
     sealed class UiEffect(){
         data class ChangePasswordClick(val id: Int) : UiEffect()
         data class NotificationClick(val id: Int) : UiEffect()
-        data class LogOutClick(val id: Int) : UiEffect()
+        data object NavigateToLogin : UiEffect()
     }
 }

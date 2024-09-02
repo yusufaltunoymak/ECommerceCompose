@@ -41,10 +41,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun AccountScreen(
+    viewModel: AccountViewModel,
     uiEffect: Flow<AccountContract.UiEffect>,
     uiState: AccountContract.UiState,
     onAction: (AccountContract.UiAction) -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToWelcome: () -> Unit,
     onNavigateToPassword: () -> Unit,
     onNavigateToNotifications: () -> Unit,
 ) {
@@ -53,9 +54,11 @@ fun AccountScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             uiEffect.collect { effect ->
                 when (effect) {
-                    is AccountContract.UiEffect.LogOutClick -> onNavigateToLogin()
                     is AccountContract.UiEffect.ChangePasswordClick -> onNavigateToPassword()
                     is AccountContract.UiEffect.NotificationClick -> onNavigateToNotifications()
+                    AccountContract.UiEffect.NavigateToLogin -> {
+                        onNavigateToWelcome()
+                    }
                 }
             }
         }
@@ -255,7 +258,7 @@ fun AccountScreen(
                 MenuItem(
                     iconId = R.drawable.ic_logout,
                     title = stringResource(id = R.string.login_out),
-                    onClick = { onNavigateToLogin() }
+                    onClick = { viewModel.logOut() }
                 )
                 HorizontalDivider(
                     modifier = Modifier

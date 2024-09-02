@@ -29,7 +29,6 @@ import com.hoy.ecommercecompose.ui.home.HomeScreen
 import com.hoy.ecommercecompose.ui.home.HomeViewModel
 import com.hoy.ecommercecompose.ui.login.LoginScreen
 import com.hoy.ecommercecompose.ui.login.LoginViewModel
-import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
 import com.hoy.ecommercecompose.ui.notification.NotificationScreen
 import com.hoy.ecommercecompose.ui.notification.NotificationViewModel
 import com.hoy.ecommercecompose.ui.onboarding.WelcomeScreen
@@ -47,7 +46,6 @@ import com.hoy.ecommercecompose.ui.signup.SignupScreen
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
-    googleAuthUiClient: GoogleAuthUiClient,
     modifier: Modifier = Modifier
 ) {
     val currentUser = FirebaseAuth.getInstance().currentUser
@@ -221,11 +219,12 @@ fun SetupNavGraph(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
             AccountScreen(
+                viewModel = viewModel,
                 uiEffect = uiEffect,
                 uiState = uiState,
                 onAction = viewModel::onAction,
                 onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
-                onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) },
+                onNavigateToWelcome = { navController.navigate(NavRoute.WELCOME.route) },
                 onNavigateToNotifications = { navController.navigate(NavRoute.NOTIFICATION.route) },
             )
         }

@@ -96,4 +96,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             Resource.Error("No user is currently logged in")
         }
     }
+
+    override suspend fun logOut() {
+        firebaseAuth.signOut()
+    }
 }
