@@ -11,6 +11,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -38,61 +40,92 @@ class AccountViewModel @Inject constructor(
             is AccountContract.UiAction.UpdateName -> updateUiState {
                 copy(name = action.name, isSaveEnabled = true)
             }
+
             is AccountContract.UiAction.UpdateSurname -> updateUiState {
                 copy(surname = action.surname, isSaveEnabled = true)
             }
+
             is AccountContract.UiAction.UpdateEmail -> updateUiState {
                 copy(email = action.email, isSaveEnabled = true)
             }
+
             is AccountContract.UiAction.UpdateAddress -> updateUiState {
                 copy(address = action.address, isSaveEnabled = true)
             }
+
             is AccountContract.UiAction.ToggleEditing -> updateUiState {
                 copy(isEditing = !isEditing)
             }
+
+            is AccountContract.UiAction.LogOut -> signOut()
+
             is AccountContract.UiAction.SaveUserInformation -> saveUserInformation(action.user)
         }
     }
 
     private fun getUserInformation() {
         viewModelScope.launch {
-            when (val result = getUserInformationUseCase()) {
-                is Resource.Success -> {
-                    val user = result.data
-                    updateUiState {
-                        copy(
-                            currentUser = user,
-                            name = user.name!!,
-                            surname = user.surname!!,
-                            email = user.email!!,
-                            address = user.address!!
-                        )
+            getUserInformationUseCase()
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect() { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            val user = result.data
+                            updateUiState {
+                                copy(
+                                    currentUser = user,
+                                    name = user.name!!,
+                                    surname = user.surname!!,
+                                    email = user.email!!,
+                                    address = user.address!!
+                                )
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = result.message) }
+                        }
                     }
                 }
-                is Resource.Error -> {
-                    updateUiState { copy(errorMessage = result.message) }
-                }
-                is Resource.Loading -> {
-                    updateUiState { copy(isLoading = true) }
-                }
-            }
         }
     }
 
     private fun saveUserInformation(user: User) {
         viewModelScope.launch {
-            updateUiState { copy(isLoading = true) }
-            when (val result = firebaseAuthRepository.updateUserInformation(user)) {
-                is Resource.Success -> {
-                    updateUiState { copy(currentUser = user, isLoading = false) }
+            firebaseAuthRepository.updateUserInformation(user)
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect() { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            updateUiState { copy(currentUser = user) }
+                        }
+
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = result.message) }
+                        }
+                    }
                 }
-                is Resource.Error -> {
-                    updateUiState { copy(errorMessage = result.message, isLoading = false) }
+        }
+    }
+
+    private fun signOut() {
+        viewModelScope.launch {
+            firebaseAuthRepository.signOut()
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect() {
+                    when (it) {
+                        is Resource.Success -> {
+                            updateUiState { copy(currentUser = null) }
+                        }
+
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = it.message) }
+                        }
+                    }
                 }
-                is Resource.Loading -> {
-                    updateUiState { copy(isLoading = true) }
-                }
-            }
         }
     }
 

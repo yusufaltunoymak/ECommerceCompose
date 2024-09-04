@@ -4,7 +4,7 @@ import com.hoy.ecommercecompose.data.source.remote.model.User
 
 object AccountContract {
     data class UiState(
-        val currentUser: User? = null,
+        val currentUser: User? = User(),
         val name: String = "",
         val surname: String = "",
         val email: String = "",
@@ -22,10 +22,11 @@ object AccountContract {
         data class UpdateEmail(val email: String) : UiAction()
         data class UpdateAddress(val address: String) : UiAction()
         data object ToggleEditing : UiAction()
+        data object LogOut : UiAction()
 
     }
 
-    sealed class UiEffect(){
+    sealed class UiEffect() {
         data class ChangePasswordClick(val id: Int) : UiEffect()
         data class NotificationClick(val id: Int) : UiEffect()
         data class LogOutClick(val id: Int) : UiEffect()

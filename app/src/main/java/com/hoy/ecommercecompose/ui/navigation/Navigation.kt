@@ -225,7 +225,14 @@ fun SetupNavGraph(
                 uiState = uiState,
                 onAction = viewModel::onAction,
                 onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
-                onNavigateToLogin = { navController.navigate(NavRoute.LOGIN.route) },
+                onNavigateToWelcome = {
+                    navController.navigate(NavRoute.WELCOME.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
                 onNavigateToNotifications = { navController.navigate(NavRoute.NOTIFICATION.route) },
             )
         }

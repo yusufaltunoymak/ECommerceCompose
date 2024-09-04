@@ -44,7 +44,7 @@ fun AccountScreen(
     uiEffect: Flow<AccountContract.UiEffect>,
     uiState: AccountContract.UiState,
     onAction: (AccountContract.UiAction) -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToWelcome: () -> Unit,
     onNavigateToPassword: () -> Unit,
     onNavigateToNotifications: () -> Unit,
 ) {
@@ -53,12 +53,16 @@ fun AccountScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             uiEffect.collect { effect ->
                 when (effect) {
-                    is AccountContract.UiEffect.LogOutClick -> onNavigateToLogin()
+                    is AccountContract.UiEffect.LogOutClick -> onNavigateToWelcome()
                     is AccountContract.UiEffect.ChangePasswordClick -> onNavigateToPassword()
                     is AccountContract.UiEffect.NotificationClick -> onNavigateToNotifications()
                 }
             }
         }
+    }
+
+    LaunchedEffect(uiState.currentUser) {
+        if (uiState.currentUser == null) onNavigateToWelcome()
     }
 
     if (uiState.currentUser != null) {
@@ -255,7 +259,7 @@ fun AccountScreen(
                 MenuItem(
                     iconId = R.drawable.ic_logout,
                     title = stringResource(id = R.string.login_out),
-                    onClick = { onNavigateToLogin() }
+                    onClick = { onAction(AccountContract.UiAction.LogOut) }
                 )
                 HorizontalDivider(
                     modifier = Modifier
@@ -266,14 +270,7 @@ fun AccountScreen(
             }
         }
     }
- else {
-        Text(
-            text = stringResource(id = R.string.connection_error),
-            modifier = Modifier.fillMaxSize(),
-            color = ECTheme.colors.red,
-            fontSize = MaterialTheme.typography.bodyMedium.fontSize
-        )
-    }
+
 }
 
 @Composable
