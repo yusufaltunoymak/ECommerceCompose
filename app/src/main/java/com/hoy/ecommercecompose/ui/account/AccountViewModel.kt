@@ -129,13 +129,6 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun logOut() {
-        viewModelScope.launch {
-            firebaseAuthRepository.logOut()
-            _uiEffect.send(AccountContract.UiEffect.NavigateToLogin)
-        }
-    }
-
     private fun updateUiState(block: AccountContract.UiState.() -> AccountContract.UiState) {
         _uiState.update(block)
     }

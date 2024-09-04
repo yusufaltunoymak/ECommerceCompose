@@ -111,8 +111,4 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             emit(Resource.Error(e.message ?: "An unknown error occurred"))
         }
     }
-
-    override suspend fun logOut() {
-        firebaseAuth.signOut()
-    }
 }
