@@ -10,7 +10,6 @@ import javax.inject.Inject
 class AddToCartLocalUseCase @Inject constructor(private val productRepository: ProductRepository) {
     suspend operator fun invoke(entity: ProductEntity): Flow<Resource<Unit>> {
         return flow {
-            emit(Resource.Loading)
             try {
                 productRepository.addToCartProduct(entity)
                 emit(Resource.Success(Unit))

@@ -14,7 +14,6 @@ class AddPaymentUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(paymentEntity: PaymentEntity): Flow<Resource<Unit>> {
         return flow {
-            emit(Resource.Loading)
             try {
                 productRepository.processOrder(paymentEntity.userId, paymentEntity)
                 emit(Resource.Success(Unit))

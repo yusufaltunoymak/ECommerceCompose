@@ -11,6 +11,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -53,24 +55,26 @@ class CategoryViewModel @Inject constructor(
 
     fun getProductsByCategory(category: String) {
         viewModelScope.launch {
-            getProductsByCategoryUseCase(category).collect { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                        _uiState.update { it.copy(isLoading = true) }
-                    }
+            getProductsByCategoryUseCase(category)
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            categoryList.clear()
+                            categoryList.addAll(result.data)
+                            _uiState.update {
+                                it.copy(
+                                    categoryList = categoryList
+                                )
+                            }
+                        }
 
-                    is Resource.Success -> {
-                        categoryList.clear()
-                        categoryList.addAll(result.data)
-                        _uiState.update { it.copy(isLoading = false, categoryList = categoryList) }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update { it.copy(isLoading = false) }
-                        _uiEffect.send(CategoryContract.UiEffect.ShowError(result.message))
+                        is Resource.Error -> {
+                            _uiEffect.send(CategoryContract.UiEffect.ShowError(result.message))
+                        }
                     }
                 }
-            }
         }
     }
 

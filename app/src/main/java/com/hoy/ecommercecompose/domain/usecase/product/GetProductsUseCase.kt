@@ -7,6 +7,7 @@ import com.hoy.ecommercecompose.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+
 private const val MINIMUM_ACCEPTABLE_RATE = 4.0
 
 class GetProductsUseCase @Inject constructor(
@@ -14,7 +15,6 @@ class GetProductsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(userId: String): Flow<Resource<List<ProductUi>>> {
         return flow {
-            emit(Resource.Loading)
             try {
                 val response = productRepository.getProducts()
 

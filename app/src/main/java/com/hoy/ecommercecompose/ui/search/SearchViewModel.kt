@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,30 +38,31 @@ class SearchViewModel @Inject constructor(
                 updateUiState { copy(searchQuery = action.query) }
                 searchProducts(action.query)
             }
+
             is SearchContract.UiAction.LoadProduct -> updateUiState { copy(productList = action.productList) }
         }
     }
 
     fun loadAllProducts() {
         viewModelScope.launch {
-            getAllProductUseCase("").collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        updateUiState {
-                            allProducts = result.data
-                            copy(productList = allProducts, isLoading = false)
+            getAllProductUseCase("")
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            updateUiState {
+                                allProducts = result.data
+                                copy(productList = allProducts)
+                            }
                         }
-                    }
 
-                    is Resource.Error -> {
-                        updateUiState { copy(errorMessage = result.message, isLoading = false) }
-                    }
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = result.message) }
+                        }
 
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
                     }
                 }
-            }
         }
     }
 

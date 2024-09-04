@@ -13,16 +13,13 @@ class GetAllProductUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(query: String): Flow<Resource<List<ProductUi>>> {
         return flow {
-            emit(Resource.Loading)
             try {
                 val response = productRepository.getProducts()
                 val allProducts = response.productDto.map { it.mapToProductUi() }
 
-                // Filter products by title
                 val filteredProducts = allProducts.filter {
                     it.title.contains(query, ignoreCase = true)
                 }
-
                 emit(Resource.Success(data = filteredProducts))
             } catch (e: Exception) {
                 emit(Resource.Error(message = e.localizedMessage ?: "Unknown error!"))

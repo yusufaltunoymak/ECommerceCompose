@@ -15,7 +15,6 @@ class AddToFavoriteUseCase @Inject constructor(
     suspend operator fun invoke(baseBody: BaseBody): Flow<Resource<FavoriteResponse>> {
         return flow {
             try {
-                emit(Resource.Loading)
                 val response = favoriteRepository.addFavoriteProduct(baseBody)
                 emit(Resource.Success(data = response.toFavoriteResponse()))
             } catch (e: Exception) {
