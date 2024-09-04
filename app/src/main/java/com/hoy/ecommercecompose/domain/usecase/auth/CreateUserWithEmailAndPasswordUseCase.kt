@@ -22,7 +22,7 @@ class CreateUserWithEmailAndPasswordUseCase @Inject constructor(
             email = email,
             password = password,
             address = address
-        ).collect() { resource ->
+        ).collect { resource ->
             emit(resource)
         }
     }

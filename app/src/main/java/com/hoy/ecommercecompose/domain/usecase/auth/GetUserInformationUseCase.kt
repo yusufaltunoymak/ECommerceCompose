@@ -11,7 +11,7 @@ class GetUserInformationUseCase @Inject constructor(
     private val repository: FirebaseAuthRepository
 ) {
     suspend operator fun invoke(): Flow<Resource<User>> = flow {
-        repository.getUserInformation().collect() { resource ->
+        repository.getUserInformation().collect { resource ->
             emit(resource)
         }
     }

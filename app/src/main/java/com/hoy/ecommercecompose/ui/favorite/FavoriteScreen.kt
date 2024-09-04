@@ -63,7 +63,7 @@ fun FavoriteScreen(
     onBackClick: () -> Unit,
 ) {
     uiEffect.collectWithLifecycle { effect ->
-        when(effect){
+        when (effect) {
             is FavoriteContract.UiEffect.FavoriteProductDetailClick -> onNavigateToDetail(effect.productId)
             is FavoriteContract.UiEffect.ShowError -> TODO()
             is FavoriteContract.UiEffect.BackScreen -> onBackClick()

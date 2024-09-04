@@ -60,7 +60,6 @@ class SearchViewModel @Inject constructor(
                         is Resource.Error -> {
                             updateUiState { copy(errorMessage = result.message) }
                         }
-
                     }
                 }
         }

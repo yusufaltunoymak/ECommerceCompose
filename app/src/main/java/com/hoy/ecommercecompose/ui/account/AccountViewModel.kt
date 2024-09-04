@@ -68,7 +68,7 @@ class AccountViewModel @Inject constructor(
             getUserInformationUseCase()
                 .onStart { updateUiState { copy(isLoading = true) } }
                 .onCompletion { updateUiState { copy(isLoading = false) } }
-                .collect() { result ->
+                .collect { result ->
                     when (result) {
                         is Resource.Success -> {
                             val user = result.data
@@ -96,7 +96,7 @@ class AccountViewModel @Inject constructor(
             firebaseAuthRepository.updateUserInformation(user)
                 .onStart { updateUiState { copy(isLoading = true) } }
                 .onCompletion { updateUiState { copy(isLoading = false) } }
-                .collect() { result ->
+                .collect { result ->
                     when (result) {
                         is Resource.Success -> {
                             updateUiState { copy(currentUser = user) }
@@ -115,7 +115,7 @@ class AccountViewModel @Inject constructor(
             firebaseAuthRepository.signOut()
                 .onStart { updateUiState { copy(isLoading = true) } }
                 .onCompletion { updateUiState { copy(isLoading = false) } }
-                .collect() {
+                .collect {
                     when (it) {
                         is Resource.Success -> {
                             updateUiState { copy(currentUser = null) }

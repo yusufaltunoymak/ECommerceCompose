@@ -50,7 +50,7 @@ class SignUpViewModel @Inject constructor(
                 address = state.address
             ).onStart { updateUiState { copy(isLoading = true) } }
                 .onCompletion { updateUiState { copy(isLoading = false) } }
-                .collect() { resource ->
+                .collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
                             emitUiEffect(SignUpContract.UiEffect.GoToMainScreen)

@@ -45,7 +45,7 @@ class GetCategoriesUseCaseUnitTest {
         val expectedResponse = GetCategoriesResponse(categories = categoryList)
         `when`(mockProductRepository.getCategories()).thenReturn(expectedResponse)
 
-        getCategoriesUseCase().collect() { result ->
+        getCategoriesUseCase().collect { result ->
             assert(result is Resource.Success)
             val data = (result as Resource.Success).data
             assertEquals(2, data.size)

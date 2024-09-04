@@ -26,6 +26,5 @@ class CreateUserWithEmailAndPasswordUseCaseTest {
 
     @Test
     fun `test createUserWithEmailAndPasswordUseCase handles exception`() {
-
     }
 }

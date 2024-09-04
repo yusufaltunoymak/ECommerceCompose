@@ -49,7 +49,8 @@ fun SendMailScreen(
     uiEffect.collectWithLifecycle { effect ->
         when (effect) {
             is SendMailContract.UiEffect.ShowToast -> {
-                Toast.makeText(context, context.getString(effect.messageResId), Toast.LENGTH_LONG).show() }
+                Toast.makeText(context, context.getString(effect.messageResId), Toast.LENGTH_LONG).show()
+            }
 
             SendMailContract.UiEffect.NavigateToLogin -> { onNavigateToLogin() }
             SendMailContract.UiEffect.BackClick -> { onBackClick() }

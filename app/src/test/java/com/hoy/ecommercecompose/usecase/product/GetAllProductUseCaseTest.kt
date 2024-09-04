@@ -41,7 +41,8 @@ class GetAllProductUseCaseTest {
                 salePrice = 899.99,
                 saleState = true,
                 title = "Smartphone Model X"
-            ), ProductDto(
+            ),
+            ProductDto(
                 category = "Home Appliances",
                 count = 20,
                 description = "A powerful and energy-efficient vacuum cleaner.",
@@ -54,7 +55,8 @@ class GetAllProductUseCaseTest {
                 salePrice = 279.99,
                 saleState = true,
                 title = "Banana"
-            ), ProductDto(
+            ),
+            ProductDto(
                 category = "Books",
                 count = 100,
                 description = "A thrilling mystery novel by a best-selling author.",

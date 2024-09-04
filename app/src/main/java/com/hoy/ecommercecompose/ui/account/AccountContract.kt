@@ -23,7 +23,6 @@ object AccountContract {
         data class UpdateAddress(val address: String) : UiAction()
         data object ToggleEditing : UiAction()
         data object LogOut : UiAction()
-
     }
 
     sealed class UiEffect() {

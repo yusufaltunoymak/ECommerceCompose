@@ -64,7 +64,7 @@ class LoginViewModel @Inject constructor(
             signInWithEmailAndPasswordUseCase(email = state.email, password = state.password)
                 .onStart { updateUiState { copy(isLoading = true) } }
                 .onCompletion { updateUiState { copy(isLoading = false) } }
-                .collect() { resource ->
+                .collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
                             emitUiEffect(LoginContract.UiEffect.GoToHome)

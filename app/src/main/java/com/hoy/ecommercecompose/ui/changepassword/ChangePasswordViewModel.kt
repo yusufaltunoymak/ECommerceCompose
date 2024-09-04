@@ -59,7 +59,7 @@ class ChangePasswordViewModel @Inject constructor(private val repository: Fireba
         repository.changePassword(currentState.currentPassword, currentState.password)
             .onStart { updateUiState { copy(isLoading = true) } }
             .onCompletion { updateUiState { copy(isLoading = false) } }
-            .collect() { result ->
+            .collect { result ->
                 when (result) {
                     is Resource.Success -> {
                         _uiEffect.send(ChangePasswordContract.UiEffect.ShowToast(R.string.password_changed_message))

@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
             getUserInformationUseCase()
                 .onStart { updateUiState { copy(isLoading = true) } }
                 .onCompletion { updateUiState { copy(isLoading = false) } }
-                .collect() { result ->
+                .collect { result ->
                     when (result) {
                         is Resource.Success -> {
                             updateUiState { copy(currentUser = result.data) }

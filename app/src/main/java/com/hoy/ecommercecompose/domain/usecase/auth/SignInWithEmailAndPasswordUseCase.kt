@@ -13,7 +13,7 @@ class SignInWithEmailAndPasswordUseCase @Inject constructor(
         firebaseAuthRepository.signInWithEmailAndPassword(
             email = email,
             password = password
-        ).collect() { resource ->
+        ).collect { resource ->
             emit(resource)
         }
     }

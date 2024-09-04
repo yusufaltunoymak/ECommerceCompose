@@ -61,7 +61,8 @@ class ProductRepositoryImplUnitTest {
                     salePrice = 899.99,
                     saleState = true,
                     title = "Smartphone Model X"
-                ), ProductDto(
+                ),
+                ProductDto(
                     category = "Home Appliances",
                     count = 20,
                     description = "A powerful and energy-efficient vacuum cleaner.",
@@ -74,7 +75,8 @@ class ProductRepositoryImplUnitTest {
                     salePrice = 279.99,
                     saleState = true,
                     title = "Vacuum Cleaner 2000"
-                ), ProductDto(
+                ),
+                ProductDto(
                     category = "Books",
                     count = 100,
                     description = "A thrilling mystery novel by a best-selling author.",
@@ -104,10 +106,14 @@ class ProductRepositoryImplUnitTest {
         val expectedCategories = GetCategoriesResponse(
             categories = listOf(
                 Category(
-                    name = "Electronics", image = ""
-                ), Category(
-                    name = "Home Appliances", image = ""
-                ), Category(name = "Books", image = "")
+                    name = "Electronics",
+                    image = ""
+                ),
+                Category(
+                    name = "Home Appliances",
+                    image = ""
+                ),
+                Category(name = "Books", image = "")
             )
         )
         `when`(mockApiService.getCategories()).thenReturn(expectedCategories)
@@ -155,12 +161,14 @@ class ProductRepositoryImplUnitTest {
     @Test
     fun `test addFavoriteProduct returns expected data`() = runBlocking<Unit> {
         val expectedBaseResponse = BaseResponse(
-            status = 200, message = "Success"
+            status = 200,
+            message = "Success"
         )
         `when`(
             mockApiService.addToFavorites(
                 baseBody = BaseBody(
-                    userId = "1", productId = 1
+                    userId = "1",
+                    productId = 1
                 )
             )
         ).thenReturn(
@@ -168,7 +176,8 @@ class ProductRepositoryImplUnitTest {
         )
         val result = productRepositoryImpl.addFavoriteProduct(
             baseBody = BaseBody(
-                userId = "1", productId = 1
+                userId = "1",
+                productId = 1
             )
         )
         assertEquals(expectedBaseResponse, result)
@@ -204,7 +213,8 @@ class ProductRepositoryImplUnitTest {
     @Test
     fun `test deleteFavoriteProduct returns expected data`() = runBlocking<Unit> {
         val expectedBaseResponse = BaseResponse(
-            status = 200, message = "Success"
+            status = 200,
+            message = "Success"
         )
         `when`(
             mockApiService.deleteFromFavorites(
@@ -300,7 +310,7 @@ class ProductRepositoryImplUnitTest {
             )
         )
         val resultFlow = productRepositoryImpl.getCartProductsLocal(userId = userId)
-        resultFlow.collect() { result ->
+        resultFlow.collect { result ->
             assertTrue(result is Resource.Success)
             assertEquals(expectedCartProducts, (result as Resource.Success).data)
         }
@@ -311,11 +321,13 @@ class ProductRepositoryImplUnitTest {
     fun `test getCartProductsLocal handles exception`() = runTest {
         val userId = "123"
         val errorMessage = "An error occurred"
-        `when`(mockProductDao.getCartProducts(userId)).thenReturn(flow {
-            throw Exception(errorMessage)
-        })
+        `when`(mockProductDao.getCartProducts(userId)).thenReturn(
+            flow {
+                throw Exception(errorMessage)
+            }
+        )
         val resultFlow = productRepositoryImpl.getCartProductsLocal(userId)
-        resultFlow.collect() { result ->
+        resultFlow.collect { result ->
             assertTrue(result is Resource.Error)
             assertEquals(errorMessage, (result as Resource.Error).message)
         }
@@ -432,7 +444,7 @@ class ProductRepositoryImplUnitTest {
         )
         `when`(mockProductDao.getUserOrders("123")).thenReturn(flowOf(expectedOrder))
         val resultFlow = productRepositoryImpl.getUserOrders("123")
-        resultFlow.collect() { result ->
+        resultFlow.collect { result ->
             assertEquals(expectedOrder, result)
         }
     }
@@ -458,5 +470,4 @@ class ProductRepositoryImplUnitTest {
         productRepositoryImpl.processOrder(userId, expectedPayment)
         verify(mockProductDao).processOrder(userId, expectedPayment)
     }
-
 }
