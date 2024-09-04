@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,17 +56,23 @@ class ChangePasswordViewModel @Inject constructor(private val repository: Fireba
             _uiState.value = _uiState.value.copy(errorMessage = R.string.passwords_not_matching)
             return
         }
+        repository.changePassword(currentState.currentPassword, currentState.password)
+            .onStart { updateUiState { copy(isLoading = true) } }
+            .onCompletion { updateUiState { copy(isLoading = false) } }
+            .collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _uiEffect.send(ChangePasswordContract.UiEffect.ShowToast(R.string.password_changed_message))
+                    }
 
-        val result = repository.changePassword(currentState.currentPassword, currentState.password)
-        when (result) {
-            is Resource.Success -> {
-                _uiEffect.send(ChangePasswordContract.UiEffect.ShowToast(R.string.password_changed_message))
+                    is Resource.Error -> {
+                        _uiState.value = _uiState.value.copy(errorMessage = 0)
+                    }
+                }
             }
-            is Resource.Error -> {
-                _uiState.value = _uiState.value.copy(errorMessage = 0)
-            }
+    }
 
-            Resource.Loading -> TODO()
-        }
+    private fun updateUiState(block: ChangePasswordContract.UiState.() -> ChangePasswordContract.UiState) {
+        _uiState.update(block)
     }
 }

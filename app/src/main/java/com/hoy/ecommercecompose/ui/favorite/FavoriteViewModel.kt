@@ -48,18 +48,12 @@ class FavoriteViewModel @Inject constructor(
                 userId = firebaseAuth.currentUser?.uid.orEmpty()
             ).collect { response ->
                 when (response) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
-
                     is Resource.Success -> {
-                        updateUiState {
-                            copy(favoriteProducts = response.data, isLoading = false)
-                        }
+                        updateUiState { copy(favoriteProducts = response.data) }
                     }
 
                     is Resource.Error -> {
-                        updateUiState { copy(errorMessage = response.message, isLoading = false) }
+                        updateUiState { copy(errorMessage = response.message) }
                     }
                 }
             }
@@ -74,14 +68,12 @@ class FavoriteViewModel @Inject constructor(
             )
             deleteFavoriteUseCase(deleteFromFavoriteBody).collect { response ->
                 when (response) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
                     is Resource.Success -> {
                         loadFavorites()
                     }
+
                     is Resource.Error -> {
-                        updateUiState { copy(errorMessage = response.message, isLoading = false) }
+                        updateUiState { copy(errorMessage = response.message) }
                         emitUiEffect(FavoriteContract.UiEffect.ShowError(response.message))
                     }
                 }

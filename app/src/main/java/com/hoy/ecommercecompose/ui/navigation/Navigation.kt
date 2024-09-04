@@ -219,12 +219,18 @@ fun SetupNavGraph(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
             AccountScreen(
-                viewModel = viewModel,
                 uiEffect = uiEffect,
                 uiState = uiState,
                 onAction = viewModel::onAction,
                 onNavigateToPassword = { navController.navigate(NavRoute.RESET_PASSWORD.route) },
-                onNavigateToWelcome = { navController.navigate(NavRoute.WELCOME.route) },
+                onNavigateToWelcome = {
+                    navController.navigate(NavRoute.WELCOME.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
                 onNavigateToNotifications = { navController.navigate(NavRoute.NOTIFICATION.route) },
             )
         }

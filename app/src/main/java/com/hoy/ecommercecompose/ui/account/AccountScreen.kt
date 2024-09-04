@@ -64,6 +64,10 @@ fun AccountScreen(
         }
     }
 
+    LaunchedEffect(uiState.currentUser) {
+        if (uiState.currentUser == null) onNavigateToWelcome()
+    }
+
     if (uiState.currentUser != null) {
         LazyColumn(
             modifier = Modifier
@@ -258,7 +262,7 @@ fun AccountScreen(
                 MenuItem(
                     iconId = R.drawable.ic_logout,
                     title = stringResource(id = R.string.login_out),
-                    onClick = { viewModel.logOut() }
+                    onClick = { onAction(AccountContract.UiAction.LogOut) }
                 )
                 HorizontalDivider(
                     modifier = Modifier
@@ -268,14 +272,6 @@ fun AccountScreen(
                 )
             }
         }
-    }
- else {
-        Text(
-            text = stringResource(id = R.string.connection_error),
-            modifier = Modifier.fillMaxSize(),
-            color = ECTheme.colors.red,
-            fontSize = MaterialTheme.typography.bodyMedium.fontSize
-        )
     }
 }
 

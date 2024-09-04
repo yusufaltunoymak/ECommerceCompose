@@ -2,6 +2,7 @@ package com.hoy.ecommercecompose.ui.changepassword
 
 object ChangePasswordContract {
     data class UiState(
+        val isLoading: Boolean = false,
         val password: String = "",
         val confirmPassword: String = "",
         val currentPassword: String = "",

@@ -19,6 +19,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -60,6 +62,7 @@ class ProductDetailViewModel @Inject constructor(
             is ProductDetailContract.UiAction.BackButtonClick -> {
                 navigateBack()
             }
+
             is ProductDetailContract.UiAction.ShareProduct -> {
                 shareProduct()
             }
@@ -72,10 +75,6 @@ class ProductDetailViewModel @Inject constructor(
                 val resource =
                     getProductDetailUseCase(firebaseAuthRepository.getUserId(), productId)
             ) {
-                is Resource.Loading -> {
-                    updateUiState { copy(isLoading = true) }
-                }
-
                 is Resource.Success -> {
                     updateUiState { copy(productDetail = resource.data, isLoading = false) }
                 }
@@ -106,26 +105,18 @@ class ProductDetailViewModel @Inject constructor(
                 userId = firebaseAuthRepository.getUserId(),
                 productId = productId
             )
-            addToFavoriteUseCase(baseBody).collect { response ->
-                when (response) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
+            addToFavoriteUseCase(baseBody)
+                .collect { response ->
+                    when (response) {
+                        is Resource.Success -> {
+                            updateUiState { copy(productDetail = productDetail?.copy(isFavorite = true)) }
+                        }
 
-                    is Resource.Success -> {
-                        updateUiState {
-                            copy(
-                                productDetail = productDetail?.copy(isFavorite = true),
-                                isLoading = false
-                            )
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = response.message) }
                         }
                     }
-
-                    is Resource.Error -> {
-                        updateUiState { copy(errorMessage = response.message, isLoading = false) }
-                    }
                 }
-            }
         }
     }
 
@@ -135,26 +126,20 @@ class ProductDetailViewModel @Inject constructor(
                 userId = firebaseAuthRepository.getUserId(),
                 id = productId
             )
-            deleteFavoriteUseCase(deleteFromFavoriteBody).collect { response ->
-                when (response) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
+            deleteFavoriteUseCase(deleteFromFavoriteBody)
+                .collect { response ->
+                    when (response) {
+                        is Resource.Success -> {
+                            updateUiState {
+                                copy(productDetail = productDetail?.copy(isFavorite = false))
+                            }
+                        }
 
-                    is Resource.Success -> {
-                        updateUiState {
-                            copy(
-                                productDetail = productDetail?.copy(isFavorite = false),
-                                isLoading = false
-                            )
+                        is Resource.Error -> {
+                            updateUiState { copy(errorMessage = response.message) }
                         }
                     }
-
-                    is Resource.Error -> {
-                        updateUiState { copy(errorMessage = response.message, isLoading = false) }
-                    }
                 }
-            }
         }
     }
 
@@ -174,29 +159,29 @@ class ProductDetailViewModel @Inject constructor(
                     count = 1,
                     quantity = 1
                 )
-                addToCartLocalUseCase(productEntity).collect {
-                    when (it) {
-                        is Resource.Loading -> {
-                            updateUiState { copy(isLoading = true) }
-                        }
+                addToCartLocalUseCase(productEntity)
+                    .onStart { updateUiState { copy(isLoading = true) } }
+                    .onCompletion { updateUiState { copy(isLoading = false) } }
+                    .collect {
+                        when (it) {
+                            is Resource.Success -> {
+                                updateUiState { copy(isLoading = false) }
+                                _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage("Product added to cart"))
+                            }
 
-                        is Resource.Success -> {
-                            updateUiState { copy(isLoading = false) }
-                            _uiEffect.send(ProductDetailContract.UiEffect.ShowToastMessage("Product added to cart"))
-                        }
-
-                        is Resource.Error -> {
-                            updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                            is Resource.Error -> {
+                                updateUiState { copy(errorMessage = it.message, isLoading = false) }
+                            }
                         }
                     }
-                }
             }
         }
     }
 
     private fun shareProduct() {
         val productDetail = _uiState.value.productDetail ?: return
-        val shareText = "Check out this product: ${productDetail.title} for \$${productDetail.price}. View it here: https://ecommerce.com/product/${productDetail.id}"
+        val shareText =
+            "Check out this product: ${productDetail.title} for \$${productDetail.price}. View it here: https://ecommerce.com/product/${productDetail.id}"
         viewModelScope.launch {
             _uiEffect.send(ProductDetailContract.UiEffect.ShareProduct(shareText))
         }

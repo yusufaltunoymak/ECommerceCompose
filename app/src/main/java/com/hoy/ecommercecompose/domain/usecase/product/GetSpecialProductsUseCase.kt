@@ -13,7 +13,6 @@ class GetSpecialProductsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(userId: String): Flow<Resource<List<ProductUi>>> {
         return flow {
-            emit(Resource.Loading)
             try {
                 val response = productRepository.getProducts()
                 val favoriteResponse = productRepository.getFavoriteProducts(userId = userId)

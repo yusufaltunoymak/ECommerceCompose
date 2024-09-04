@@ -11,6 +11,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -59,24 +61,21 @@ class LoginViewModel @Inject constructor(
     private fun signIn() {
         val state = uiState.value
         viewModelScope.launch {
-            val resource = signInWithEmailAndPasswordUseCase(
-                email = state.email,
-                password = state.password
-            )
-            when (resource) {
-                is Resource.Loading -> {
-                    updateUiState { copy(isLoading = true) }
-                }
+            signInWithEmailAndPasswordUseCase(email = state.email, password = state.password)
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            emitUiEffect(LoginContract.UiEffect.GoToHome)
+                        }
 
-                is Resource.Success -> {
-                    emitUiEffect(LoginContract.UiEffect.GoToHome)
+                        is Resource.Error -> {
+                            updateUiState { copy(signInError = resource.message) }
+                            emitUiEffect(LoginContract.UiEffect.ShowAlertDialog)
+                        }
+                    }
                 }
-
-                is Resource.Error -> {
-                    updateUiState { copy(isLoading = false, signInError = resource.message) }
-                    emitUiEffect(LoginContract.UiEffect.ShowAlertDialog)
-                }
-            }
         }
     }
 

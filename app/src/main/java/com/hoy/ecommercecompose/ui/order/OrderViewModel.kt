@@ -10,6 +10,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -44,25 +46,29 @@ class OrderViewModel @Inject constructor(
 
     fun loadOrders() {
         viewModelScope.launch {
-            updateUiState { copy(isLoading = true, errorMessage = null) }
+            updateUiState { copy(errorMessage = null) }
             val userId = firebaseAuthRepository.getUserId()
-            getUserOrdersUseCase(userId).collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
+            getUserOrdersUseCase(userId)
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            val sortedOrders = resource.data.sortedByDescending { it.orderDate }
+                            updateUiState { copy(isLoading = false, orders = sortedOrders) }
+                        }
 
-                    is Resource.Success -> {
-                        val sortedOrders = resource.data.sortedByDescending { it.orderDate }
-                        updateUiState { copy(isLoading = false, orders = sortedOrders) }
-                    }
-
-                    is Resource.Error -> {
-                        updateUiState { copy(isLoading = false, errorMessage = resource.message) }
-                        emitUiEffect(OrderContract.UiEffect.ShowError(resource.message))
+                        is Resource.Error -> {
+                            updateUiState {
+                                copy(
+                                    isLoading = false,
+                                    errorMessage = resource.message
+                                )
+                            }
+                            emitUiEffect(OrderContract.UiEffect.ShowError(resource.message))
+                        }
                     }
                 }
-            }
         }
     }
 

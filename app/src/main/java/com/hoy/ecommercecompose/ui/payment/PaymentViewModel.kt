@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -49,18 +51,20 @@ class PaymentViewModel @Inject constructor(
 
     private fun getCartProduct() {
         viewModelScope.launch {
-            getCartProductsUseCase(userId = uiState.value.userId).collect {
-                when (it) {
-                    is Resource.Loading -> {}
-                    is Resource.Success -> {
-                        updateUiState { copy(cartProducts = it.data) }
-                    }
+            getCartProductsUseCase(userId = uiState.value.userId)
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            updateUiState { copy(cartProducts = it.data) }
+                        }
 
-                    is Resource.Error -> {
-                        _uiEffect.send(PaymentContract.UiEffect.ShowAlertDialog(it.message))
+                        is Resource.Error -> {
+                            _uiEffect.send(PaymentContract.UiEffect.ShowAlertDialog(it.message))
+                        }
                     }
                 }
-            }
         }
     }
 
@@ -146,27 +150,24 @@ class PaymentViewModel @Inject constructor(
                 price = uiState.value.cartProducts.sumOf { it.price * it.quantity }
             )
 
-            addPaymentUseCase(paymentEntity).collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        updateUiState { copy(isLoading = true) }
-                    }
+            addPaymentUseCase(paymentEntity)
+                .onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            _uiEffect.send(
+                                PaymentContract.UiEffect.ShowOrderConfirmation(R.string.order_success_received)
+                            )
+                        }
 
-                    is Resource.Success -> {
-                        updateUiState { copy(isLoading = false) }
-                        _uiEffect.send(
-                            PaymentContract.UiEffect.ShowOrderConfirmation(R.string.order_success_received)
-                        )
-                    }
-
-                    is Resource.Error -> {
-                        updateUiState { copy(isLoading = false) }
-                        _uiEffect.send(
-                            PaymentContract.UiEffect.ShowAlertDialog("Order failed: ${resource.message}")
-                        )
+                        is Resource.Error -> {
+                            _uiEffect.send(
+                                PaymentContract.UiEffect.ShowAlertDialog("Order failed: ${resource.message}")
+                            )
+                        }
                     }
                 }
-            }
         }
     }
 

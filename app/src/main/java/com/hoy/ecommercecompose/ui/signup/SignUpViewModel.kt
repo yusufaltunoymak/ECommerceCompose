@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -40,28 +42,31 @@ class SignUpViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             val state = uiState.value
-            val resource = createUserWithEmailAndPasswordUseCase(
+            createUserWithEmailAndPasswordUseCase(
                 name = state.name,
                 surname = state.surname,
                 email = state.email,
                 password = state.password,
                 address = state.address
-            )
+            ).onStart { updateUiState { copy(isLoading = true) } }
+                .onCompletion { updateUiState { copy(isLoading = false) } }
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            emitUiEffect(SignUpContract.UiEffect.GoToMainScreen)
+                        }
 
-            when (resource) {
-                is Resource.Loading -> {
-                    updateUiState { copy(isLoading = true) }
+                        is Resource.Error -> {
+                            updateUiState {
+                                copy(
+                                    isLoading = false,
+                                    signUpError = resource.message
+                                )
+                            }
+                            emitUiEffect(SignUpContract.UiEffect.ShowAlertDialog)
+                        }
+                    }
                 }
-
-                is Resource.Success -> {
-                    emitUiEffect(SignUpContract.UiEffect.GoToMainScreen)
-                }
-
-                is Resource.Error -> {
-                    updateUiState { copy(isLoading = false, signUpError = resource.message) }
-                    emitUiEffect(SignUpContract.UiEffect.ShowAlertDialog)
-                }
-            }
         }
     }
 

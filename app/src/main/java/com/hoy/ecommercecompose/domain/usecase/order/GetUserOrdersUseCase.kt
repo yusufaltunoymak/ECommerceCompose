@@ -15,7 +15,6 @@ class GetUserOrdersUseCase @Inject constructor(
 ) {
     operator fun invoke(userId: String): Flow<Resource<List<PaymentEntity>>> {
         return flow {
-            emit(Resource.Loading)
             try {
                 val orders = productRepository.getUserOrders(userId).first()
                 emit(Resource.Success(orders))

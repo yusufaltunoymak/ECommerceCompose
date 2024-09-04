@@ -14,6 +14,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -47,28 +49,25 @@ class CartViewModel @Inject constructor(
 
     fun getCartProducts() {
         viewModelScope.launch {
-            getCartProductsUseCase(firebaseAuthRepository.getUserId()).collect { response ->
-                when (response) {
-                    is Resource.Success -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(cartProductList = response.data)
+            getCartProductsUseCase(firebaseAuthRepository.getUserId())
+                .onStart { _uiState.update { uiState -> uiState.copy(isLoading = true) } }
+                .onCompletion { _uiState.update { uiState -> uiState.copy(isLoading = false) } }
+                .collect { response ->
+                    when (response) {
+                        is Resource.Success -> {
+                            _uiState.update { uiState ->
+                                uiState.copy(cartProductList = response.data)
+                            }
+                            updateTotalPrice()
                         }
-                        updateTotalPrice()
-                    }
 
-                    is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(errorMessage = response.message)
-                        }
-                    }
-
-                    is Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(isLoading = true)
+                        is Resource.Error -> {
+                            _uiState.update { uiState ->
+                                uiState.copy(errorMessage = response.message)
+                            }
                         }
                     }
                 }
-            }
         }
     }
 
