@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun AccountScreen(
+    viewModel: AccountViewModel,
     uiEffect: Flow<AccountContract.UiEffect>,
     uiState: AccountContract.UiState,
     onAction: (AccountContract.UiAction) -> Unit,
@@ -53,9 +54,11 @@ fun AccountScreen(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             uiEffect.collect { effect ->
                 when (effect) {
-                    is AccountContract.UiEffect.LogOutClick -> onNavigateToWelcome()
                     is AccountContract.UiEffect.ChangePasswordClick -> onNavigateToPassword()
                     is AccountContract.UiEffect.NotificationClick -> onNavigateToNotifications()
+                    AccountContract.UiEffect.NavigateToLogin -> {
+                        onNavigateToWelcome()
+                    }
                 }
             }
         }
