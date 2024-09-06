@@ -34,8 +34,8 @@ fun CustomHorizontalPager(
     imageUrls: List<Any>,
     pageCount: Int = imageUrls.size,
     contentDescription: (Int) -> String = { "Image $it" },
-    activeIndicatorColor: Color = ECTheme.colors.darkGray,
-    inactiveIndicatorColor: Color = ECTheme.colors.white,
+    activeIndicatorColor: Color = ECTheme.colors.primary,
+    inactiveIndicatorColor: Color = ECTheme.colors.darkGray,
 ) {
     Column(
         modifier = modifier
@@ -92,8 +92,8 @@ fun DotIndicator(
     pageCount: Int,
     currentPage: Int,
     modifier: Modifier = Modifier,
-    activeColor: Color = ECTheme.colors.darkGray,
-    inactiveColor: Color = ECTheme.colors.white
+    activeColor: Color = ECTheme.colors.primary,
+    inactiveColor: Color = ECTheme.colors.darkGray
 ) {
     Row(
         modifier = modifier.padding(ECTheme.dimensions.eight),

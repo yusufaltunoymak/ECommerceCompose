@@ -2,11 +2,11 @@ package com.hoy.ecommercecompose.ui.favorite
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.collectWithLifecycle
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.ECEmptyScreen
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -71,13 +73,19 @@ fun FavoriteScreen(
     }
 
     Scaffold(
+        contentColor = ECTheme.colors.white,
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.fav_product)) }
+                title = { Text(stringResource(id = R.string.fav_product)) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = ECTheme.colors.white),
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             when {
                 uiState.isLoading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -100,7 +108,11 @@ fun FavoriteScreen(
                 }
 
                 else -> {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(ECTheme.colors.white)
+                    ) {
                         items(uiState.favoriteProducts) { product ->
                             FavoriteProductCard(
                                 product = product,
@@ -128,7 +140,7 @@ fun FavoriteProductCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onNavigateToDetail(product.id) }
+            .noRippleClickable { onNavigateToDetail(product.id) }
             .padding(ECTheme.dimensions.eight)
             .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
             .shadow(
@@ -221,11 +233,12 @@ fun FavoriteProductCard(
                     .background(color = ECTheme.colors.white, shape = CircleShape)
                     .padding(ECTheme.dimensions.four)
                     .size(ECTheme.dimensions.thirtySix)
+                    .align(Alignment.CenterVertically)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Favorite,
+                    imageVector = Icons.Default.Delete,
                     contentDescription = stringResource(id = R.string.favorite),
-                    tint = ECTheme.colors.gray,
+                    tint = ECTheme.colors.primary,
                     modifier = Modifier.size(ECTheme.dimensions.twenty)
                 )
             }

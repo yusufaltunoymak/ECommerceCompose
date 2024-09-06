@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.hoy.ecommercecompose.R
@@ -75,24 +76,29 @@ fun HomeScreen(
                     text = stringResource(id = R.string.welcome_user, currentUser.name!!),
                     style = MaterialTheme.typography.bodyLarge,
                     color = ECTheme.colors.darkGray,
-                    fontFamily = displayFontFamily
+                    fontFamily = displayFontFamily,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
         SearchNavigationView(
             onNavigateToSearch = onNavigateToSearch,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
         CustomHorizontalPager(imageUrls = imageUrls)
+
+        Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
 
         Text(
             text = stringResource(id = R.string.categories),
             style = MaterialTheme.typography.titleLarge,
             color = ECTheme.colors.darkGray,
-            fontFamily = displayFontFamily
+            fontFamily = displayFontFamily,
+            fontWeight = FontWeight.Bold
         )
         CategoryList(
             uiState = uiState,
@@ -103,7 +109,8 @@ fun HomeScreen(
             text = stringResource(id = R.string.top_rated_products),
             style = MaterialTheme.typography.titleLarge,
             color = ECTheme.colors.darkGray,
-            fontFamily = displayFontFamily
+            fontFamily = displayFontFamily,
+            fontWeight = FontWeight.Bold
         )
         ProductList(
             uiState = uiState,
@@ -117,7 +124,8 @@ fun HomeScreen(
             text = "Special products for you",
             style = MaterialTheme.typography.titleLarge,
             color = ECTheme.colors.darkGray,
-            fontFamily = displayFontFamily
+            fontFamily = displayFontFamily,
+            fontWeight = FontWeight.Bold
         )
 
         SpecialProductList(

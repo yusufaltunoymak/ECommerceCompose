@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -98,6 +99,7 @@ fun ProductDetailScreen(
     }
 
     Scaffold(
+        modifier = Modifier.background(ECTheme.colors.white),
         topBar = {
             TopBar(onBackClick = onBackClick, onAction = onAction, uiState = uiState)
         },
@@ -105,8 +107,6 @@ fun ProductDetailScreen(
             AddToCartSection(
                 onAction = onAction,
                 uiState = uiState,
-                modifier = Modifier
-                    .padding(16.dp)
             )
         }
     ) { innerPadding ->
@@ -115,17 +115,18 @@ fun ProductDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .background(ECTheme.colors.white)
         ) {
             if (!uiState.isLoading && uiState.productDetail != null) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize(), // Alt kısımdaki çakışmayı önlemek için ek padding ekledik
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item {
                         ImageList(modifier = Modifier.fillMaxWidth(), uiState = uiState)
                         ProductDetails(uiState = uiState)
-                        Spacer(modifier = Modifier.height(16.dp)) // İçerik ile alt bar arasına boşluk ekliyoruz
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
@@ -139,6 +140,7 @@ fun ProductDetailScreen(
 
 @Composable
 fun TopBar(
+    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onAction: (ProductDetailContract.UiAction) -> Unit,
     uiState: ProductDetailContract.UiState
@@ -146,12 +148,14 @@ fun TopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ECTheme.colors.white),
+            .background(ECTheme.colors.white)
+            .padding(ECTheme.dimensions.eight),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
         IconButton(onClick = { onBackClick() }) {
             Icon(
+                modifier = modifier.size(ECTheme.dimensions.thirty),
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(id = R.string.back_icon),
                 tint = ECTheme.colors.primary
@@ -162,6 +166,7 @@ fun TopBar(
                 onAction(ProductDetailContract.UiAction.ShareProduct)
             }) {
                 Icon(
+                    modifier = modifier.size(ECTheme.dimensions.thirty),
                     imageVector = Icons.Default.Share,
                     contentDescription = stringResource(id = R.string.share),
                     tint = ECTheme.colors.primary
@@ -169,6 +174,7 @@ fun TopBar(
             }
             IconButton(onClick = { onAction(ProductDetailContract.UiAction.ToggleFavoriteClick) }) {
                 Icon(
+                    modifier = modifier.size(ECTheme.dimensions.thirty),
                     imageVector = if (uiState.productDetail?.isFavorite == true) {
                         Icons.Default.Favorite
                     } else {
@@ -241,11 +247,12 @@ fun ProductDetails(uiState: ProductDetailContract.UiState) {
 fun AddToCartSection(
     onAction: (ProductDetailContract.UiAction) -> Unit,
     uiState: ProductDetailContract.UiState,
-    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(ECTheme.colors.white)
+            .padding(ECTheme.dimensions.sixteen),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {

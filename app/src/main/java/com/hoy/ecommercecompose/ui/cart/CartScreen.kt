@@ -228,12 +228,13 @@ fun CartItem(
                                         imageVector = if (product.quantity == 1) Icons.Default.Delete else Icons.Default.KeyboardArrowDown,
                                         contentDescription = stringResource(id = R.string.decrease_quantity),
                                         tint = ECTheme.colors.darkGray,
-                                        modifier = Modifier.size(ECTheme.dimensions.sixteen)
+                                        modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                     )
                                 }
                                 Text(
                                     text = "${product.quantity}",
                                     color = ECTheme.colors.darkGray,
+                                    fontSize = ECTheme.typography.medium,
                                     modifier = Modifier.padding(horizontal = ECTheme.dimensions.four)
                                 )
                                 IconButton(
@@ -250,7 +251,7 @@ fun CartItem(
                                         Icons.Default.KeyboardArrowUp,
                                         contentDescription = stringResource(id = R.string.increase_quantity),
                                         tint = ECTheme.colors.darkGray,
-                                        modifier = Modifier.size(ECTheme.dimensions.sixteen)
+                                        modifier = Modifier.size(ECTheme.dimensions.twentyFour)
                                     )
                                 }
                             }
@@ -334,7 +335,7 @@ fun CartFooter(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "%.2f".format(uiState.totalCartPrice),
+                text = "%.2f $".format(uiState.totalCartPrice),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -342,7 +343,13 @@ fun CartFooter(
 
         Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
-        CustomButton(text = stringResource(id = R.string.payment), onClick = { onPaymentClick() })
+        CustomButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = ECTheme.dimensions.sixteen),
+            text = stringResource(id = R.string.payment),
+            onClick = { onPaymentClick() }
+        )
     }
 }
 

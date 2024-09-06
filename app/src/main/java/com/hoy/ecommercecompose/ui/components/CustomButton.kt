@@ -18,12 +18,13 @@ import com.hoy.ecommercecompose.ui.theme.ECTheme
 fun CustomButton(
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     colors: Color = ECTheme.colors.primary,
     enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = ECTheme.dimensions.eight)
             .height(ECTheme.dimensions.fiftySix)
             .fillMaxWidth(),

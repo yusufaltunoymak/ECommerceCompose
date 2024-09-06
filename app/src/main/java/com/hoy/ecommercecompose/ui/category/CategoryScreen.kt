@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.category
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,6 +46,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.collectWithLifecycle
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomAlertDialog
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
@@ -173,7 +173,7 @@ fun ProductCategoryCard(
 ) {
     Card(
         modifier = modifier
-            .clickable { onProductDetailClick(product.id) }
+            .noRippleClickable { onProductDetailClick(product.id) }
             .fillMaxWidth()
             .padding(ECTheme.dimensions.eight)
             .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
