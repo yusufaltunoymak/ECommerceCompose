@@ -26,7 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -200,10 +200,10 @@ fun LoginScreen(
                     .padding(ECTheme.dimensions.sixteen),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Divider(
-                    color = ECTheme.colors.primary,
+                HorizontalDivider(
+                    modifier = Modifier.weight(1f),
                     thickness = ECTheme.dimensions.one,
-                    modifier = Modifier.weight(1f)
+                    color = ECTheme.colors.primary
                 )
 
                 Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
@@ -216,10 +216,10 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.width(ECTheme.dimensions.eight))
 
-                Divider(
-                    color = ECTheme.colors.primary,
+                HorizontalDivider(
+                    modifier = Modifier.weight(1f),
                     thickness = ECTheme.dimensions.one,
-                    modifier = Modifier.weight(1f)
+                    color = ECTheme.colors.primary
                 )
             }
 

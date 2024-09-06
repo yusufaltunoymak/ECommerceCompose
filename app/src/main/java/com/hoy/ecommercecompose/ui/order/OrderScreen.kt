@@ -81,9 +81,7 @@ fun TopBar(
 ) {
     Text(
         text = "Orders",
-        fontSize = ECTheme.typography.extraLarge,
-        color = ECTheme.colors.black,
-        style = MaterialTheme.typography.headlineMedium,
+        style = MaterialTheme.typography.titleLarge,
         modifier = modifier
             .fillMaxWidth()
             .padding(ECTheme.dimensions.twelve)

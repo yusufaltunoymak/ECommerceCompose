@@ -24,5 +24,4 @@ interface FirebaseAuthRepository {
     suspend fun changePassword(currentPassword: String, newPassword: String): Flow<Resource<Unit>>
 
     suspend fun signOut(): Flow<Resource<Unit>>
-
 }

@@ -39,6 +39,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hoy.ecommercecompose.R
@@ -56,21 +57,23 @@ fun ProductCard(
     onNavigateToDetail: (Int) -> Unit
 ) {
     val iconColor =
-        if (product.isFavorite) ECTheme.colors.primary else ECTheme.colors.gray
+        if (product.isFavorite) ECTheme.colors.primary else ECTheme.colors.lightGray
     Card(
         modifier = modifier
             .size(
                 ECTheme.dimensions.oneHundredSeventy,
                 ECTheme.dimensions.twoHundredSixty
             )
+            .zIndex(1f)
             .clip(RoundedCornerShape(ECTheme.dimensions.twelve))
+            .padding(ECTheme.dimensions.two)
             .noRippleClickable {
                 onNavigateToDetail(product.id)
             },
         colors = CardDefaults.cardColors(
             containerColor = ECTheme.colors.white
         ),
-        elevation = CardDefaults.cardElevation(ECTheme.dimensions.eight)
+        elevation = CardDefaults.cardElevation(defaultElevation = ECTheme.dimensions.two)
     ) {
         Column(
             modifier = Modifier
@@ -103,7 +106,10 @@ fun ProductCard(
                             top = ECTheme.dimensions.eight,
                             end = ECTheme.dimensions.eight
                         )
-                        .background(color = ECTheme.colors.lightGray, shape = CircleShape)
+                        .background(
+                            color = ECTheme.colors.lightGray.copy(alpha = 0.4f),
+                            shape = CircleShape
+                        )
                         .size(ECTheme.dimensions.thirtySix)
                 ) {
                     Icon(

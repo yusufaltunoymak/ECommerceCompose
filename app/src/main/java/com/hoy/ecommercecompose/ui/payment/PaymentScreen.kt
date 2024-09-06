@@ -26,6 +26,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -118,76 +119,84 @@ fun PaymentScreen(
         )
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(ECTheme.dimensions.sixteen)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = ECTheme.dimensions.four),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = ECTheme.colors.primary,
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            Row(
                 modifier = Modifier
-                    .clickable { onBackPress() }
-                    .size(ECTheme.dimensions.twentyFour)
+                    .fillMaxWidth()
+                    .padding(ECTheme.dimensions.sixteen),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = ECTheme.colors.primary,
+                    modifier = Modifier
+                        .clickable { onBackPress() }
+                        .size(ECTheme.dimensions.twentyFour)
+                )
+
+                Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
+
+                Text(
+                    text = "Payment",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        },
+        bottomBar = {
+            CustomButton(
+                text = "Order Now",
+                onClick = { onAction(PaymentContract.UiAction.OrderClick) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(ECTheme.dimensions.sixteen)
             )
-
-            Spacer(modifier = Modifier.width(ECTheme.dimensions.sixteen))
-
-            Text(
-                text = "Payment",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
         }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = ECTheme.dimensions.sixteen),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            BankCard(uiState = uiState)
 
-        BankCard(
-            uiState = uiState
-        )
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
-        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
+            CardHolderInput(
+                uiState = uiState,
+                onAction = onAction
+            )
 
-        CardHolderInput(
-            uiState = uiState,
-            onAction = onAction
-        )
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
-        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
+            CardNumberInput(
+                uiState = uiState,
+                onAction = onAction
+            )
 
-        CardNumberInput(
-            uiState = uiState,
-            onAction = onAction
-        )
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
 
-        Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
+            ExpiryDateAndCvvInput(
+                uiState = uiState,
+                onAction = onAction
+            )
 
-        ExpiryDateAndCvvInput(
-            uiState = uiState,
-            onAction = onAction
-        )
-        Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
+            Spacer(modifier = Modifier.height(ECTheme.dimensions.twentyFour))
 
-        AddressInput(
-            uiState = uiState,
-            onAction = onAction
-        )
-
-        CustomButton(
-            text = " Order Now ",
-            onClick = { onAction(PaymentContract.UiAction.OrderClick) }
-        )
+            AddressInput(
+                uiState = uiState,
+                onAction = onAction
+            )
+        }
     }
 }
 

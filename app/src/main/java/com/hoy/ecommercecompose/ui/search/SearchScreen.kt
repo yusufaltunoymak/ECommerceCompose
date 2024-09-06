@@ -2,7 +2,6 @@ package com.hoy.ecommercecompose.ui.search
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +37,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.collectWithLifecycle
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.domain.model.ProductUi
 import com.hoy.ecommercecompose.ui.components.CustomSearchView
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -159,7 +159,7 @@ fun ProductListItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = ECTheme.dimensions.eight)
-            .clickable { onDetailClick(product.id) },
+            .noRippleClickable { onDetailClick(product.id) },
         colors = CardDefaults.cardColors(
             containerColor = ECTheme.colors.white
         ),

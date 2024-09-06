@@ -29,21 +29,21 @@ ECommerceCompose not only provides essential e-commerce functionalities but also
 
 ## 📸 Screenshots
 
-| <img src="screenshot/welcome.png" alt="Screen1" width="300"/>          | <img src="screenshot/register.png" alt="Screen2" width="300"/>         | <img src="screenshot/login1.png" alt="Screen3" width="300"/>           |
+|     <img src="screenshot/welcome.png" alt="Screen1" width="300"/>      |     <img src="screenshot/register.png" alt="Screen2" width="300"/>     |      <img src="screenshot/login1.png" alt="Screen3" width="300"/>      |
 |:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
-|           **WELCOME PAGE**                                             |   **REGISTER PAGE**                                                    |    **LOGIN PAGE**                                                      |
+|                            **WELCOME PAGE**                            |                           **REGISTER PAGE**                            |                             **LOGIN PAGE**                             |
 
-| <img src="screenshot/forgot_password.png" alt="Screen4" width="300"/>  | <img src="screenshot/home_page.png" alt="Screen5" width="300"/>        | <img src="screenshot/favorite.png" alt="Screen6" width="300"/>         |
+| <img src="screenshot/forgot_password.png" alt="Screen4" width="300"/>  |    <img src="screenshot/home_page.png" alt="Screen5" width="300"/>     |     <img src="screenshot/favorite.png" alt="Screen6" width="300"/>     |
 |:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
-|           **FORGOT PASSWORD PAGE**                                     |   **HOME PAGE**                                                        |    **FAVORITES PAGE**                                                  |
+|                        **FORGOT PASSWORD PAGE**                        |                             **HOME PAGE**                              |                           **FAVORITES PAGE**                           |
 
-| <img src="screenshot/cart.png" alt="Screen7" width="300"/>             | <img src="screenshot/search.png" alt="Screen8" width="300"/>           | <img src="screenshot/notifications.png" alt="Screen9" width="300"/>    |
+|       <img src="screenshot/cart.png" alt="Screen7" width="300"/>       |      <img src="screenshot/search.png" alt="Screen8" width="300"/>      |  <img src="screenshot/notifications.png" alt="Screen9" width="300"/>   |
 |:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
-| **CART PAGE**                                                          |   **SEARCH PAGE**                                                      |      **NOTIFICATIONS PAGE**                                            |
+|                             **CART PAGE**                              |                            **SEARCH PAGE**                             |                         **NOTIFICATIONS PAGE**                         |
 
-| <img src="screenshot/category.png" alt="Screen10" width="300"/>        | <img src="screenshot/detail.png" alt="Screen11" width="300"/>          | <img src="screenshot/payment.png" alt="Screen12" width="300"/>         |
+|    <img src="screenshot/category.png" alt="Screen10" width="300"/>     |     <img src="screenshot/detail.png" alt="Screen11" width="300"/>      |     <img src="screenshot/payment.png" alt="Screen12" width="300"/>     |
 |:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|
-| **CATEGORY PAGE**                                                      |   **DETAIL PAGE**                                                      |       **PAYMENT PAGE**                                                 |
+|                           **CATEGORY PAGE**                            |                            **DETAIL PAGE**                             |                            **PAYMENT PAGE**                            |
 
 ##
 

@@ -3,7 +3,6 @@ package com.hoy.ecommercecompose.ui.account
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.hoy.ecommercecompose.R
+import com.hoy.ecommercecompose.common.noRippleClickable
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
 
@@ -282,7 +282,7 @@ fun MenuItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
             .padding(vertical = ECTheme.dimensions.sixteen)
     ) {
         Image(
