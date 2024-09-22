@@ -17,7 +17,7 @@ class GetFavoriteUseCase @Inject constructor(
                 val response = productRepository.getFavoriteProducts(userId)
                 emit(Resource.Success(data = response.productDto.map { it.mapToProductUi() }))
             } catch (e: Exception) {
-                emit(Resource.Error(message = e.localizedMessage ?: "Unknown error!"))
+                emit(Resource.Error(message = "Unknown error!"))
             }
         }
     }

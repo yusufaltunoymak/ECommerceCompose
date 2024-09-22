@@ -33,7 +33,7 @@ class GetProductsUseCase @Inject constructor(
                 }
                 emit(Resource.Success(data = updatedProductList))
             } catch (e: Exception) {
-                emit(Resource.Error(message = e.localizedMessage ?: "Unknown error!"))
+                emit(Resource.Error(message = "Unknown error!"))
             }
         }
     }

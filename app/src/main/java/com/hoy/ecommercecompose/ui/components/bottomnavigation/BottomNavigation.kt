@@ -10,7 +10,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -89,14 +89,17 @@ fun BottomNavigationBar(
                 .align(Alignment.TopCenter)
                 .offset(y = ECTheme.dimensions.negativeTwentyEight)
         ) {
-            Icon(Icons.Default.Home, contentDescription = stringResource(id = R.string.home))
+            Icon(
+                Icons.Default.ShoppingCart,
+                contentDescription = stringResource(id = R.string.cart)
+            )
         }
     }
 }
 
 val bottomNavItems = listOf(
+    BottomNavItem.Home,
     BottomNavItem.Favorite,
-    BottomNavItem.Cart,
     BottomNavItem.Order,
     BottomNavItem.Profile
 )
