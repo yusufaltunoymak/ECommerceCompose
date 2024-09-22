@@ -80,7 +80,7 @@ fun TopBar(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = "Orders",
+        text = stringResource(R.string.order),
         style = MaterialTheme.typography.titleLarge,
         modifier = modifier
             .fillMaxWidth()

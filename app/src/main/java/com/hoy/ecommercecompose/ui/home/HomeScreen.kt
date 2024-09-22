@@ -121,7 +121,7 @@ fun HomeScreen(
         )
 
         Text(
-            text = "Special products for you",
+            text = stringResource(R.string.special_products),
             style = MaterialTheme.typography.titleLarge,
             color = ECTheme.colors.darkGray,
             fontFamily = displayFontFamily,

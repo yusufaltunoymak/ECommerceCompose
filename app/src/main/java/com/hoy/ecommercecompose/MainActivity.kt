@@ -4,21 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.hoy.ecommercecompose.ui.ConnectivityViewModel
 import com.hoy.ecommercecompose.ui.components.bottomnavigation.BottomNavigationBar
 import com.hoy.ecommercecompose.ui.components.bottomnavigation.bottomNavItems
 import com.hoy.ecommercecompose.ui.login.google.GoogleAuthUiClient
@@ -33,7 +29,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var googleAuthUiClient: GoogleAuthUiClient
     private lateinit var navController: NavHostController
-    private val connectivityViewModel: ConnectivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,8 +73,6 @@ class MainActivity : ComponentActivity() {
                                         Log.e("MainActivity", "popUpTo")
                                         saveState = true
                                     }
-//                                    launchSingleTop = true
-//                                    restoreState = true
                                 }
                             },
                             onFabClick = {
@@ -99,17 +92,6 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(intent) {
                 handleDeepLink(intent)
             }
-
-            ConnectivityStatus()
-        }
-    }
-
-    @Composable
-    fun ConnectivityStatus() {
-        connectivityViewModel.isConnected.collectAsState().value.let { isConnected ->
-            if (!isConnected) {
-                showNoInternetDialog()
-            }
         }
     }
 
@@ -121,9 +103,5 @@ class MainActivity : ComponentActivity() {
                 navController.navigate(NavRoute.PRODUCT_DETAIL.withArgs("productId=$id"))
             }
         }
-    }
-
-    private fun showNoInternetDialog() {
-        Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,6 +1,6 @@
 package com.hoy.ecommercecompose.data.source.remote
 
-import com.hoy.ecommercecompose.common.Constants.USER
+import com.hoy.ecommercecompose.BuildConfig
 import com.hoy.ecommercecompose.data.source.remote.model.CheckFavoriteResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.BaseResponse
 import com.hoy.ecommercecompose.data.source.remote.model.response.GetCartProductResponse
@@ -19,60 +19,54 @@ interface ApiService {
 
     @GET("get_products")
     suspend fun getProducts(
-        @Header("store") store: String = USER
+        @Header("store") store: String = BuildConfig.USER
     ): ProductListDto
 
     @GET("get_categories")
     suspend fun getCategories(
-        @Header("store") store: String = USER
+        @Header("store") store: String = BuildConfig.USER
     ): GetCategoriesResponse
 
     @GET("get_product_detail")
     suspend fun getProductDetail(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Query("id") id: Int
     ): GetProductDetailResponse
 
     @GET("check_favorite")
     suspend fun checkIsFavorite(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Query("userId") userId: String,
         @Query("productId") productId: Int
     ): CheckFavoriteResponse
 
     @GET("get_cart_products")
     suspend fun getCartProducts(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Query("userId") id: String
     ): GetCartProductResponse
 
     @POST("add_to_favorites")
     suspend fun addToFavorites(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Body baseBody: BaseBody
     ): BaseResponse
 
     @GET("get_favorites")
     suspend fun getFavorites(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Query("userId") userId: String
     ): ProductListDto
 
     @POST("delete_from_favorites")
     suspend fun deleteFromFavorites(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Body deleteFromFavoriteBody: DeleteFromFavoriteBody
     ): BaseResponse
 
     @GET("get_products_by_category")
     suspend fun getProductsByCategory(
-        @Header("store") store: String = USER,
+        @Header("store") store: String = BuildConfig.USER,
         @Query("category") category: String
     ): ProductListDto
-
-    @POST("add_to_cart")
-    suspend fun addToCart(
-        @Header("store") store: String = USER,
-        @Body addToCartBody: BaseBody
-    ): BaseResponse
 }

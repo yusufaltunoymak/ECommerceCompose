@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ECommerceCompose</string>
+    <string name="web_client_id">577399386049-hhl7r87tc71ij5kkorkkb8u3a48r0bbf.apps.googleusercontent.com</string>
+    <string name="email_format_error">Lütfen geçerli bir e-posta adresi girin</string>
+    <string name="password_invalid_error">Şifre en az 6 karakter uzunluğunda olmalıdır!</string>
+    <string name="empty_field_error">Tüm alanlar zorunludur</string>
+    <string name="validation_error_title">Doğrulama Hatası</string>
+    <string name="ok_button">Tamam</string>
+    <string name="validation_error">Doğrulama Hatası</string>
+    <string name="hello_register_text">Merhaba! Başlamak için kayıt olun!</string>
+    <string name="name_text">İsim</string>
+    <string name="surname_text">Soyisim</string>
+    <string name="email_text">E-posta</string>
+    <string name="password_text">Şifre</string>
+    <string name="register_text">Kayıt Ol</string>
+    <string name="welcome_login_text">Tekrar hoş geldiniz! \nSizi tekrar görmek güzel!</string>
+    <string name="enter_mail_text">E-posta adresinizi girin</string>
+    <string name="enter_password_text">Şifrenizi girin</string>
+    <string name="forgot_password_text">Şifrenizi mi unuttunuz?</string>
+    <string name="login_text">Giriş Yap</string>
+    <string name="or_login_with_text">veya bununla giriş yap</string>
+    <string name="order_success_received">Siparişiniz başarıyla alındı!</string>
+    <string name="empty_fav_title">Kayıtlı Ürün Yok!</string>
+    <string name="empty_cart_title">Sepetiniz Boş!</string>
+    <string name="empty_fav_desc">Kayıtlı ürününüz yok.\n Ana sayfaya gidip ekleyebilirsiniz.</string>
+    <string name="empty_cart_desc">Ürün eklediğinizde burada görünecektir.</string>
+    <!--Şifre Unutma Ekranı-->
+    <string name="send_mail_screen_title">Ups! \nŞifrenizi mi unuttunuz?</string>
+    <string name="send_mail_screen_description">Endişelenmeyin! Bu bazen olur. \nLütfen hesabınızla ilişkili e-posta adresini girin.</string>
+    <string name="send_mail_button_text">E-posta Gönder</string>
+    <string name="send_mail_email_label">E-posta adresinizi girin</string>
+    <string name="click_to_login_text">Giriş yapmak için tıklayın</string>
+    <!--Favoriler Ekranı-->
+    <string name="fav_product">Favori Ürünler</string>
+    <string name="desc_product">Ürün Resmi</string>
+    <!--Hoşgeldiniz Ekranı-->
+    <string name="desc_welcome">hoşgeldiniz resmi</string>
+    <string name="app_name_hoy">hoy</string>
+    <string name="ecommerce_title">E-Ticaret</string>
+    <string name="login_but">Giriş Yap</string>
+    <string name="login_out">Çıkış Yap</string>
+    <string name="register_but">Kayıt Ol</string>
+    <!--Özel Arama-->
+    <string name="search">Ara</string>
+    <string name="clear">Temizle</string>
+    <string name="sort">Sırala</string>
+    <!--Alt Navigasyon Barı-->
+    <string name="home">Ana Sayfa</string>
+    <string name="cart">Sepet</string>
+    <string name="favorite">Favoriler</string>
+    <string name="profile">Profil</string>
+
+    <string name="product_image">Ürün Resmi</string>
+    <string name="category_image">Kategori Resmi</string>
+    <string name="rating">Puan</string>
+    <string name="welcome_user">Hoş geldin %1$s!</string>
+    <string name="categories">Kategoriler</string>
+    <string name="top_rated_products">En Yüksek Puanlı Ürünler</string>
+    <string name="search_icon">Arama İkonu</string>
+    <string name="search_for_products">Ürün ara</string>
+    <string name="list_icon">Liste İkonu</string>
+    <string name="share">Paylaş</string>
+    <string name="back_icon">Geri İkonu</string>
+    <string name="one_text">1</string>
+    <string name="add_to_cart">Sepete Ekle</string>
+    <string name="my_cart">Sepetim</string>
+    <string name="remove_item">Ürünü Kaldır</string>
+    <string name="decrease_quantity">Adedi Azalt</string>
+    <string name="increase_quantity">Adedi Arttır</string>
+    <string name="apply">Uygula</string>
+    <string name="total_count">Toplam Adet:</string>
+    <string name="total_price">Toplam Fiyat:</string>
+    <string name="payment">Ödeme</string>
+
+    <!--kategori ekranı-->
+    <string name="no_products_found">Bu kategoride ürün bulunamadı.</string>
+    <string name="price_low_to_high">Fiyat: Düşükten Yükseğe</string>
+    <string name="price_high_to_low">Fiyat: Yüksekten Düşüğe</string>
+
+    <!--hesap ekranı-->
+    <string name="account_screen_title">Hesap</string>
+    <string name="name_label">İsim</string>
+    <string name="surname_label">Soyisim</string>
+    <string name="email_label">E-posta</string>
+    <string name="address_label">Adres</string>
+    <string name="my_order">Siparişlerim</string>
+    <string name="payment_methods">Ödeme Yöntemleri</string>
+    <string name="change_password">Şifre Değiştir</string>
+    <string name="log_out">Çıkış Yap</string>
+    <string name="connection_error">Bağlantı Hatası!</string>
+
+    <!--arama ekranı-->
+    <string name="search_products">Ürün ara</string>
+    <string name="hacer">hacer</string>
+
+    <!--Şifre Sıfırlama Ekranı-->
+    <string name="create_new_password">Yeni şifre oluştur</string>
+    <string name="new_password_instruction">Yeni şifreniz daha önce kullanılanlardan farklı olmalıdır.</string>
+    <string name="new_password">Yeni Şifre</string>
+    <string name="confirm_password">Şifreyi Onayla</string>
+    <string name="reset_password">Şifreyi Sıfırla</string>
+    <string name="current_password">Mevcut Şifre</string>
+    <string name="passwords_not_matching">Şifreler uyuşmuyor</string>
+
+    <string name="password_changed">Şifre Değiştirildi!</string>
+    <string name="password_changed_message">Şifreniz başarıyla değiştirildi.</string>
+    <string name="back_to_login">Girişe Dön</string>
+
+    <!--ödeme ekranı-->
+    <string name="card_holder">Kart Sahibi</string>
+    <string name="card_number">Kart Numarası</string>
+    <string name="expires">Son Kullanma Tarihi</string>
+    <string name="cvv">CVV</string>
+    <string name="visa">Visa</string>
+    <string name="order_now">Şimdi Sipariş Ver</string>
+    <string name="order_confirmed">Sipariş Onaylandı</string>
+    <string name="okay">Tamam</string>
+    <string name="validation_errors">Doğrulama Hataları</string>
+    <string name="card_holder_name">Kart Sahibi Adı</string>
+    <string name="month">Ay</string>
+    <string name="year">Yıl</string>
+    <string name="card_number_string">Kart Numarası: %1$s</string>
+    <string name="card_holder_name_string">Kart Sahibi Adı: %1$s</string>
+    <string name="city">Şehir: %1$s</string>
+    <string name="district">İlçe: %1$s</string>
+    <string name="full_address">Tam Adres: %1$s</string>
+    <string name="price">Fiyat: %1$.2f</string>
+    <string name="notification">Bildirim</string>
+    <string name="email_sent">E-posta başarıyla gönderildi!</string>
+    <string name="error">Bir şeyler yanlış gitti!</string>
+
+    <!--posta gönderme ekranı-->
+    <string name="mail_sent_success">E-posta başarıyla gönderildi</string>
+    <string name="mail_sent_failure">E-posta gönderimi başarısız</string>
+    <string name="no_orders_found">Sipariş Bulunamadı</string>
+
+    <string name="no_orders">Devam Eden Sipariş Yok!</string>
+    <string name="no_orders_long">Şu anda devam eden bir siparişiniz yok.</string>
+
+    <string name="no_notifications">Henüz hiçbir bildirim almadınız!</string>
+    <string name="no_notifications_long">Bir şeyler olduğunda sizi bilgilendireceğiz.</string>
+    <string name="order">Sipariş</string>
+    <string name="special_products">Sana Özel Ürünler</string>
+</resources>
