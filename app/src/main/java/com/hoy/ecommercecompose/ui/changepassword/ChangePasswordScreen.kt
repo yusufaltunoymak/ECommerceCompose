@@ -23,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.collectWithLifecycle
 import com.hoy.ecommercecompose.ui.components.CustomButton
 import com.hoy.ecommercecompose.ui.components.CustomTextField
 import com.hoy.ecommercecompose.ui.theme.ECTheme
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun ChangePasswordScreen(
@@ -129,4 +131,15 @@ fun ChangePasswordScreen(
             }
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ChangePasswordScreenPreview() {
+    ChangePasswordScreen(
+        onBackClick = {},
+        uiState = ChangePasswordContract.UiState(),
+        onAction = {},
+        uiEffect = flowOf()
+    )
 }

@@ -1,5 +1,6 @@
 package com.hoy.ecommercecompose.data.repository
 
+import android.util.Log
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -55,7 +56,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         if (currentUser != null) {
             try {
                 val document = firestore.collection("Users").document(currentUser.uid).get().await()
+                Log.e("User", document.toString())
                 val user = document.toObject(User::class.java)
+                Log.e("User", user.toString())
                 if (user != null) {
                     emit(Resource.Success(user))
                 } else {
