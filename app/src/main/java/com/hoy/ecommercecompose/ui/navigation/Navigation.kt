@@ -156,9 +156,11 @@ fun SetupNavGraph(
                     type = NavType.IntType
                 }
             ),
-            deepLinks = listOf(navDeepLink {
-                uriPattern = "https://ecommerce.com/product/{productId}"
-            })
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "https://ecommerce.com/product/{productId}"
+                }
+            )
         ) {
             val viewModel: ProductDetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
