@@ -15,7 +15,7 @@ interface FirebaseAuthRepository {
 
     suspend fun signInWithEmailAndPassword(email: String, password: String): Flow<Resource<Unit>>
 
-    suspend fun getUserInformation(): Flow<Resource<User>>
+    fun getUserInformation(): Flow<Resource<User>>
 
     fun getUserId(): String
 

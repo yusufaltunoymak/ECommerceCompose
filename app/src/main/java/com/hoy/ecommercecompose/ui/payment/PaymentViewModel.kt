@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.Resource
-import com.hoy.ecommercecompose.data.datasources.CityRepository
 import com.hoy.ecommercecompose.data.mapper.toPaymentEntity
+import com.hoy.ecommercecompose.domain.repository.CityRepository
 import com.hoy.ecommercecompose.domain.repository.FirebaseAuthRepository
 import com.hoy.ecommercecompose.domain.usecase.cart.GetCartProductsLocalUseCase
 import com.hoy.ecommercecompose.domain.usecase.payment.AddPaymentUseCase

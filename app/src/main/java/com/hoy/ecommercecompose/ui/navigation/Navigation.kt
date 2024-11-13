@@ -12,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.firebase.auth.FirebaseAuth
 import com.hoy.ecommercecompose.ui.account.AccountScreen
 import com.hoy.ecommercecompose.ui.account.AccountViewModel
@@ -154,7 +155,10 @@ fun SetupNavGraph(
                 navArgument(name = "productId") {
                     type = NavType.IntType
                 }
-            )
+            ),
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "https://ecommerce.com/product/{productId}"
+            })
         ) {
             val viewModel: ProductDetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()

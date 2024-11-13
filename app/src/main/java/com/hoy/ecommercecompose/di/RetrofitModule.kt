@@ -2,8 +2,8 @@ package com.hoy.ecommercecompose.di
 
 import android.content.Context
 import com.hoy.ecommercecompose.common.Constants.BASE_URL
-import com.hoy.ecommercecompose.data.repository.ConnectivityRepository
 import com.hoy.ecommercecompose.data.source.remote.ApiService
+import com.hoy.ecommercecompose.domain.repository.ConnectivityRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

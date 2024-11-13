@@ -1,10 +1,13 @@
-package com.hoy.ecommercecompose.data.repository
+package com.hoy.ecommercecompose.domain.repository
 
 import android.content.Context
 import android.net.ConnectivityManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Singleton
 
-class ConnectivityRepository(val context: Context) {
+@Singleton
+class ConnectivityRepository(@ApplicationContext val context: Context) {
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val _isConnected = MutableStateFlow(false)

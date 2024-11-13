@@ -51,7 +51,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.hoy.ecommercecompose.R
 import com.hoy.ecommercecompose.common.collectWithLifecycle
-import com.hoy.ecommercecompose.common.orEmpty
+import com.hoy.ecommercecompose.common.orZeroDouble
 import com.hoy.ecommercecompose.ui.components.CustomHorizontalPager
 import com.hoy.ecommercecompose.ui.components.NonClickableProgress
 import com.hoy.ecommercecompose.ui.theme.ECTheme
@@ -224,7 +224,7 @@ fun ProductDetails(uiState: ProductDetailContract.UiState) {
                 fontStyle = FontStyle.Italic
             )
             Spacer(modifier = Modifier.height(ECTheme.dimensions.eight))
-            RatingBar(rating = uiState.productDetail?.rate.orEmpty())
+            RatingBar(rating = uiState.productDetail?.rate.orZeroDouble())
             Spacer(modifier = Modifier.height(ECTheme.dimensions.sixteen))
             Text(
                 text = "Detail",

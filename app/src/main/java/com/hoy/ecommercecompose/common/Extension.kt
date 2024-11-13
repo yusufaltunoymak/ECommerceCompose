@@ -14,15 +14,15 @@ import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-fun Int?.orEmpty(): Int {
+fun Int?.orZero(): Int {
     return this ?: 0
 }
 
-fun Double?.orEmpty(): Double {
+fun Double?.orZeroDouble(): Double {
     return this ?: 0.0
 }
 
-fun Boolean?.orEmpty(): Boolean {
+fun Boolean?.orFalse(): Boolean {
     return this ?: false
 }
 

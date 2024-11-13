@@ -33,19 +33,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainContent(intent)
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setContent {
-            MainContent(intent)
+            MainContent()
         }
     }
 
     @Composable
-    fun MainContent(intent: Intent) {
+    fun MainContent() {
         ECTheme {
             navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -87,20 +80,6 @@ class MainActivity : ComponentActivity() {
                     googleAuthUiClient = googleAuthUiClient,
                     modifier = Modifier.padding(innerPadding)
                 )
-            }
-
-            LaunchedEffect(intent) {
-                handleDeepLink(intent)
-            }
-        }
-    }
-
-    private fun handleDeepLink(intent: Intent) {
-        val data: Uri? = intent.data
-        data?.let {
-            val productId = it.lastPathSegment?.toIntOrNull()
-            productId?.let { id ->
-                navController.navigate(NavRoute.PRODUCT_DETAIL.withArgs("productId=$id"))
             }
         }
     }

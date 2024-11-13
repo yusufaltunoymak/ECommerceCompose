@@ -51,7 +51,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserInformation(): Flow<Resource<User>> = flow {
+    override fun getUserInformation(): Flow<Resource<User>> = flow {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
             try {

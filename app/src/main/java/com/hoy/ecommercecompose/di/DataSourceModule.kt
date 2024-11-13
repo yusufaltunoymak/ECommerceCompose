@@ -3,7 +3,7 @@ package com.hoy.ecommercecompose.di
 import android.content.Context
 import com.hoy.ecommercecompose.data.datasources.AssetCityDataSource
 import com.hoy.ecommercecompose.data.datasources.CityDataSource
-import com.hoy.ecommercecompose.data.datasources.CityRepository
+import com.hoy.ecommercecompose.domain.repository.CityRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
